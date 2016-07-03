@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>Analyser (AU).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>Analyser (AUv3 AppExtension).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
+		<key>Analyser (AUv3 Standalone).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
+		<key>Analyser (All).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>0</integer>
+		</dict>
+		<key>Analyser (Shared Code).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
+		<key>Analyser (VST).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>Analyser (VST3).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>0A3E34CA7A2F2DD7C292362D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1AA6A7E7F9D5D3EC0CAE7BB1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>268D7FE032CDFA772206DCF0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7E89DCA41A14D9580B9DDA1E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>931C8C19E4EB419FC834AB28</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C21BC1183731498842B4863D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E79553BE7107C2B0CB3D65A7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

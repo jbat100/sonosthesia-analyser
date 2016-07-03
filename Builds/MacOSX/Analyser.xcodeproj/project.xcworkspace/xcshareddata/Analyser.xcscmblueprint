@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "8A42469690B4EC9B51F3A458DF8614C498892B4A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "8A42469690B4EC9B51F3A458DF8614C498892B4A" : 0,
+    "DEBAC9C6799FD4E8074B3BAF720718E3C3499FA0" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "88D434DD-EDCB-4A38-A84C-3A3C4BAD4265",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "8A42469690B4EC9B51F3A458DF8614C498892B4A" : "sonosthesia-analyser\/",
+    "DEBAC9C6799FD4E8074B3BAF720718E3C3499FA0" : "..\/juce\/juce-git"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Analyser",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Builds\/MacOSX\/Analyser.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jbat100\/sonosthesia-analyser.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8A42469690B4EC9B51F3A458DF8614C498892B4A"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/julianstorer\/JUCE.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DEBAC9C6799FD4E8074B3BAF720718E3C3499FA0"
+    }
+  ]
+}
