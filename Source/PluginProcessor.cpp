@@ -28,10 +28,7 @@
 //==============================================================================
 SoundAnalyserAudioProcessor::SoundAnalyserAudioProcessor() : analyserTree( AnalysisModel::createAnalyserTree()), analyser(analyserTree[AnalysisModel::Ids::BufferSize])
 {
-    
-    
     analyserTree.addListener(this);
-    
     refreshFromTree();
 }
 
@@ -44,17 +41,13 @@ SoundAnalyserAudioProcessor::~SoundAnalyserAudioProcessor()
 void SoundAnalyserAudioProcessor::refreshFromTree()
 {
     analyser.setBufferSize(analyserTree[AnalysisModel::Ids::BufferSize]);
-    
     analyser.setOSCPort(analyserTree[AnalysisModel::Ids::Port]);
-    
     analyser.setIPAddress(analyserTree[AnalysisModel::Ids::IPAddress].toString().toStdString());
-    
     analyser.setAnalyserIdString(analyserTree[AnalysisModel::Ids::AnalyserId].toString().toStdString());
     
     for (int i = 0;i < analyser.audioAnalyses.size();i++)
     {
         ValueTree tree = analyserTree.getChildWithName(analyser.audioAnalyses[i]->getIdentifier());
-        
         analyser.audioAnalyses[i]->initialise(tree);
     }
 }
@@ -212,25 +205,20 @@ void SoundAnalyserAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiB
 {
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
-    for (int channel = 0; channel < getNumInputChannels(); ++channel)
+    for (int channel = 0; channel < getTotalNumInputChannels(); ++channel)
     {
         float* channelData = buffer.getWritePointer (channel);
-        
         if (channel == 0)
         {
             analyser.analyseAudio(channelData, buffer.getNumSamples());
         }
-
         // ..do something to the data...
     }
-
-    
-    
     
     // In case we have more outputs than inputs, we'll clear any output
     // channels that didn't contain input data, (because these aren't
     // guaranteed to be empty - they may contain garbage).
-    for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
+    for (int i = getTotalNumInputChannels(); i < getTotalNumOutputChannels(); ++i)
     {
         buffer.clear (i, 0, buffer.getNumSamples());
     }
@@ -245,7 +233,8 @@ bool SoundAnalyserAudioProcessor::hasEditor() const
 //==============================================================================
 AudioProcessorEditor* SoundAnalyserAudioProcessor::createEditor()
 {
-    return new SoundAnalyserAudioProcessorEditor (this,analyserTree);
+    std::cout << "Create editor\n";
+    return new SoundAnalyserAudioProcessorEditor (this);
 }
 
 //==============================================================================
@@ -260,10 +249,9 @@ void SoundAnalyserAudioProcessor::getStateInformation (MemoryBlock& destData)
 //==============================================================================
 void SoundAnalyserAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
+    std::cout << "Setting state\n";
     ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
-    
     analyserTree = ValueTree::fromXml(*xmlState);
-    
     refreshFromTree();
 }
 
@@ -326,7 +314,6 @@ void SoundAnalyserAudioProcessor::valueTreePropertyChanged (ValueTree& treeWhose
                     }
                 }
             }
-            
             // clear the plot history 
             analyser.clearPlotHistory();
         }
@@ -339,10 +326,7 @@ void SoundAnalyserAudioProcessor::valueTreePropertyChanged (ValueTree& treeWhose
                     analyser.audioAnalyses[i]->handleCustomPropertyChange(treeWhosePropertyHasChanged, property);
                 }
             }
-                
         }
-        
-        
     }
 }
 

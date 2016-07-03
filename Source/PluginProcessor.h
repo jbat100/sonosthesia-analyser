@@ -28,6 +28,18 @@
 #include "Audio Analysis/AudioAnalysisManager.h"
 #include "Audio Analysis/AnalysisModel.h"
 
+enum BufferSizeValues
+{
+    BufferSize64,
+    BufferSize128,
+    BufferSize256,
+    BufferSize512,
+    BufferSize1024,
+    BufferSize2048,
+    BufferSize4096,
+    NumBufferSizes
+};
+
 //==============================================================================
 /**
 */

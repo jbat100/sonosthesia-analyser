@@ -13,6 +13,16 @@
               companyWebsite="" buildAUv3="1" pluginIsMidiEffectPlugin="0">
   <MAINGROUP id="VsHW7o" name="Analyser">
     <GROUP id="{0F5E9544-A7EE-7AC3-489A-8BF69D05E6FB}" name="Source">
+      <GROUP id="{BF77CE8F-DF3D-B157-7A5D-BD8066780E6E}" name="Sonosthesia">
+        <GROUP id="{6E4EE87B-10BB-E671-B05E-886E3356DFAF}" name="Targets"/>
+        <GROUP id="{D824FCC7-5A03-3F48-2D2A-856AD1A47370}" name="Relays"/>
+        <GROUP id="{F9542060-CE86-DCA0-287C-B7A4F6B799CD}" name="GUI">
+          <FILE id="eu7eNR" name="SonosthesiaRootComponent.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/GUI/SonosthesiaRootComponent.cpp"/>
+          <FILE id="YYyoDQ" name="SonosthesiaRootComponent.h" compile="0" resource="0"
+                file="Source/Sonosthesia/GUI/SonosthesiaRootComponent.h"/>
+        </GROUP>
+      </GROUP>
       <GROUP id="{5855A183-D5A6-41E2-2853-4D2D0B7D04EC}" name="Audio Analysis">
         <FILE id="L4Ik4r" name="AnalysisModel.cpp" compile="1" resource="0"
               file="Source/Audio Analysis/AnalysisModel.cpp"/>
@@ -50,6 +60,14 @@
               file="Source/GUI/ItemListComponent.cpp"/>
         <FILE id="yQO3MV" name="ItemListComponent.h" compile="0" resource="0"
               file="Source/GUI/ItemListComponent.h"/>
+        <FILE id="PGnRl9" name="OriginalPlotComponent.cpp" compile="1" resource="0"
+              file="Source/GUI/OriginalPlotComponent.cpp"/>
+        <FILE id="kWl73F" name="OriginalPlotComponent.h" compile="0" resource="0"
+              file="Source/GUI/OriginalPlotComponent.h"/>
+        <FILE id="M6IRQW" name="OriginalRootComponent.cpp" compile="1" resource="0"
+              file="Source/GUI/OriginalRootComponent.cpp"/>
+        <FILE id="T9Ua51" name="OriginalRootComponent.h" compile="0" resource="0"
+              file="Source/GUI/OriginalRootComponent.h"/>
         <FILE id="KmIn6N" name="PluginLookAndFeel.cpp" compile="1" resource="0"
               file="Source/GUI/PluginLookAndFeel.cpp"/>
         <FILE id="k1U5Oz" name="PluginLookAndFeel.h" compile="0" resource="0"

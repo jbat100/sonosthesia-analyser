@@ -25,122 +25,31 @@
 #define __PLUGINEDITOR_H_EA17EABC__
 
 #include "../JuceLibraryCode/JuceHeader.h"
+
 #include "PluginProcessor.h"
-#include "Audio Analysis/AnalysisModel.h"
-#include "GUI/PluginLookAndFeel.h"
-#include "GUI/SimpleAnalysisComponent.h"
-#include "GUI/AnalysisSelectionComponent.h"
-
-enum BufferSizeValues
-{
-    BufferSize64,
-    BufferSize128,
-    BufferSize256,
-    BufferSize512,
-    BufferSize1024,
-    BufferSize2048,
-    BufferSize4096,
-    NumBufferSizes
-};
-
+#include "GUI/OriginalRootComponent.h"
 
 //==============================================================================
 /**
 */
-class SoundAnalyserAudioProcessorEditor :   public AudioProcessorEditor,
-                                            public Button::Listener,
-                                            public Timer,
-                                            public ValueTree::Listener,
-                                            public Label::Listener,
-                                            public ComboBox::Listener
+class SoundAnalyserAudioProcessorEditor : public AudioProcessorEditor
 {
 public:
     
     //==============================================================================
-    SoundAnalyserAudioProcessorEditor (SoundAnalyserAudioProcessor* ownerFilter, ValueTree analyserTree_);
+    SoundAnalyserAudioProcessorEditor (SoundAnalyserAudioProcessor* processor);
     ~SoundAnalyserAudioProcessorEditor();
-    
-    //==============================================================================
-    void setValueTree (ValueTree tree);
-    
-    void refreshFromTree();
-    
-    void addAnalysis (ValueTree& analysisTree);
     
     //==============================================================================
     // Component
     void paint (Graphics& g);
     void resized();
     
-    //==============================================================================
-    // Button::Listener
-    void buttonClicked (Button* button);
-    
-    //==============================================================================
-    // Timer
-    void timerCallback();
-    
-    //==============================================================================
-    // ValueTree::Listener
-    void valueTreePropertyChanged (ValueTree& treeWhosePropertyHasChanged, const Identifier& property);
-    void valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded);
-    void valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved);
-    void valueTreeChildOrderChanged (ValueTree& parentTreeWhoseChildrenHaveMoved, int oldIndex, int newIndex);
-    void valueTreeParentChanged (ValueTree& treeWhoseParentHasChanged);
-    
-    //==============================================================================
-    // Label::Listener
-    void labelTextChanged (Label* labelThatHasChanged);
-    
-    //==============================================================================
-    // ComboBox::Listener
-    void comboBoxChanged (ComboBox* comboBoxThatHasChanged);
-    
-    //==============================================================================
-    void textEditorTextChanged (TextEditor& textEditor);
-    
 private:
     
-    int getBufferSizeFromIndex(int index);
-    
-    int getIndexFromBufferSize(int bufferSize);
+    OriginalRootComponent rootComponent;
     
     SoundAnalyserAudioProcessor* getProcessor() const;
-    
-	double round(double val)
-	{
-		return floor(val + 0.5);
-	}
-
-    ValueTree analyserTree;
-    
-    OwnedArray<Component> analysisComponents;
-    
-    TextButton newAnalysisButton;
-    
-    int plotX, plotY, plotHeight;
-    
-    Label analyserId;
-    
-    
-    Label OSCPort;
-    Label OSCPortText;
-    
-    Label IPAddressValue;
-    Label IPAddressText;
-    
-    Label analyserIdText;
-    
-    
-    Label bufferSizeText;
-    Label bufferSizeValue;
-    
-    ComboBox bufferSizeComboBox;
-    
-    Label pluginTitleLabel;
-    Label pluginVersionLabel;
-    
-    PluginLookAndFeel pluginLookAndFeel;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SoundAnalyserAudioProcessorEditor)
     
