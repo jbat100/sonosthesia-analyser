@@ -370,7 +370,6 @@ void OriginalRootComponent::addAnalysis(ValueTree& analysisTree)
         }
     }
     
-    
     addChildComponent(analysisComponents.getLast());
     analysisComponents.getLast()->setVisible(true);
     

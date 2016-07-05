@@ -14,13 +14,52 @@
   <MAINGROUP id="VsHW7o" name="Analyser">
     <GROUP id="{0F5E9544-A7EE-7AC3-489A-8BF69D05E6FB}" name="Source">
       <GROUP id="{BF77CE8F-DF3D-B157-7A5D-BD8066780E6E}" name="Sonosthesia">
-        <GROUP id="{6E4EE87B-10BB-E671-B05E-886E3356DFAF}" name="Targets"/>
-        <GROUP id="{D824FCC7-5A03-3F48-2D2A-856AD1A47370}" name="Relays"/>
-        <GROUP id="{F9542060-CE86-DCA0-287C-B7A4F6B799CD}" name="GUI">
-          <FILE id="eu7eNR" name="SonosthesiaRootComponent.cpp" compile="1" resource="0"
+        <GROUP id="{3D05C09B-E5EB-532C-F7EE-9C8828BD560C}" name="Analysis">
+          <FILE id="H5hTFq" name="AnalysisManager.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/Analysis/AnalysisManager.cpp"/>
+          <FILE id="bLDJZy" name="AnalysisManager.h" compile="0" resource="0"
+                file="Source/Sonosthesia/Analysis/AnalysisManager.h"/>
+          <FILE id="UhQ17K" name="AnalysisManagerComponent.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/Analysis/AnalysisManagerComponent.cpp"/>
+          <FILE id="gJE2hJ" name="AnalysisManagerComponent.h" compile="0" resource="0"
+                file="Source/Sonosthesia/Analysis/AnalysisManagerComponent.h"/>
+        </GROUP>
+        <GROUP id="{B7E6A117-0025-CC35-E34F-A068A0FFC2DF}" name="Core">
+          <FILE id="GA2Kda" name="CommonComponent.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/Core/CommonComponent.cpp"/>
+          <FILE id="wHia5f" name="CommonComponent.h" compile="0" resource="0"
+                file="Source/Sonosthesia/Core/CommonComponent.h"/>
+          <FILE id="aVU8Ac" name="ListControllerComponent.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/Core/ListControllerComponent.cpp"/>
+          <FILE id="ZacF82" name="ListControllerComponent.h" compile="0" resource="0"
+                file="Source/Sonosthesia/Core/ListControllerComponent.h"/>
+          <FILE id="wenxKr" name="Theme.cpp" compile="1" resource="0" file="Source/Sonosthesia/Core/Theme.cpp"/>
+          <FILE id="eLbtfk" name="Theme.h" compile="0" resource="0" file="Source/Sonosthesia/Core/Theme.h"/>
+          <FILE id="fsCn3A" name="Utils.cpp" compile="1" resource="0" file="Source/Sonosthesia/Core/Utils.cpp"/>
+          <FILE id="Cjbf3h" name="Utils.h" compile="0" resource="0" file="Source/Sonosthesia/Core/Utils.h"/>
+        </GROUP>
+        <GROUP id="{9DA778C4-284E-B9EE-BB2C-2374BD3B81D7}" name="GUI">
+          <FILE id="cgZXQS" name="SonosthesiaRootComponent.cpp" compile="1" resource="0"
                 file="Source/Sonosthesia/GUI/SonosthesiaRootComponent.cpp"/>
-          <FILE id="YYyoDQ" name="SonosthesiaRootComponent.h" compile="0" resource="0"
+          <FILE id="knDKUB" name="SonosthesiaRootComponent.h" compile="0" resource="0"
                 file="Source/Sonosthesia/GUI/SonosthesiaRootComponent.h"/>
+        </GROUP>
+        <GROUP id="{1E91648D-6E11-BB89-B7EE-DF30257D6ACC}" name="Relay">
+          <FILE id="YKrHxb" name="Relay.cpp" compile="1" resource="0" file="Source/Sonosthesia/Relay/Relay.cpp"/>
+          <FILE id="SEqQla" name="Relay.h" compile="0" resource="0" file="Source/Sonosthesia/Relay/Relay.h"/>
+          <FILE id="A1aZHy" name="RelayComponent.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/Relay/RelayComponent.cpp"/>
+          <FILE id="qpcyDP" name="RelayComponent.h" compile="0" resource="0"
+                file="Source/Sonosthesia/Relay/RelayComponent.h"/>
+        </GROUP>
+        <GROUP id="{B52537D5-4EA2-7BC1-DD53-49A818F4E04B}" name="Target">
+          <FILE id="ypCdh8" name="TargetListComponent.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/Target/TargetListComponent.cpp"/>
+          <FILE id="Nia7nx" name="TargetListComponent.h" compile="0" resource="0"
+                file="Source/Sonosthesia/Target/TargetListComponent.h"/>
+          <FILE id="vFVhuU" name="TargetManager.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/Target/TargetManager.cpp"/>
+          <FILE id="aVidJz" name="TargetManager.h" compile="0" resource="0" file="Source/Sonosthesia/Target/TargetManager.h"/>
         </GROUP>
       </GROUP>
       <GROUP id="{5855A183-D5A6-41E2-2853-4D2D0B7D04EC}" name="Audio Analysis">
