@@ -110,6 +110,8 @@ public:
     /** A vector containing the data to be plotted for an audio analysis algorithm that returns vectors */
     std::vector<float> vectorPlot;
     
+    void muteOSCSender(bool mute);
+    
 private:
  
     /** Add a new sample to the plot history
@@ -143,6 +145,8 @@ private:
     
     /** The remote host IP address to send to */
     String ipAddress;
+    
+    bool mute;
     
     //=======================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioAnalysisManager)

@@ -25,7 +25,7 @@
 #include "../Libraries/speex/include/speex/speex_resampler.h"
 
 //==============================================================================
-AudioAnalysisManager::AudioAnalysisManager(int bufferSize_) : bufferSize(bufferSize_), audioBuffer(bufferSize), gist(bufferSize,DEFAULT_SAMPLING_FREQUENCY), port(8000), ipAddress("127.0.0.1")
+AudioAnalysisManager::AudioAnalysisManager(int bufferSize_) : bufferSize(bufferSize_), audioBuffer(bufferSize), gist(bufferSize,DEFAULT_SAMPLING_FREQUENCY), port(8000), ipAddress("127.0.0.1"), mute(false)
 {
     setBufferSize(bufferSize);
     
@@ -44,6 +44,11 @@ AudioAnalysisManager::AudioAnalysisManager(int bufferSize_) : bufferSize(bufferS
         plotHistory[i] = 0;
         vectorPlot[i] = 0;
     }
+}
+
+void AudioAnalysisManager::muteOSCSender(bool _mute)
+{
+    mute = _mute;
 }
 
 //==============================================================================
@@ -88,9 +93,7 @@ void AudioAnalysisManager::analyseAudio(float* buffer,int numSamples)
             {
                 if (audioAnalyses[i]->getOutputType() == FloatOutput)
                 {
-                
                     float output = 0.0;
-                    
                     if (audioAnalyses[i]->getInputType() == AudioBufferInput)
                     {
                         audioAnalyses[i]->performAnalysis(audioBuffer.buffer);
@@ -99,21 +102,15 @@ void AudioAnalysisManager::analyseAudio(float* buffer,int numSamples)
                     {
                         audioAnalyses[i]->performAnalysis(gist.getMagnitudeSpectrum());
                     }
-
-                    
                     if (audioAnalyses[i]->resultReady())
                     {
                         output = audioAnalyses[i]->getAnalysisResultAsFloat();
-                        
-                        if (audioAnalyses[i]->send)
+                        if (audioAnalyses[i]->send && !mute)
                         {
                             OSCMessage m(OSCAddressPattern(audioAnalyses[i]->addressPattern));
-                            
                             m.addFloat32(output);
-                            
                             osc.send(m);
                         }
-                        
                         if (audioAnalyses[i]->plot)
                         {
                             updatePlotHistory(output);
@@ -144,15 +141,13 @@ void AudioAnalysisManager::analyseAudio(float* buffer,int numSamples)
                     {
                         output = audioAnalyses[i]->getAnalysisResultAsVector();
                         
-                        if (audioAnalyses[i]->send)
+                        if (audioAnalyses[i]->send && !mute)
                         {
                             OSCMessage m(OSCAddressPattern(audioAnalyses[i]->addressPattern));
-                            
                             for (int i = 0;i < output.size();i++)
                             {
                                 m.addFloat32(output[i]);
                             }
-                            
                             osc.send(m);
                         }
 
@@ -162,8 +157,6 @@ void AudioAnalysisManager::analyseAudio(float* buffer,int numSamples)
                         }
                     }
                 }
-                
-                
             }
         }
     }
@@ -275,18 +268,14 @@ std::vector<float> AudioAnalysisManager::resamplePlot(std::vector<float> v)
     
     SpeexResamplerState *resampler;
     
-    
     int err = 0;
     
     resampler = speex_resampler_init(1, (spx_uint32_t) v.size(), 512, 0, &err);
-    
     
     spx_uint32_t inLen = (spx_uint32_t) v.size();
     spx_uint32_t outLen = (spx_uint32_t) 512;
     
     err = speex_resampler_process_float(resampler, 0, inF, &inLen, outF, &outLen);
-    
-    
     
     for (int i = 0;i < resampledSignal.size();i++)
     {
@@ -319,7 +308,6 @@ void AudioAnalysisManager::updateVectorPlot(std::vector<float> v)
     else // otherwise, we have to downsample
     {
         vectorPlot.resize(512);
-        
         vectorPlot = resamplePlot(v);
     }
 }
