@@ -24,10 +24,10 @@
 #ifndef SoundAnalyser_ZeroCrossingRate_h
 #define SoundAnalyser_ZeroCrossingRate_h
 
-#include "AudioAnalysis.h"
+#include "AnalysisProxy.h"
 #include <cmath>
 
-class ZeroCrossingRate : public AudioAnalysis
+class ZeroCrossingRate : public AnalysisProxy
 {
 public:
     

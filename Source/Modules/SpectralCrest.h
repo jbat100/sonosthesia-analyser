@@ -24,10 +24,10 @@
 #ifndef _SOUNDANALYSER_SPECTRALCREST_
 #define _SOUNDANALYSER_SPECTRALCREST_
 
-#include "AudioAnalysis.h"
+#include "AnalysisProxy.h"
 #include <cmath>
 
-class SpectralCrest : public AudioAnalysis
+class SpectralCrest : public AnalysisProxy
 {
 public:
     

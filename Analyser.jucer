@@ -15,6 +15,16 @@
     <GROUP id="{0F5E9544-A7EE-7AC3-489A-8BF69D05E6FB}" name="Source">
       <GROUP id="{BF77CE8F-DF3D-B157-7A5D-BD8066780E6E}" name="Sonosthesia">
         <GROUP id="{3D05C09B-E5EB-532C-F7EE-9C8828BD560C}" name="Analysis">
+          <FILE id="nUQqtL" name="Analysis.cpp" compile="1" resource="0" file="Source/Sonosthesia/Analysis/Analysis.cpp"/>
+          <FILE id="nZdkPn" name="Analysis.h" compile="0" resource="0" file="Source/Sonosthesia/Analysis/Analysis.h"/>
+          <FILE id="s9pJTB" name="AnalysisBuffer.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/Analysis/AnalysisBuffer.cpp"/>
+          <FILE id="N6XkDp" name="AnalysisBuffer.h" compile="0" resource="0"
+                file="Source/Sonosthesia/Analysis/AnalysisBuffer.h"/>
+          <FILE id="vAp5ou" name="AnalysisComponent.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/Analysis/AnalysisComponent.cpp"/>
+          <FILE id="N4rg1D" name="AnalysisComponent.h" compile="0" resource="0"
+                file="Source/Sonosthesia/Analysis/AnalysisComponent.h"/>
           <FILE id="H5hTFq" name="AnalysisManager.cpp" compile="1" resource="0"
                 file="Source/Sonosthesia/Analysis/AnalysisManager.cpp"/>
           <FILE id="bLDJZy" name="AnalysisManager.h" compile="0" resource="0"
@@ -185,6 +195,7 @@
         </GROUP>
       </GROUP>
       <GROUP id="{81C1BB9D-960D-0688-3122-046634E1AC4B}" name="Modules">
+        <FILE id="fG6Yxm" name="AnalysisProxy.h" compile="0" resource="0" file="Source/Modules/AnalysisProxy.h"/>
         <FILE id="CIrQ0a" name="FFTMagnitudeSpectrum.h" compile="0" resource="0"
               file="Source/Modules/FFTMagnitudeSpectrum.h"/>
         <FILE id="rVIOsp" name="MelFrequencySpectrum.h" compile="0" resource="0"

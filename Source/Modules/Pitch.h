@@ -24,9 +24,9 @@
 #ifndef SoundAnalyser_PitchYin_h
 #define SoundAnalyser_PitchYin_h
 
-#include "../Audio Analysis/AudioAnalysis.h"
+#include "AnalysisProxy.h"
 
-class Pitch : public AudioAnalysis
+class Pitch : public AnalysisProxy
 {
 public:
     

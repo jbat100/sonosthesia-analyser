@@ -24,10 +24,10 @@
 #ifndef _SOUNDANALYSER_SPECTRALFLATNESS_
 #define _SOUNDANALYSER_SPECTRALFLATNESS_
 
-#include "AudioAnalysis.h"
+#include "AnalysisProxy.h"
 #include <cmath>
 
-class SpectralFlatness : public AudioAnalysis
+class SpectralFlatness : public AnalysisProxy
 {
 public:
     

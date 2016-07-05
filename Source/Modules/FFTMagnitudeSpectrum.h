@@ -24,11 +24,11 @@
 #ifndef SoundAnalyser_FFTMagnitudeSpectrum_h
 #define SoundAnalyser_FFTMagnitudeSpectrum_h
 
-#include "AudioAnalysis.h"
+#include "AnalysisProxy.h"
 #include "../GUI/Custom Analysis Components/FFTComponent.h"
 #include <cmath>
 
-class FFTMagnitudeSpectrum : public AudioAnalysis
+class FFTMagnitudeSpectrum : public AnalysisProxy
 {
 public:
     

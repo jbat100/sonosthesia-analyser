@@ -24,10 +24,10 @@
 #ifndef __SoundAnalyser__PeakEnergy__
 #define __SoundAnalyser__PeakEnergy__
 
-#include "AudioAnalysis.h"
+#include "AnalysisProxy.h"
 #include <cmath>
 
-class PeakEnergy : public AudioAnalysis
+class PeakEnergy : public AnalysisProxy
 {
 public:
     

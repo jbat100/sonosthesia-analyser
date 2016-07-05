@@ -24,7 +24,9 @@
 #ifndef SoundAnalyser_SpectralDifference_h
 #define SoundAnalyser_SpectralDifference_h
 
-class SpectralDifference : public AudioAnalysis
+#include "AnalysisProxy.h"
+
+class SpectralDifference : public AnalysisProxy
 {
 public:
     

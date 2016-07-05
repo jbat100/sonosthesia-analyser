@@ -24,10 +24,10 @@
 #ifndef __SoundAnalyser__RMS__
 #define __SoundAnalyser__RMS__
 
-#include "../Audio Analysis/AudioAnalysis.h"
+#include "AnalysisProxy.h"
 #include <cmath>
 
-class RMS : public AudioAnalysis
+class RMS : public AnalysisProxy
 {
 public:
     

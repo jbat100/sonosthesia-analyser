@@ -1,34 +1,33 @@
 /*
   ==============================================================================
 
-    AnalysisManagerComponent.h
-    Created: 5 Jul 2016 9:52:44pm
+    AnalysisComponent.h
+    Created: 5 Jul 2016 10:30:05pm
     Author:  Jonathan Thorpe
 
   ==============================================================================
 */
 
-#ifndef ANALYSISMANAGERCOMPONENT_H_INCLUDED
-#define ANALYSISMANAGERCOMPONENT_H_INCLUDED
+#ifndef ANALYSISCOMPONENT_H_INCLUDED
+#define ANALYSISCOMPONENT_H_INCLUDED
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 
 //==============================================================================
 /*
 */
-
-class AnalysisManagerComponent    : public Component
+class AnalysisComponent    : public Component
 {
 public:
-    AnalysisManagerComponent();
-    ~AnalysisManagerComponent();
+    AnalysisComponent();
+    ~AnalysisComponent();
 
     void paint (Graphics&) override;
     void resized() override;
 
 private:
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AnalysisManagerComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AnalysisComponent)
 };
 
 
-#endif  // ANALYSISMANAGERCOMPONENT_H_INCLUDED
+#endif  // ANALYSISCOMPONENT_H_INCLUDED

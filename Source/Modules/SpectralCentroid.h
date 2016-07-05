@@ -24,12 +24,11 @@
 #ifndef SoundAnalyser_SpectralCentroid_h
 #define SoundAnalyser_SpectralCentroid_h
 
-#include "AudioAnalysis.h"
+#include "AnalysisProxy.h"
 #include <cmath>
 
 
-
-class SpectralCentroid : public AudioAnalysis
+class SpectralCentroid : public AnalysisProxy
 {
 public:
     

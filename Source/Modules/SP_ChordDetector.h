@@ -24,11 +24,11 @@
 #ifndef Sound_Analyser_SP_ChordDetector_h
 #define Sound_Analyser_SP_ChordDetector_h
 
-#include "../Audio Analysis/AudioAnalysis.h"
+#include "AnalysisProxy.h"
 #include "../Libraries/Stark-Plumbley/Chromagram.h"
 #include "../Libraries/Stark-Plumbley/ChordDetector.h"
 
-class SP_ChordDetector : public AudioAnalysis
+class SP_ChordDetector : public AnalysisProxy
 {
 public:
     

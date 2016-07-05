@@ -24,10 +24,10 @@
 #ifndef Sound_Analyser_SP_Chromagram_h
 #define Sound_Analyser_SP_Chromagram_h
 
-#include "AudioAnalysis.h"
+#include "AnalysisProxy.h"
 #include "../Libraries/Stark-Plumbley/Chromagram.h"
 
-class SP_Chromagram : public AudioAnalysis 
+class SP_Chromagram : public AnalysisProxy 
 {
 public:
     
