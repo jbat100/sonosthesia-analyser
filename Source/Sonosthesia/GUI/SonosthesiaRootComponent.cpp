@@ -16,7 +16,7 @@ MainTabbedComponent::MainTabbedComponent(SoundAnalyserAudioProcessor& _processor
 TabbedComponent (TabbedButtonBar::TabsAtTop),
 processor(_processor),
 analysisManagerComponent(processor),
-analysisRelayComponent(processor),
+analysisRelayListComponent(processor),
 targetComponent(processor.getTargetManager())
 {
     File applicationFile = File::getSpecialLocation(File::SpecialLocationType::currentApplicationFile);
@@ -27,7 +27,7 @@ targetComponent(processor.getTargetManager())
     Colour colour = Colours::black.withAlpha(0.3f); // Colour(Colours::black).withAlpha(0.0f);
     
     addTab ("Analysis", colour, &analysisManagerComponent, true);
-    addTab ("Relay", colour, &analysisRelayComponent, true);
+    addTab ("Relay", colour, &analysisRelayListComponent, true);
     addTab ("Targets", colour, &targetComponent, true);
     
 }
@@ -37,33 +37,13 @@ SonosthesiaRootComponent::SonosthesiaRootComponent(SoundAnalyserAudioProcessor& 
     tabbedComponent(_processor)
 {
     setOpaque (true);
-    
-    
     addAndMakeVisible(&tabbedComponent);
-    
-    //addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
-    //resizeLimits.setSizeLimits (150, 150, 1000, 500);
-    
-    //std::cout << "Editor setting UI dimensions to processor setting " << processor.lastUIWidth << " " << processor.lastUIHeight << "\n";
-    
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    //setSize (processor.lastUIWidth, processor.lastUIHeight);
 }
 
 void SonosthesiaRootComponent::paint (Graphics& g)
 {
     Colour dark = Colour(70, 70, 70);
-    
     g.setColour (dark);
-    
-    /*
-     File applicationFile = File::getSpecialLocation(File::SpecialLocationType::currentApplicationFile);
-     File imageFile = applicationFile.getChildFile("Contents/Resources/space-dense.png");
-     Image image = ImageCache::getFromFile(imageFile);
-     g.setTiledImageFill (image, 0, 0, 1.0);
-     */
-    
     g.fillAll();
 }
 

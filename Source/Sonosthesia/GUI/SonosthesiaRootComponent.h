@@ -34,7 +34,7 @@ private:
     SoundAnalyserAudioProcessor& processor;
     
     AnalysisManagerComponent analysisManagerComponent;
-    AnalysisRelayComponent analysisRelayComponent;
+    AnalysisRelayListComponent analysisRelayListComponent;
     TargetListComponent targetComponent;
 };
 

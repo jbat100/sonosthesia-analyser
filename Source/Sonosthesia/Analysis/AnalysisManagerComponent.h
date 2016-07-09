@@ -12,9 +12,7 @@
 #define ANALYSISMANAGERCOMPONENT_H_INCLUDED
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
-
 #include "../../PluginProcessor.h"
-
 #include "PluginLookAndFeel.h"
 
 //==============================================================================
@@ -27,6 +25,7 @@ class AnalysisManagerComponent    : public Component,
                                     public ComboBox::Listener
 {
 public:
+    
     AnalysisManagerComponent(SoundAnalyserAudioProcessor& _processor);
     ~AnalysisManagerComponent();
 
