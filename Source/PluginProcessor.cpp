@@ -360,3 +360,14 @@ void SoundAnalyserAudioProcessor::valueTreeParentChanged (ValueTree& treeWhosePa
 {
     
 }
+
+OSCTargetManager& SoundAnalyserAudioProcessor::getTargetManager()
+{
+    return targetManager;
+}
+
+AnalysisRelayManager& SoundAnalyserAudioProcessor::getAnalysisRelayManager()
+{
+    return analysisRelayManager;
+}
+

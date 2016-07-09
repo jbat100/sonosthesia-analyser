@@ -25,8 +25,12 @@
 #define __PLUGINPROCESSOR_H_FF438757__
 
 #include "../JuceLibraryCode/JuceHeader.h"
+
 #include "Audio Analysis/AudioAnalysisManager.h"
 #include "Audio Analysis/AnalysisModel.h"
+
+#include "Sonosthesia/Target/TargetManager.h"
+#include "Sonosthesia/Analysis/AnalysisRelay.h"
 
 enum BufferSizeValues
 {
@@ -107,7 +111,15 @@ public:
     
     AudioAnalysisManager analyser;
     
+    //==============================================================================
+    
+    OSCTargetManager& getTargetManager();
+    AnalysisRelayManager& getAnalysisRelayManager();
+    
 private:
+    
+    OSCTargetManager targetManager;
+    AnalysisRelayManager analysisRelayManager;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SoundAnalyserAudioProcessor)

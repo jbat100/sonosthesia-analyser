@@ -1,11 +1,11 @@
 /*
   ==============================================================================
 
-    AnalysisManager.cpp
-    Created: 5 Jul 2016 9:53:15pm
+    AnalysisRelay.cpp
+    Created: 8 Jul 2016 2:47:58pm
     Author:  Jonathan Thorpe
 
   ==============================================================================
 */
 
-#include "AnalysisManager.h"
+#include "AnalysisRelay.h"

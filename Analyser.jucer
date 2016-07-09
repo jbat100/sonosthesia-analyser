@@ -15,14 +15,17 @@
     <GROUP id="{0F5E9544-A7EE-7AC3-489A-8BF69D05E6FB}" name="Source">
       <GROUP id="{BF77CE8F-DF3D-B157-7A5D-BD8066780E6E}" name="Sonosthesia">
         <GROUP id="{3D05C09B-E5EB-532C-F7EE-9C8828BD560C}" name="Analysis">
-          <FILE id="H5hTFq" name="AnalysisManager.cpp" compile="1" resource="0"
-                file="Source/Sonosthesia/Analysis/AnalysisManager.cpp"/>
-          <FILE id="bLDJZy" name="AnalysisManager.h" compile="0" resource="0"
-                file="Source/Sonosthesia/Analysis/AnalysisManager.h"/>
-          <FILE id="UhQ17K" name="AnalysisManagerComponent.cpp" compile="1" resource="0"
+          <FILE id="yKsvzu" name="AnalysisManagerComponent.cpp" compile="1" resource="0"
                 file="Source/Sonosthesia/Analysis/AnalysisManagerComponent.cpp"/>
-          <FILE id="gJE2hJ" name="AnalysisManagerComponent.h" compile="0" resource="0"
+          <FILE id="gEXGj1" name="AnalysisManagerComponent.h" compile="0" resource="0"
                 file="Source/Sonosthesia/Analysis/AnalysisManagerComponent.h"/>
+          <FILE id="sd4qhj" name="AnalysisRelay.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/Analysis/AnalysisRelay.cpp"/>
+          <FILE id="DBXOOe" name="AnalysisRelay.h" compile="0" resource="0" file="Source/Sonosthesia/Analysis/AnalysisRelay.h"/>
+          <FILE id="W17y47" name="AnalysisRelayComponent.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/Analysis/AnalysisRelayComponent.cpp"/>
+          <FILE id="uelrms" name="AnalysisRelayComponent.h" compile="0" resource="0"
+                file="Source/Sonosthesia/Analysis/AnalysisRelayComponent.h"/>
         </GROUP>
         <GROUP id="{B7E6A117-0025-CC35-E34F-A068A0FFC2DF}" name="Core">
           <FILE id="GA2Kda" name="CommonComponent.cpp" compile="1" resource="0"

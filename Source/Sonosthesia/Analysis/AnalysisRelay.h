@@ -1,18 +1,20 @@
 /*
   ==============================================================================
 
-    AnalysisManager.h
-    Created: 5 Jul 2016 9:53:15pm
+    AnalysisRelay.h
+    Created: 8 Jul 2016 2:47:58pm
     Author:  Jonathan Thorpe
 
   ==============================================================================
 */
 
-#ifndef ANALYSISMANAGER_H_INCLUDED
-#define ANALYSISMANAGER_H_INCLUDED
+#ifndef ANALYSISRELAY_H_INCLUDED
+#define ANALYSISRELAY_H_INCLUDED
 
 
+class AnalysisRelayManager {
+    
+};
 
 
-
-#endif  // ANALYSISMANAGER_H_INCLUDED
+#endif  // ANALYSISRELAY_H_INCLUDED

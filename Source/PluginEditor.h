@@ -28,6 +28,7 @@
 
 #include "PluginProcessor.h"
 #include "GUI/OriginalRootComponent.h"
+#include "Sonosthesia/GUI/SonosthesiaRootComponent.h"
 
 //==============================================================================
 /**
@@ -47,7 +48,8 @@ public:
     
 private:
     
-    OriginalRootComponent rootComponent;
+    //OriginalRootComponent rootComponent;
+    SonosthesiaRootComponent rootComponent;
     
     SoundAnalyserAudioProcessor* getProcessor() const;
     

@@ -30,7 +30,7 @@
 //==============================================================================
 SoundAnalyserAudioProcessorEditor::SoundAnalyserAudioProcessorEditor (SoundAnalyserAudioProcessor* processor) :
     AudioProcessorEditor (processor),
-    rootComponent(processor)
+    rootComponent(*processor)
 {
     // This is where our plugin's editor size is set.
     setSize (600, 500);
