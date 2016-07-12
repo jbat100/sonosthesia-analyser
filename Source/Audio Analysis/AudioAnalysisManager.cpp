@@ -76,6 +76,24 @@ void AudioAnalysisManager::addAudioAnalysisAlgorithms()
 
 }
 
+bool AudioAnalysisManager::shouldSendResults()
+{
+    return audioBuffer.isReady();
+}
+
+AudioAnalysis* AudioAnalysisManager::getAnalysisWithIdentifier(String identifier)
+{
+    for (int i = 0;i < audioAnalyses.size();i++)
+    {
+        if (audioAnalyses[i]->getIdentifier().toString() == identifier)
+        {
+            return audioAnalyses[i];
+        }
+    }
+    
+    return nullptr; 
+}
+
 //==============================================================================
 void AudioAnalysisManager::analyseAudio(float* buffer,int numSamples)
 {

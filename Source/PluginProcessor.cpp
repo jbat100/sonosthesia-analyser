@@ -26,7 +26,10 @@
 
 
 //==============================================================================
-SoundAnalyserAudioProcessor::SoundAnalyserAudioProcessor() : analyserTree( AnalysisModel::createAnalyserTree()), analyser(analyserTree[AnalysisModel::Ids::BufferSize])
+SoundAnalyserAudioProcessor::SoundAnalyserAudioProcessor() :
+    analyserTree( AnalysisModel::createAnalyserTree()),
+    analyser(analyserTree[AnalysisModel::Ids::BufferSize]),
+    analysisRelayManager(analyser)
 {
     analyserTree.addListener(this);
     refreshFromTree();
@@ -211,8 +214,8 @@ void SoundAnalyserAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiB
         if (channel == 0)
         {
             analyser.analyseAudio(channelData, buffer.getNumSamples());
+            analysisRelayManager.sendResults();
         }
-        // ..do something to the data...
     }
     
     // In case we have more outputs than inputs, we'll clear any output

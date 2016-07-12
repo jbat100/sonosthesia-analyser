@@ -110,7 +110,13 @@ public:
     /** A vector containing the data to be plotted for an audio analysis algorithm that returns vectors */
     std::vector<float> vectorPlot;
     
+    /** Sonosthesia add on, to mute the OSC sender, in favour of relay based senders **/
     void muteOSCSender(bool mute);
+    
+    /** Sonosthesia add on, true if relay manager should send the results through OSC clients **/
+    bool shouldSendResults();
+    
+    AudioAnalysis* getAnalysisWithIdentifier(String identifier);
     
 private:
  

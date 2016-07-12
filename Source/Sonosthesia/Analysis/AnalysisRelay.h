@@ -29,6 +29,8 @@ public:
     void setAnaysisIdentifier(String _anaysisIdentifier);
     String getAnaysisIdentifier();
     
+    static const String noIdentifier;
+    
 private:
     
     String descriptor;
