@@ -18,11 +18,7 @@
 //==============================================================================
 /*
 */
-class AnalysisManagerComponent    : public Component,
-                                    public Button::Listener,
-                                    public ValueTree::Listener,
-                                    public Label::Listener,
-                                    public ComboBox::Listener
+class AnalysisManagerComponent : public Component, public ListBoxModel, public ChangeListener
 {
 public:
     
@@ -32,66 +28,22 @@ public:
     void paint (Graphics&) override;
     void resized() override;
     
-    //==============================================================================
-    // Button::Listener
-    void buttonClicked (Button* button) override;
+    // ======= ChangeListener ===========
     
-    //==============================================================================
-    // ValueTree::Listener
-    void valueTreePropertyChanged (ValueTree& treeWhosePropertyHasChanged, const Identifier& property) override;
-    void valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded) override;
-    void valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved) override;
-    void valueTreeChildOrderChanged (ValueTree& parentTreeWhoseChildrenHaveMoved, int oldIndex, int newIndex) override;
-    void valueTreeParentChanged (ValueTree& treeWhoseParentHasChanged) override;
+    void changeListenerCallback (ChangeBroadcaster *source) override;
     
-    //==============================================================================
-    // Label::Listener
-    void labelTextChanged (Label* labelThatHasChanged) override;
+    // ======== ListBoxModel ===========
     
-    //==============================================================================
-    // ComboBox::Listener
-    void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
-    
-    //==============================================================================
-    void textEditorTextChanged (TextEditor& textEditor);
-    
-    //==============================================================================
-    
-    void setValueTree (ValueTree tree);
-    void addAnalysis (ValueTree& analysisTree);
-    void refreshFromTree();
+    int getNumRows() override;
+    void paintListBoxItem (int rowNumber, Graphics &g, int width, int height, bool rowIsSelected) override;
+    Component* refreshComponentForRow (int rowNumber, bool isRowSelected, Component *existingComponentToUpdate) override;
     
 private:
     
     SoundAnalyserAudioProcessor& processor;
+    //OwnedArray<Component> analysisComponents;
     
-    int getBufferSizeFromIndex(int index);
-    int getIndexFromBufferSize(int bufferSize);
-    double round(double val) { return floor(val + 0.5); }
-    
-    OwnedArray<Component> analysisComponents;
-    
-    TextButton newAnalysisButton;
-    
-    Label analyserId;
-    
-    Label OSCPort;
-    Label OSCPortText;
-    
-    Label IPAddressValue;
-    Label IPAddressText;
-    
-    Label analyserIdText;
-    
-    Label bufferSizeText;
-    Label bufferSizeValue;
-    
-    ComboBox bufferSizeComboBox;
-    
-    Label pluginTitleLabel;
-    Label pluginVersionLabel;
-    
-    PluginLookAndFeel pluginLookAndFeel;
+    ListBox listBox;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AnalysisManagerComponent)
 };

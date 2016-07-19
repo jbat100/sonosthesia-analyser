@@ -13,7 +13,7 @@
 #include "AnalysisRelayComponent.h"
 
 
-AnalysisSelectorComponent::AnalysisSelectorComponent (SoundAnalyserAudioProcessor& _processor) : processor(_processor)
+AnalysisSelectorComponent::AnalysisSelectorComponent(SoundAnalyserAudioProcessor& _processor) : processor(_processor)
 {
     // just put a combo box inside this component
     addAndMakeVisible (comboBox);
@@ -63,7 +63,7 @@ void AnalysisSelectorComponent::setRelay(std::shared_ptr<AnalysisRelay> _relay)
 }
 
 
-const int AnalysisRelayComponent::desiredHeight = 40;
+const int AnalysisRelayComponent::desiredHeight = 60;
 const int AnalysisRelayComponent::hmargin = 10;
 const int AnalysisRelayComponent::vmargin = 4;
 
@@ -189,14 +189,28 @@ void AnalysisRelayComponent::resized()
     Rectangle<int> buttonBounds(horizontalOffset, verticalOffset, buttonWidth, rowHeight);
     deleteButton.setBounds(buttonBounds);
     
-    
 }
+
+void AnalysisRelayComponent::refresh()
+{
+}
+
+
 
 void AnalysisRelayComponent::setRelay(std::shared_ptr<Relay> _relay)
 {
-    //std::shared_ptr<MIDIRelay> midiRelay = std::dynamic_pointer_cast<MIDIRelay>(_relay);
-    //channelSelectionComponent.setRelay(midiRelay);
+    std::shared_ptr<AnalysisRelay> analysisRelay = std::dynamic_pointer_cast<AnalysisRelay>(_relay);
+    analysisSelectorComponent.setRelay(analysisRelay);
     RelayComponent::setRelay( _relay );
+    
+    if (analysisRelay)
+    {
+        descriptorField.setText(analysisRelay->getDescriptor(), dontSendNotification);
+    }
+    else
+    {
+        descriptorField.setText("", dontSendNotification);
+    }
 }
 
 //==============================================================================

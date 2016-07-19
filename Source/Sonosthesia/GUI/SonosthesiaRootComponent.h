@@ -15,14 +15,13 @@
 
 #include "../../PluginProcessor.h"
 
-#include "../Target/TargetManager.h"
 #include "../Target/TargetListComponent.h"
-
-#include "../Analysis/AnalysisRelay.h"
 #include "../Analysis/AnalysisRelayComponent.h"
 #include "../Analysis/AnalysisManagerComponent.h"
+#include "SettingsComponent.h"
 
-class MainTabbedComponent  : public TabbedComponent
+
+class MainTabbedComponent : public TabbedComponent
 {
     
 public:
@@ -36,12 +35,14 @@ private:
     AnalysisManagerComponent analysisManagerComponent;
     AnalysisRelayListComponent analysisRelayListComponent;
     TargetListComponent targetComponent;
+    SettingsComponent settingsComponent;
 };
 
 //==============================================================================
 /*
 */
-class SonosthesiaRootComponent    : public Component
+
+class SonosthesiaRootComponent : public Component
 {
 public:
     SonosthesiaRootComponent(SoundAnalyserAudioProcessor& _processor);

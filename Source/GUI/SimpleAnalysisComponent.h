@@ -28,17 +28,15 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Audio Analysis/AnalysisModel.h"
 
-/** A generic GUI component for AudioAnalysis modules. 
- 
-    Extend this class to create a custom component. 
- 
+/** 
+ A generic GUI component for AudioAnalysis modules.
+ Extend this class to create a custom component.
 */
-class SimpleAnalysisComponent :     public Component,
-                                    public Button::Listener,
-                                    public ValueTree::Listener
+class SimpleAnalysisComponent : public Component, public Button::Listener
 {
     
 public:
+    
     SimpleAnalysisComponent(ValueTree& analysisTree_);
     
     virtual ~SimpleAnalysisComponent()
@@ -56,19 +54,7 @@ public:
     //======================================================================
     // Button::Listener
     void buttonClicked (Button* button);
-    
-    //======================================================================
-    // ValueTree::Listener
-    void valueTreePropertyChanged (ValueTree& treeWhosePropertyHasChanged, const Identifier& property);
-    void valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded);
-    void valueTreeChildRemoved (ValueTree& parentTree,ValueTree& childWhichHasBeenRemoved,int indexFromWhichChildWasRemoved);
-    void valueTreeChildOrderChanged (ValueTree& parentTreeWhoseChildrenHaveMoved,int oldIndex, int newIndex);
-    void valueTreeParentChanged (ValueTree& treeWhoseParentHasChanged);
-   
-    //======================================================================
-    virtual void customComponentPropertyChange(ValueTree& treeWhosePropertyHasChanged, const Identifier& property);
-    virtual void customComponentResized();
-    virtual void customComponentRefreshFromTree();
+
     
 protected:
     
@@ -78,9 +64,9 @@ private:
     
     Label analysisName;
     TextButton sendButton;
-    TextButton plotButton;
     
-    TextButton removeButton;
+    //TextButton plotButton;
+    //TextButton removeButton;
     
     //======================================================================//
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleAnalysisComponent)

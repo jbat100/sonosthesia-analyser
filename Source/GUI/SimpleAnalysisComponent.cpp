@@ -24,38 +24,36 @@
 
 #include "SimpleAnalysisComponent.h"
 
+#include "../Sonosthesia/Core/Theme.h"
+
 //==============================================================================
 SimpleAnalysisComponent::SimpleAnalysisComponent(ValueTree& analysisTree_) : analysisTree(analysisTree_)
 {
 
     setSize (580, 30);
     
-    
-    
     String name = analysisTree[AnalysisProperties::name];
     analysisName.setText(name, dontSendNotification);
-    analysisName.setFont(Font(16));
+    //analysisName.setFont(Font(16));
     addAndMakeVisible(&analysisName);
+    Appearence::theme()->label(analysisName);
     
     sendButton.setButtonText("Send");
-    //sendButton.setColour(TextButton::ColourIds::buttonOnColourId, Colours::blueviolet);
-    //sendButton.setColour(TextButton::ColourIds::buttonColourId, Colours::silver);
     sendButton.setToggleState(false, dontSendNotification);
     addAndMakeVisible(&sendButton);
-    
-    plotButton.setButtonText("Plot");
-    //plotButton.setColour(TextButton::ColourIds::buttonOnColourId, Colours::yellowgreen);
-    //plotButton.setColour(TextButton::ColourIds::buttonColourId, Colours::silver);
-    plotButton.setToggleState(false, dontSendNotification);
-    addAndMakeVisible(&plotButton);
-    
-    removeButton.setButtonText("x");
-    addAndMakeVisible(&removeButton);
-    
     analysisTree.addListener(this);
     sendButton.addListener(this);
+    
+    /*
+    plotButton.setButtonText("Plot");
+    plotButton.setToggleState(false, dontSendNotification);
+    addAndMakeVisible(&plotButton);
+    removeButton.setButtonText("x");
+    addAndMakeVisible(&removeButton);
     plotButton.addListener(this);
     removeButton.addListener(this);
+    */
+
         
     refreshFromTree();
 }
@@ -64,7 +62,8 @@ SimpleAnalysisComponent::SimpleAnalysisComponent(ValueTree& analysisTree_) : ana
 void SimpleAnalysisComponent::refreshFromTree()
 {
     sendButton.setToggleState(analysisTree[AnalysisProperties::send],dontSendNotification);
-    plotButton.setToggleState(analysisTree[AnalysisProperties::plot], dontSendNotification);
+    
+    //plotButton.setToggleState(analysisTree[AnalysisProperties::plot], dontSendNotification);
     
     customComponentRefreshFromTree();
     
@@ -74,11 +73,11 @@ void SimpleAnalysisComponent::refreshFromTree()
 //==============================================================================
 void SimpleAnalysisComponent::resized()
 {
-    removeButton.setBounds(0,0,20,20);
-    analysisName.setBounds(30,0,300,20);
+    //removeButton.setBounds(0,0,20,20);
+    //plotButton.setBounds(340, 0, 40, 20);
     
+    analysisName.setBounds(30,0,300,20);
     sendButton.setBounds(280,0,40,20);
-    plotButton.setBounds(340, 0, 40, 20);
 
     customComponentResized();
 }
@@ -106,6 +105,7 @@ void SimpleAnalysisComponent::buttonClicked (Button* button)
             analysisTree.setProperty(AnalysisProperties::send, 1, nullptr);
         }
     }
+    /*
     else if (button == &plotButton)
     {
         bool state = plotButton.getToggleState();
@@ -124,9 +124,10 @@ void SimpleAnalysisComponent::buttonClicked (Button* button)
     {
         AnalysisModel::removeAnalysis(analysisTree);
     }
+     */
 }
 
-//==============================================================================
+/*==============================================================================
 void SimpleAnalysisComponent::valueTreePropertyChanged (ValueTree& treeWhosePropertyHasChanged, const Identifier& property)
 {
     if (treeWhosePropertyHasChanged == analysisTree)
@@ -139,51 +140,8 @@ void SimpleAnalysisComponent::valueTreePropertyChanged (ValueTree& treeWhoseProp
         {
             plotButton.setToggleState(analysisTree[AnalysisProperties::plot], dontSendNotification);
         }
-        
         customComponentPropertyChange(treeWhosePropertyHasChanged,property);
-        
-        
         resized();
     }
 }
-//==============================================================================
-void SimpleAnalysisComponent::valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded)
-{
-
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved)
-{
-
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::valueTreeChildOrderChanged (ValueTree& parentTreeWhoseChildrenHaveMoved,int oldIndex, int newIndex)
-{
-
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::valueTreeParentChanged (ValueTree& treeWhoseParentHasChanged)
-{
-
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::customComponentPropertyChange(ValueTree& treeWhosePropertyHasChanged, const Identifier& property)
-{
-    
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::customComponentResized()
-{
-    
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::customComponentRefreshFromTree()
-{
-    
-}
+ */

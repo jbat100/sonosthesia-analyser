@@ -62,6 +62,7 @@ public:
     {
         plot = false;
         send = false;
+        relayed = false;
         addressPattern = "/uninitialised";
     }
     
@@ -248,6 +249,9 @@ public:
     
     /** Indicates whether the module should send its result by OSC */
     bool send;
+    
+    /** Sonosthesia: indicates whether the analysis is used by at least one relay **/
+    bool relayed;
     
     /** The address pattern of the audio analysis module */
     std::string addressPattern;

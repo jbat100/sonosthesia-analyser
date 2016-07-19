@@ -61,6 +61,8 @@ public:
 
     virtual void setRelay(std::shared_ptr<Relay> _relay) override;
     
+    virtual void refresh() override;
+    
     static const int desiredHeight;
     static const int hmargin;
     static const int vmargin;

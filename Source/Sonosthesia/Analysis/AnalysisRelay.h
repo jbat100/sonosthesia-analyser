@@ -12,11 +12,22 @@
 #define ANALYSISRELAY_H_INCLUDED
 
 #include "../../Audio Analysis/AudioAnalysisManager.h"
-
 #include "../Core/Utils.h"
 #include "../Relay/Relay.h"
 
-class AnalysisRelay : public Relay {
+class AnalysisRelay;
+
+class AnalysisRelayListener {
+    
+    virtual ~AnalysisRelayListener() {}
+    
+    virtual void analysisRelayChanged(AnalysisRelay* relay) = 0;
+    
+    virtual void analysisRelayInvalidated(AnalysisRelay* relay) = 0;
+    
+};
+
+class AnalysisRelay : public Relay, public ListenerList<AnalysisRelayListener> {
 
 public:
     
@@ -45,6 +56,8 @@ public:
     AnalysisRelayManager(AudioAnalysisManager& _analysisManager);
     
     void sendResults(); // push the results of all the analyses according to the relays
+    
+    bool analysisIsRelayed(String analysisIdentifier);
     
 private:
     

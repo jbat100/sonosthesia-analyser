@@ -17,7 +17,8 @@ TabbedComponent (TabbedButtonBar::TabsAtTop),
 processor(_processor),
 analysisManagerComponent(processor),
 analysisRelayListComponent(processor),
-targetComponent(processor.getTargetManager())
+targetComponent(processor.getTargetManager()),
+settingsComponent(processor)
 {
     File applicationFile = File::getSpecialLocation(File::SpecialLocationType::currentApplicationFile);
     std::cout << "Plugin path : " << applicationFile.getFullPathName() << "\n";
@@ -27,8 +28,9 @@ targetComponent(processor.getTargetManager())
     Colour colour = Colours::black.withAlpha(0.3f); // Colour(Colours::black).withAlpha(0.0f);
     
     addTab ("Analysis", colour, &analysisManagerComponent, true);
-    addTab ("Relay", colour, &analysisRelayListComponent, true);
+    addTab ("Relays", colour, &analysisRelayListComponent, true);
     addTab ("Targets", colour, &targetComponent, true);
+    addTab ("Settings", colour, &settingsComponent, true);
     
 }
 

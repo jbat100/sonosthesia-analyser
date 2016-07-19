@@ -42,6 +42,10 @@
           <FILE id="Cjbf3h" name="Utils.h" compile="0" resource="0" file="Source/Sonosthesia/Core/Utils.h"/>
         </GROUP>
         <GROUP id="{9DA778C4-284E-B9EE-BB2C-2374BD3B81D7}" name="GUI">
+          <FILE id="di9L5v" name="SettingsComponent.cpp" compile="1" resource="0"
+                file="Source/Sonosthesia/GUI/SettingsComponent.cpp"/>
+          <FILE id="lQEAia" name="SettingsComponent.h" compile="0" resource="0"
+                file="Source/Sonosthesia/GUI/SettingsComponent.h"/>
           <FILE id="cgZXQS" name="SonosthesiaRootComponent.cpp" compile="1" resource="0"
                 file="Source/Sonosthesia/GUI/SonosthesiaRootComponent.cpp"/>
           <FILE id="knDKUB" name="SonosthesiaRootComponent.h" compile="0" resource="0"

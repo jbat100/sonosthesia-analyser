@@ -90,7 +90,6 @@ public:
     
     void changeListenerCallback (ChangeBroadcaster *source) override;
     
-    
     // ======== ListBoxModel ===========
     
     int getNumRows() override;
