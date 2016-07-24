@@ -15,6 +15,8 @@
 #include "../../PluginProcessor.h"
 #include "PluginLookAndFeel.h"
 
+class AudioAnalysis;
+
 //==============================================================================
 /*
 */
@@ -37,6 +39,9 @@ public:
     int getNumRows() override;
     void paintListBoxItem (int rowNumber, Graphics &g, int width, int height, bool rowIsSelected) override;
     Component* refreshComponentForRow (int rowNumber, bool isRowSelected, Component *existingComponentToUpdate) override;
+    
+    
+    Component* createComponentForAnalysis(AudioAnalysis* analysis);
     
 private:
     

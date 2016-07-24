@@ -365,8 +365,7 @@ void OriginalRootComponent::addAnalysis(ValueTree& analysisTree)
     {
         if (analysisTree.getType() == processor->analyser.audioAnalyses[i]->getIdentifier())
         {
-            analysisComponents.add(processor->analyser.audioAnalyses[i]->getGUIComponent(analysisTree));
-            
+            //analysisComponents.add(processor->analyser.audioAnalyses[i]->getGUIComponent(analysisTree));
         }
     }
     

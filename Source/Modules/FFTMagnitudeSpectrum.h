@@ -118,11 +118,12 @@ public:
     }
     
     //==============================================================================
-    /** overriding this as we have a custom GUI */
+    /* overriding this as we have a custom GUI
     Component* getGUIComponent(ValueTree& analysisTree)
     {
         return new FFTComponent(analysisTree);
     }
+     */
     
     //==============================================================================
     std::string getCoreAddressPattern()

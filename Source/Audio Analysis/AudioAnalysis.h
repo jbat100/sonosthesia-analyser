@@ -27,8 +27,9 @@
 #include <vector>
 #include <string>
 #include "AnalysisModel.h"
-#include "../GUI/SimpleAnalysisComponent.h"
 #include "../Libraries/Gist/src/Gist.h"
+
+class SimpleAnalysisComponent;
 
 //=======================================================================
 /** The InputType for the audio analysis module.
@@ -156,7 +157,6 @@ public:
     virtual std::vector<float> getAnalysisResultAsVector()
     {
         std::vector<float> v;
-        
         return v;
     }
 
@@ -222,18 +222,6 @@ public:
     virtual void handleCustomPropertyChange(ValueTree& tree, const Identifier& property)
     {
         
-    }
-    
-    /** @returns a pointer to the GUI component that should be used for this AudioAnalysis module.
-     
-        Override this if you wish to create a custom GUI component. Also, @see SimpleAnalysisComponent for
-        how to extend it to be a custom GUI component 
-     
-        @param analysisTree the audio analysis tree for the module
-     */
-    virtual Component* getGUIComponent(ValueTree& analysisTree)
-    {
-        return new SimpleAnalysisComponent(analysisTree);
     }
     
     /** Constructs the full OSC address pattern from the analyser ID and the module address pattern

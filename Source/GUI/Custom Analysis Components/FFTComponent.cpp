@@ -22,10 +22,13 @@
 //=======================================================================
 
 #include "FFTComponent.h"
+#include "../../Modules/FFTMagnitudeSpectrum.h"
 
 //==============================================================================
-FFTComponent::FFTComponent(ValueTree& analysisTree_) : SimpleAnalysisComponent(analysisTree_)
+FFTComponent::FFTComponent(AudioAnalysis* _analysis) : SimpleAnalysisComponent(_analysis)
 {
+    jassert(dynamic_cast<FFTMagnitudeSpectrum*>(_analysis) != nullptr);
+    
     setSize (580, 30);
     
     numFFTSamplesText.setText("# Samples", dontSendNotification);
@@ -40,11 +43,11 @@ FFTComponent::FFTComponent(ValueTree& analysisTree_) : SimpleAnalysisComponent(a
     
     numFFTSamples.addListener(this);
     
-    refreshFromTree();
+    //refreshFromTree();
 }
 
 
-//==============================================================================
+/*==============================================================================
 void FFTComponent::customComponentPropertyChange(ValueTree& treeWhosePropertyHasChanged, const Identifier& property)
 {
     if (property == AnalysisProperties::FFT::numSamplesToSend)
@@ -52,37 +55,41 @@ void FFTComponent::customComponentPropertyChange(ValueTree& treeWhosePropertyHas
         numFFTSamples.setText(treeWhosePropertyHasChanged[property], dontSendNotification);
     }
 }
+ */
 
 //==============================================================================
-void FFTComponent::customComponentResized()
+void FFTComponent::resized()
 {
+    SimpleAnalysisComponent::resized();
+    
     numFFTSamplesText.setBounds(400, 0, 70, 20);
     numFFTSamples.setBounds(480,00,40,20);
 }
 
-//==============================================================================
+/*==============================================================================
 void FFTComponent::customComponentRefreshFromTree()
 {
     int numSamples = analysisTree[AnalysisProperties::FFT::numSamplesToSend];
     numFFTSamples.setText(String(numSamples), dontSendNotification);
 }
+ */
 
 //==============================================================================
 void FFTComponent::labelTextChanged (Label* labelThatHasChanged)
 {
+    /*
     if (labelThatHasChanged == &numFFTSamples)
     {
         int numSamples = numFFTSamples.getTextValue().getValue();
-        
         ValueTree analyserTree = analysisTree.getParent();
-        
         int bufferSize = analyserTree[AnalysisModel::Ids::BufferSize];
-        
         if (numSamples > bufferSize/2)
         {
             numSamples = bufferSize/2;
         }
-        
         analysisTree.setProperty(AnalysisProperties::FFT::numSamplesToSend, numSamples, nullptr);
     }
+     */
 }
+
+

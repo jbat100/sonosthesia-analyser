@@ -8,14 +8,19 @@
   ==============================================================================
 */
 
-#include "../../../JuceLibraryCode/JuceHeader.h"
 #include "AnalysisManagerComponent.h"
 
+#include "../../../JuceLibraryCode/JuceHeader.h"
+
 #include "../../Audio Analysis/AnalysisModel.h"
+#include "../../Audio Analysis/AudioAnalysis.h"
 #include "../../PluginProcessor.h"
 
-#include "SimpleAnalysisComponent.h"
-#include "AnalysisSelectionComponent.h"
+#include "../../GUI/SimpleAnalysisComponent.h"
+#include "../../GUI/Custom Analysis Components/FFTComponent.h"
+#include "../../GUI/Custom Analysis Components/MelFreqSpecComponent.h"
+
+//#include "../../GUI/AnalysisSelectionComponent.h"
 
 //==============================================================================
 AnalysisManagerComponent::AnalysisManagerComponent(SoundAnalyserAudioProcessor& _processor) : processor(_processor)
@@ -148,6 +153,13 @@ void AnalysisManagerComponent::paintListBoxItem (int rowNumber, Graphics &g, int
     
 }
 
+Component* AnalysisManagerComponent::createComponentForAnalysis(AudioAnalysis* analysis)
+{
+    if (analysis->getIdentifier().toString() == "FFT") return new FFTComponent(analysis);
+    else if (analysis->getIdentifier().toString() == "MelFrequencySpectrum") return new MelFreqSpecComponent(analysis);
+    return new SimpleAnalysisComponent(analysis);
+}
+
 Component* AnalysisManagerComponent::refreshComponentForRow (int rowNumber, bool isRowSelected, Component *existingComponentToUpdate)
 {
     Component* component = existingComponentToUpdate;
@@ -156,10 +168,11 @@ Component* AnalysisManagerComponent::refreshComponentForRow (int rowNumber, bool
     
     // If an existing component is being passed-in for updating, we'll re-use it, but
     // if not, we'll have to create one.
+    
     if (component == nullptr && analysis)
     {
-        ValueTree dummy; // this is used to transfer state, but the GUI doing that seems wrong to me...
-        component = analysis->getGUIComponent(dummy);
+        //ValueTree dummy; // this is used to transfer state, but the GUI doing that seems wrong to me...
+        component = createComponentForAnalysis(analysis);
     }
     
     return component;

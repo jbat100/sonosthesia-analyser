@@ -41,6 +41,7 @@ public:
     
     enum Level {
         Default,
+        Background,
         Info,
         Primary,
         Warning,

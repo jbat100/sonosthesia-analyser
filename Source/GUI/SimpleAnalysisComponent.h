@@ -27,44 +27,51 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Audio Analysis/AnalysisModel.h"
+#include "../Audio Analysis/AudioAnalysis.h"
 
 /** 
  A generic GUI component for AudioAnalysis modules.
  Extend this class to create a custom component.
 */
+
 class SimpleAnalysisComponent : public Component, public Button::Listener
 {
     
 public:
     
-    SimpleAnalysisComponent(ValueTree& analysisTree_);
+    SimpleAnalysisComponent(AudioAnalysis* _analysis);
     
     virtual ~SimpleAnalysisComponent()
     {
         
     }
     
-    void refreshFromTree();
+    //void refreshFromTree();
     
     //======================================================================
     // Component
-    void resized();
-    void paint(Graphics& g);
+    void resized() override;
+    void paint(Graphics& g) override;
     
     //======================================================================
     // Button::Listener
-    void buttonClicked (Button* button);
+    void buttonClicked (Button* button) override;
 
     
 protected:
     
-    ValueTree analysisTree;
+    //ValueTree analysisTree;
+    
+    AudioAnalysis* analysis;
     
 private:
     
-    Label analysisName;
-    TextButton sendButton;
+    Label nameLabel;
+    Label activityIndicator;
     
+    void updateActivityIndicator();
+    
+    //TextButton sendButton;
     //TextButton plotButton;
     //TextButton removeButton;
     

@@ -27,48 +27,57 @@
 #include "../Sonosthesia/Core/Theme.h"
 
 //==============================================================================
-SimpleAnalysisComponent::SimpleAnalysisComponent(ValueTree& analysisTree_) : analysisTree(analysisTree_)
+SimpleAnalysisComponent::SimpleAnalysisComponent(AudioAnalysis* _analysis) : analysis(_analysis)
 {
 
     setSize (580, 30);
     
-    String name = analysisTree[AnalysisProperties::name];
-    analysisName.setText(name, dontSendNotification);
-    //analysisName.setFont(Font(16));
-    addAndMakeVisible(&analysisName);
-    Appearence::theme()->label(analysisName);
+    //String name = analysisTree[AnalysisProperties::name];
+    //nameLabel.setText(name, dontSendNotification);
     
-    sendButton.setButtonText("Send");
-    sendButton.setToggleState(false, dontSendNotification);
-    addAndMakeVisible(&sendButton);
-    analysisTree.addListener(this);
-    sendButton.addListener(this);
+    jassert(analysis != nullptr);
+    
+    addAndMakeVisible(activityIndicator);
+    
+    
+    nameLabel.setText(analysis->getName(), dontSendNotification);
+    addAndMakeVisible(&nameLabel);
+    Appearence::theme()->label(nameLabel);
+    nameLabel.setColour(Label::ColourIds::backgroundColourId, Colours::grey);
+    nameLabel.setJustificationType(Justification::verticallyCentred | Justification::left);
     
     /*
-    plotButton.setButtonText("Plot");
-    plotButton.setToggleState(false, dontSendNotification);
-    addAndMakeVisible(&plotButton);
-    removeButton.setButtonText("x");
-    addAndMakeVisible(&removeButton);
-    plotButton.addListener(this);
-    removeButton.addListener(this);
-    */
+     
+     sendButton.setButtonText("Send");
+     sendButton.setToggleState(false, dontSendNotification);
+     addAndMakeVisible(&sendButton);
+     sendButton.addListener(this);
+     
+     nameLabel.setFont(Font(16));
+     analysisTree.addListener(this);
+     plotButton.setButtonText("Plot");
+     plotButton.setToggleState(false, dontSendNotification);
+     addAndMakeVisible(&plotButton);
+     removeButton.setButtonText("x");
+     addAndMakeVisible(&removeButton);
+     plotButton.addListener(this);
+     removeButton.addListener(this);
+     refreshFromTree();
+     */
 
-        
-    refreshFromTree();
 }
 
-//==============================================================================
+/*==============================================================================
 void SimpleAnalysisComponent::refreshFromTree()
 {
     sendButton.setToggleState(analysisTree[AnalysisProperties::send],dontSendNotification);
     
     //plotButton.setToggleState(analysisTree[AnalysisProperties::plot], dontSendNotification);
-    
-    customComponentRefreshFromTree();
+    //customComponentRefreshFromTree();
     
     resized();
 }
+ */
 
 //==============================================================================
 void SimpleAnalysisComponent::resized()
@@ -76,10 +85,10 @@ void SimpleAnalysisComponent::resized()
     //removeButton.setBounds(0,0,20,20);
     //plotButton.setBounds(340, 0, 40, 20);
     
-    analysisName.setBounds(30,0,300,20);
-    sendButton.setBounds(280,0,40,20);
-
-    customComponentResized();
+    nameLabel.setBounds(30,0,300,20);
+    
+    //sendButton.setBounds(280,0,40,20);
+    //customComponentResized();
 }
 
 
@@ -89,27 +98,47 @@ void SimpleAnalysisComponent::paint(Graphics& g)
    // g.fillAll(Colours::silver);
 }
 
-//==============================================================================
-void SimpleAnalysisComponent::buttonClicked (Button* button)
+void SimpleAnalysisComponent::updateActivityIndicator()
 {
-    if (button == &sendButton)
+    if (analysis != nullptr)
     {
-        bool state = sendButton.getToggleState();
-        
-        if (state == true)
+        if (analysis->send || analysis->relayed)
         {
-            analysisTree.setProperty(AnalysisProperties::send, 0, nullptr);
+            Appearence::theme()->indicator(activityIndicator, Theme::Primary);
+            activityIndicator.setText("Active", dontSendNotification);
         }
         else
         {
-            analysisTree.setProperty(AnalysisProperties::send, 1, nullptr);
+            Appearence::theme()->indicator(activityIndicator, Theme::Background);
+            activityIndicator.setText("Inactive", dontSendNotification);
         }
     }
+    else
+    {
+        Appearence::theme()->indicator(activityIndicator, Theme::Warning);
+        activityIndicator.setText("Unknown", dontSendNotification);
+    }
+}
+
+//==============================================================================
+void SimpleAnalysisComponent::buttonClicked (Button* button)
+{
     /*
+    if (button == &sendButton)
+    {
+        bool state = sendButton.getToggleState();
+        if (state == true)
+        {
+            //analysisTree.setProperty(AnalysisProperties::send, 0, nullptr);
+        }
+        else
+        {
+            //analysisTree.setProperty(AnalysisProperties::send, 1, nullptr);
+        }
+    }
     else if (button == &plotButton)
     {
         bool state = plotButton.getToggleState();
-        
         if (state == true)
         {
             analysisTree.setProperty(AnalysisProperties::plot, 0, nullptr);

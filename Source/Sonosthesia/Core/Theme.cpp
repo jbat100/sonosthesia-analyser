@@ -59,6 +59,11 @@ void SpaceTheme::indicator(Label& label, Level level)
 {
     switch (level) {
         
+        case Theme::Background:
+            label.setColour( Label::ColourIds::textColourId, Colours::grey);
+            label.setColour( Label::ColourIds::backgroundColourId, Colours::lightgrey);
+            break;
+            
         case Theme::Primary:
             label.setColour( Label::ColourIds::textColourId, Colours::whitesmoke);
             label.setColour( Label::ColourIds::backgroundColourId, Colours::deepskyblue);

@@ -22,10 +22,13 @@
 //=======================================================================
 
 #include "MelFreqSpecComponent.h"
+#include "../../Modules/MelFrequencySpectrum.h"
 
 //==============================================================================
-MelFreqSpecComponent::MelFreqSpecComponent(ValueTree& analysisTree_) : SimpleAnalysisComponent(analysisTree_)
+MelFreqSpecComponent::MelFreqSpecComponent(AudioAnalysis* _analysis) : SimpleAnalysisComponent(_analysis)
 {
+    jassert(dynamic_cast<MelFrequencySpectrum*>(_analysis) != nullptr);
+    
     setSize (580, 30);
    
     numMelBinsText.setText("# Bins", dontSendNotification);
@@ -40,12 +43,12 @@ MelFreqSpecComponent::MelFreqSpecComponent(ValueTree& analysisTree_) : SimpleAna
     
     numMelBins.addListener(this);
     
-    refreshFromTree();
+    //refreshFromTree();
 }
 
 
 
-//==============================================================================
+/*==============================================================================
 void MelFreqSpecComponent::customComponentPropertyChange(ValueTree& treeWhosePropertyHasChanged, const Identifier& property)
 {
     if (property == AnalysisProperties::MelFrequencySpectrum::numBins)
@@ -53,20 +56,23 @@ void MelFreqSpecComponent::customComponentPropertyChange(ValueTree& treeWhosePro
         numMelBins.setText(treeWhosePropertyHasChanged[property], dontSendNotification);
     }
 }
+ */
 
-//==============================================================================
-void MelFreqSpecComponent::customComponentResized()
+void MelFreqSpecComponent::resized()
 {
+    SimpleAnalysisComponent::resized();
+    
     numMelBinsText.setBounds(400, 0, 70, 20);
     numMelBins.setBounds(480,00,40,20);
 }
 
-//==============================================================================
+/*==============================================================================
 void MelFreqSpecComponent::customComponentRefreshFromTree()
 {
     int numBins = analysisTree[AnalysisProperties::MelFrequencySpectrum::numBins];
     numMelBins.setText(String(numBins), dontSendNotification);
 }
+ */
 
 //==============================================================================
 void MelFreqSpecComponent::labelTextChanged (Label* labelThatHasChanged)
@@ -74,8 +80,7 @@ void MelFreqSpecComponent::labelTextChanged (Label* labelThatHasChanged)
     if (labelThatHasChanged == &numMelBins)
     {
         int numBins = numMelBins.getTextValue().getValue();
-        
-        analysisTree.setProperty(AnalysisProperties::MelFrequencySpectrum::numBins, numBins, nullptr);
+        //analysisTree.setProperty(AnalysisProperties::MelFrequencySpectrum::numBins, numBins, nullptr);
     }
 }
 
