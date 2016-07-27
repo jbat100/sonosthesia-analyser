@@ -117,10 +117,10 @@ void AnalysisRelayComponent::resized()
     // target   <__________________> analysis _________ | Del |
     // group <_____________> descriptor <_____________> |     |
     
-    int targetLabelWidth = 60;
-    int analysisLabelWidth = 80;
-    int groupLabelWidth = 60;
-    int descriptorLabelWidth = 80;
+    int targetLabelWidth = 50;
+    int analysisLabelWidth = 70;
+    int groupLabelWidth = 50;
+    int descriptorLabelWidth = 70;
     int buttonWidth = 60;
     int rowHeight = 20;
     
@@ -191,8 +191,24 @@ void AnalysisRelayComponent::resized()
     
 }
 
+void AnalysisRelayComponent::buttonClicked (Button* button)
+{
+    if (button == &deleteButton)
+    {
+        if (relay)
+        {
+            processor.getAnalysisRelayManager().deleteItem(relay->getIdentifier());
+        }
+        else
+        {
+            std::cerr << "AnalysisRelayComponent on delete button, no associated relay\n";
+        }
+    }
+}
+
 void AnalysisRelayComponent::refresh()
 {
+    
 }
 
 
@@ -297,18 +313,23 @@ Component* AnalysisRelayListComponent::refreshComponentForRow (int rowNumber, bo
     
     std::shared_ptr<AnalysisRelay> relay = nullptr;
     
-    if (rowNumber < processor.getAnalysisRelayManager().count())
-    {
-        relay = processor.getAnalysisRelayManager().getItem(rowNumber);
-    }
-    
     // If an existing component is being passed-in for updating, we'll re-use it, if not, we'll have to create one.
     if (relayComponent == nullptr)
     {
         relayComponent = new AnalysisRelayComponent(processor);
     }
     
-    relayComponent->setRelay(relay);
+    if (rowNumber < processor.getAnalysisRelayManager().count())
+    {
+        relay = processor.getAnalysisRelayManager().getItem(rowNumber);
+        relayComponent->setRelay(relay);
+    }
+    else
+    {
+        //std::cerr << "AnalysisRelayListComponent refresh component for row out of bounds " << rowNumber << "\n";
+    }
+    
+    
     return relayComponent;
 }
 

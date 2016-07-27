@@ -45,7 +45,7 @@ SimpleAnalysisComponent::SimpleAnalysisComponent(AudioAnalysis* _analysis) : ana
     nameLabel.setText(analysis->getName(), dontSendNotification);
     addAndMakeVisible(&nameLabel);
     Appearence::theme()->label(nameLabel);
-    nameLabel.setColour(Label::ColourIds::backgroundColourId, Colours::grey);
+    //nameLabel.setColour(Label::ColourIds::backgroundColourId, Colours::grey);
     nameLabel.setJustificationType(Justification::verticallyCentred | Justification::left);
     
     /*

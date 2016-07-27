@@ -94,6 +94,9 @@ protected:
     
     OSCTargetManager& targetManager;
     std::shared_ptr<Relay> relay;
+    TextButton deleteButton;
+    
+    // protected not private so that subclasses can resize the sub components
     
     Label groupLabel;
     Label groupField;
@@ -101,14 +104,8 @@ protected:
     Label targetLabel;
     TargetSelectionComponent targetSelectionComponent;
     
-    TextButton deleteButton;
-    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RelayComponent)
     
 };
-
-
-
-
 
 #endif  // RELAYCOMPONENT_H_INCLUDED

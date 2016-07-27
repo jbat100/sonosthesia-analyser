@@ -25,9 +25,22 @@ AnalysisRelay::AnalysisRelay(std::shared_ptr<OSCTarget> _target, String _group, 
     
 }
 
+void AnalysisRelay::setGroup(String _group)
+{
+    Relay::setGroup(_group);
+    call(&AnalysisRelayListener::analysisRelayChanged, this);
+}
+
+void AnalysisRelay::setTarget(std::shared_ptr<OSCTarget> _target)
+{
+    Relay::setTarget(_target);
+    call(&AnalysisRelayListener::analysisRelayChanged, this);
+}
+
 void AnalysisRelay::setDescriptor(String _descriptor)
 {
     descriptor = _descriptor;
+    call(&AnalysisRelayListener::analysisRelayChanged, this);
 }
 
 String AnalysisRelay::getDescriptor()
@@ -38,6 +51,7 @@ String AnalysisRelay::getDescriptor()
 void AnalysisRelay::setAnaysisIdentifier(String _anaysisIdentifier)
 {
     anaysisIdentifier = _anaysisIdentifier;
+    call(&AnalysisRelayListener::analysisRelayChanged, this);
 }
 
 String AnalysisRelay::getAnaysisIdentifier()

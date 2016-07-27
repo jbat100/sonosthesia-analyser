@@ -18,15 +18,10 @@
 class AnalysisRelay;
 
 class AnalysisRelayListener {
-    
 public:
-    
     virtual ~AnalysisRelayListener() {}
-    
     virtual void analysisRelayChanged(AnalysisRelay* relay) = 0;
-    
     virtual void analysisRelayInvalidated(AnalysisRelay* relay) = 0;
-    
 };
 
 class AnalysisRelay : public Relay, public ListenerList<AnalysisRelayListener> {
@@ -41,6 +36,10 @@ public:
     
     void setAnaysisIdentifier(String _anaysisIdentifier);
     String getAnaysisIdentifier();
+    
+    // overrides to send change notifications
+    void setTarget(std::shared_ptr<OSCTarget> _target);
+    void setGroup(String _group);
     
     static const String noIdentifier;
     

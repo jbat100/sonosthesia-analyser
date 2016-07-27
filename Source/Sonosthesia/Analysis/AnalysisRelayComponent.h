@@ -58,10 +58,10 @@ public:
 
     void paint (Graphics&) override;
     void resized() override;
-
-    virtual void setRelay(std::shared_ptr<Relay> _relay) override;
     
-    virtual void refresh() override;
+    void buttonClicked (Button* button) override;
+    void setRelay(std::shared_ptr<Relay> _relay) override;
+    void refresh() override;
     
     static const int desiredHeight;
     static const int hmargin;
@@ -70,8 +70,6 @@ public:
 private:
     
     SoundAnalyserAudioProcessor& processor;
-    
-    std::shared_ptr<AnalysisRelay> relay;
     
     Label descriptorLabel;
     Label descriptorField;
