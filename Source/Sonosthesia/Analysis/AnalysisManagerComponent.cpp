@@ -43,7 +43,7 @@ AnalysisManagerComponent::AnalysisManagerComponent(SoundAnalyserAudioProcessor& 
     addAndMakeVisible (listBox);
     
     listBox.setOutlineThickness(0);
-    listBox.setRowHeight(34);
+    listBox.setRowHeight(40);
     
     listBox.setOpaque(false);
     listBox.setColour(ListBox::ColourIds::backgroundColourId, Colours::transparentBlack);
@@ -141,6 +141,10 @@ void AnalysisManagerComponent::resized()
     listBox.setBounds( getBounds() );
 }
 
+void AnalysisManagerComponent::reload()
+{
+    listBox.updateContent();
+}
 
 
 int AnalysisManagerComponent::getNumRows()
@@ -173,6 +177,17 @@ Component* AnalysisManagerComponent::refreshComponentForRow (int rowNumber, bool
     {
         //ValueTree dummy; // this is used to transfer state, but the GUI doing that seems wrong to me...
         component = createComponentForAnalysis(analysis);
+    }
+    
+    SimpleAnalysisComponent* analysisComponent = dynamic_cast<SimpleAnalysisComponent*>(component);
+    
+    if (analysisComponent)
+    {
+        analysisComponent->reload();
+    }
+    else
+    {
+        std::cerr << "AnalysisManagerComponent ERROR: unexpected analysis component\n";
     }
     
     return component;

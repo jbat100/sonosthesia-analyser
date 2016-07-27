@@ -31,7 +31,7 @@ MelFreqSpecComponent::MelFreqSpecComponent(AudioAnalysis* _analysis) : SimpleAna
     
     setSize (580, 30);
    
-    numMelBinsText.setText("# Bins", dontSendNotification);
+    numMelBinsText.setText("Bins", dontSendNotification);
     addAndMakeVisible(&numMelBinsText);
     
     numMelBins.setColour(Label::textColourId, Colours::black);
@@ -62,8 +62,8 @@ void MelFreqSpecComponent::resized()
 {
     SimpleAnalysisComponent::resized();
     
-    numMelBinsText.setBounds(400, 0, 70, 20);
-    numMelBins.setBounds(480,00,40,20);
+    numMelBinsText.setBounds(400, yOffset, 70, 20);
+    numMelBins.setBounds(480, yOffset, 40, 20);
 }
 
 /*==============================================================================

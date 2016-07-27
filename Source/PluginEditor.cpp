@@ -32,10 +32,16 @@ SoundAnalyserAudioProcessorEditor::SoundAnalyserAudioProcessorEditor (SoundAnaly
     AudioProcessorEditor (processor),
     rootComponent(*processor)
 {
+    processor->getAnalysisRelayManager().addChangeListener(this);
+    
     // This is where our plugin's editor size is set.
-    setSize (600, 500);
+    setSize (600, 600);
     
     addAndMakeVisible(rootComponent);
+
+    updateAnalysisRelayListeners();
+    updateAnalysisRelayFlags();
+    rootComponent.refreshAnalyses();
 }
 
 
@@ -64,4 +70,56 @@ SoundAnalyserAudioProcessor* SoundAnalyserAudioProcessorEditor::getProcessor() c
     return static_cast <SoundAnalyserAudioProcessor*> (getAudioProcessor());
 }
 
+
+void SoundAnalyserAudioProcessorEditor::changeListenerCallback (ChangeBroadcaster* source)
+{
+    if (source == &getProcessor()->getAnalysisRelayManager())
+    {
+        updateAnalysisRelayListeners();
+        updateAnalysisRelayFlags();
+        rootComponent.refreshAnalyses();
+    }
+}
+
+void SoundAnalyserAudioProcessorEditor::analysisRelayChanged(AnalysisRelay* relay)
+{
+    updateAnalysisRelayFlags();
+    rootComponent.refreshAnalyses();
+}
+
+void SoundAnalyserAudioProcessorEditor::analysisRelayInvalidated(AnalysisRelay* relay)
+{
+    updateAnalysisRelayFlags();
+    rootComponent.refreshAnalyses();
+}
+
+void SoundAnalyserAudioProcessorEditor::updateAnalysisRelayListeners()
+{
+    auto relays = getProcessor()->getAnalysisRelayManager().getItems();
+    for (auto i = relays.begin(); i != relays.end(); ++i)
+    {
+        (*i)->add(this);
+    }
+}
+
+void SoundAnalyserAudioProcessorEditor::updateAnalysisRelayFlags()
+{
+    std::cout << "SoundAnalyserAudioProcessor updateAnalysisRelayFlags\n";
+    
+    // for each analysis check whether a relay is referring to it, if so, mark it as relayed
+    for (auto i = getProcessor()->analyser.audioAnalyses.begin(); i != getProcessor()->analyser.audioAnalyses.end(); ++i)
+    {
+        AudioAnalysis* analysis = (*i);
+        if (getProcessor()->getAnalysisRelayManager().analysisIsRelayed( analysis->getIdentifier().toString() ))
+        {
+            analysis->setRelayed(true);
+            std::cout << "SoundAnalyserAudioProcessor " << analysis->getIdentifier().toString() << " is relayed\n";
+        }
+        else
+        {
+            analysis->setRelayed(false);
+            std::cout << "SoundAnalyserAudioProcessor " << analysis->getIdentifier().toString() << " is not relayed\n";
+        }
+    }
+}
 

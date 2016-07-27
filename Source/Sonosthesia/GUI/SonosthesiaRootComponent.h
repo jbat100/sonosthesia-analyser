@@ -18,8 +18,12 @@
 #include "../Target/TargetListComponent.h"
 #include "../Analysis/AnalysisRelayComponent.h"
 #include "../Analysis/AnalysisManagerComponent.h"
+
 #include "SettingsComponent.h"
 
+//==============================================================================
+/*   MainTabbedComponent should be considered private
+ */
 
 class MainTabbedComponent : public TabbedComponent
 {
@@ -27,6 +31,8 @@ class MainTabbedComponent : public TabbedComponent
 public:
     
     MainTabbedComponent(SoundAnalyserAudioProcessor& processor);
+    
+    void refreshAnalyses();
     
 private:
     
@@ -50,6 +56,8 @@ public:
 
     void paint (Graphics&) override;
     void resized() override;
+    
+    void refreshAnalyses();
 
 private:
     

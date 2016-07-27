@@ -29,7 +29,17 @@
 #include "AnalysisModel.h"
 #include "../Libraries/Gist/src/Gist.h"
 
-class SimpleAnalysisComponent;
+class AudioAnalysis;
+
+class AudioAnalysisListener {
+    
+public:
+    
+    virtual ~AudioAnalysisListener() {}
+    
+    virtual void audioAnalysisChanged(AudioAnalysis* analysis) = 0;
+    
+};
 
 //=======================================================================
 /** The InputType for the audio analysis module.
@@ -55,7 +65,7 @@ enum OutputType
  
     To create a new AudioAnalysis module, just extend this class.
  */
-class AudioAnalysis
+class AudioAnalysis : public ListenerList<AudioAnalysisListener>
 {
 public:
     /** Constructor */
@@ -232,18 +242,25 @@ public:
         addressPattern = idWithForwardSlash.append(getCoreAddressPattern());
     }
     
+    void setRelayed(bool _relayed);
+    bool getRelayed();
+    
+    // properties which should really be private...
+    
     /** Indicates whether the module should update the plotting vectors */
     bool plot;
     
     /** Indicates whether the module should send its result by OSC */
     bool send;
     
+    /** The address pattern of the audio analysis module */
+    std::string addressPattern;
+    
+private:
+    
     /** Sonosthesia: indicates whether the analysis is used by at least one relay **/
     bool relayed;
     
-    /** The address pattern of the audio analysis module */
-    std::string addressPattern;
-   
 };
 
 #endif /* defined(__SoundAnalyser__Analysis__) */

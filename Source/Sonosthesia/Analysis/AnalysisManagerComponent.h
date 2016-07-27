@@ -30,6 +30,8 @@ public:
     void paint (Graphics&) override;
     void resized() override;
     
+    void reload();
+    
     // ======= ChangeListener ===========
     
     void changeListenerCallback (ChangeBroadcaster *source) override;
@@ -40,6 +42,7 @@ public:
     void paintListBoxItem (int rowNumber, Graphics &g, int width, int height, bool rowIsSelected) override;
     Component* refreshComponentForRow (int rowNumber, bool isRowSelected, Component *existingComponentToUpdate) override;
     
+    // =================================
     
     Component* createComponentForAnalysis(AudioAnalysis* analysis);
     

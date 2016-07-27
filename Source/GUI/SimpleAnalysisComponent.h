@@ -34,19 +34,18 @@
  Extend this class to create a custom component.
 */
 
-class SimpleAnalysisComponent : public Component, public Button::Listener
+class SimpleAnalysisComponent : public Component, public Button::Listener, AudioAnalysisListener
 {
     
 public:
     
     SimpleAnalysisComponent(AudioAnalysis* _analysis);
     
-    virtual ~SimpleAnalysisComponent()
-    {
-        
-    }
+    virtual ~SimpleAnalysisComponent() {}
     
     //void refreshFromTree();
+    
+    void reload();
     
     //======================================================================
     // Component
@@ -56,7 +55,13 @@ public:
     //======================================================================
     // Button::Listener
     void buttonClicked (Button* button) override;
-
+    
+    //======================================================================
+    // AudioAnalysisListener
+    
+    void audioAnalysisChanged(AudioAnalysis* analysis) override;
+    
+    static const int yOffset;
     
 protected:
     

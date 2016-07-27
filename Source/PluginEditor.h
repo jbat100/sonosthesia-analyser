@@ -33,7 +33,7 @@
 //==============================================================================
 /**
 */
-class SoundAnalyserAudioProcessorEditor : public AudioProcessorEditor
+class SoundAnalyserAudioProcessorEditor : public AudioProcessorEditor, public ChangeListener, public AnalysisRelayListener
 {
 public:
     
@@ -43,8 +43,17 @@ public:
     
     //==============================================================================
     // Component
-    void paint (Graphics& g);
-    void resized();
+    void paint (Graphics& g) override;
+    void resized() override;
+    
+    // === ChangeListener ===
+    
+    void changeListenerCallback (ChangeBroadcaster* source) override;
+    
+    // === AnalysisRelayListener ===
+    
+    void analysisRelayChanged(AnalysisRelay* relay) override;
+    void analysisRelayInvalidated(AnalysisRelay* relay) override;
     
 private:
     
@@ -52,6 +61,9 @@ private:
     SonosthesiaRootComponent rootComponent;
     
     SoundAnalyserAudioProcessor* getProcessor() const;
+    
+    void updateAnalysisRelayListeners();
+    void updateAnalysisRelayFlags();
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SoundAnalyserAudioProcessorEditor)
     

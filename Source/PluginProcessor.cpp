@@ -30,7 +30,7 @@ SoundAnalyserAudioProcessor::SoundAnalyserAudioProcessor() :
     analyserTree( AnalysisModel::createAnalyserTree()),
     analyser(analyserTree[AnalysisModel::Ids::BufferSize]),
     analysisRelayManager(analyser)
-{
+{    
     analyserTree.addListener(this);
     refreshFromTree();
 }
@@ -363,6 +363,7 @@ void SoundAnalyserAudioProcessor::valueTreeParentChanged (ValueTree& treeWhosePa
 {
     
 }
+
 
 OSCTargetManager& SoundAnalyserAudioProcessor::getTargetManager()
 {

@@ -19,6 +19,8 @@ class AnalysisRelay;
 
 class AnalysisRelayListener {
     
+public:
+    
     virtual ~AnalysisRelayListener() {}
     
     virtual void analysisRelayChanged(AnalysisRelay* relay) = 0;

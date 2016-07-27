@@ -26,6 +26,8 @@
 
 #include "../Sonosthesia/Core/Theme.h"
 
+const int SimpleAnalysisComponent::yOffset = 5;
+
 //==============================================================================
 SimpleAnalysisComponent::SimpleAnalysisComponent(AudioAnalysis* _analysis) : analysis(_analysis)
 {
@@ -38,7 +40,7 @@ SimpleAnalysisComponent::SimpleAnalysisComponent(AudioAnalysis* _analysis) : ana
     jassert(analysis != nullptr);
     
     addAndMakeVisible(activityIndicator);
-    
+    updateActivityIndicator();
     
     nameLabel.setText(analysis->getName(), dontSendNotification);
     addAndMakeVisible(&nameLabel);
@@ -85,7 +87,8 @@ void SimpleAnalysisComponent::resized()
     //removeButton.setBounds(0,0,20,20);
     //plotButton.setBounds(340, 0, 40, 20);
     
-    nameLabel.setBounds(30,0,300,20);
+    activityIndicator.setBounds(30, yOffset, 80, 20);
+    nameLabel.setBounds(120, yOffset, 200, 20);
     
     //sendButton.setBounds(280,0,40,20);
     //customComponentResized();
@@ -95,14 +98,37 @@ void SimpleAnalysisComponent::resized()
 //==============================================================================
 void SimpleAnalysisComponent::paint(Graphics& g)
 {
-   // g.fillAll(Colours::silver);
+    int hmargin = 10;
+    
+    g.fillAll (Colours::transparentBlack);   // clear the background
+    
+    Rectangle<float> b = getLocalBounds().toFloat();
+    
+    b.setX(hmargin);
+    b.setWidth( b.getWidth() - (hmargin*2) );
+    b.setHeight( b.getHeight() - 10);
+    
+    g.setColour (Colours::grey);
+    g.drawRoundedRectangle(b, 5, 1);
+    g.setColour(Colours::black.withAlpha(0.5f));
+    g.fillRoundedRectangle(b.reduced(1), 5);
+}
+
+void SimpleAnalysisComponent::reload()
+{
+    updateActivityIndicator();
+}
+
+void SimpleAnalysisComponent::audioAnalysisChanged(AudioAnalysis* analysis)
+{
+    updateActivityIndicator();
 }
 
 void SimpleAnalysisComponent::updateActivityIndicator()
 {
     if (analysis != nullptr)
     {
-        if (analysis->send || analysis->relayed)
+        if (analysis->send || analysis->getRelayed())
         {
             Appearence::theme()->indicator(activityIndicator, Theme::Primary);
             activityIndicator.setText("Active", dontSendNotification);

@@ -10,8 +10,6 @@
 
 #include "AnalysisRelay.h"
 
-#include "AnalysisRelay.h"
-
 const String AnalysisRelay::noIdentifier = "None";
 
 AnalysisRelay::AnalysisRelay() :
@@ -88,3 +86,17 @@ void AnalysisRelayManager::sendResults()
         }
     }
 }
+
+bool AnalysisRelayManager::analysisIsRelayed(String analysisIdentifier)
+{
+    auto relays = getItems();
+    for (auto i = relays.begin(); i != relays.end(); ++i)
+    {
+        if ( (*i)->getAnaysisIdentifier() == analysisIdentifier)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+

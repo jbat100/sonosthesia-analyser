@@ -13,12 +13,12 @@
 
 
 MainTabbedComponent::MainTabbedComponent(SoundAnalyserAudioProcessor& _processor) :
-TabbedComponent (TabbedButtonBar::TabsAtTop),
-processor(_processor),
-analysisManagerComponent(processor),
-analysisRelayListComponent(processor),
-targetComponent(processor.getTargetManager()),
-settingsComponent(processor)
+    TabbedComponent (TabbedButtonBar::TabsAtTop),
+    processor(_processor),
+    analysisManagerComponent(processor),
+    analysisRelayListComponent(processor),
+    targetComponent(processor.getTargetManager()),
+    settingsComponent(processor)
 {
     File applicationFile = File::getSpecialLocation(File::SpecialLocationType::currentApplicationFile);
     std::cout << "Plugin path : " << applicationFile.getFullPathName() << "\n";
@@ -32,6 +32,11 @@ settingsComponent(processor)
     addTab ("Targets", colour, &targetComponent, true);
     addTab ("Settings", colour, &settingsComponent, true);
     
+}
+
+void MainTabbedComponent::refreshAnalyses()
+{
+    analysisManagerComponent.reload();
 }
 
 SonosthesiaRootComponent::SonosthesiaRootComponent(SoundAnalyserAudioProcessor& _processor) :
@@ -52,5 +57,9 @@ void SonosthesiaRootComponent::paint (Graphics& g)
 void SonosthesiaRootComponent::resized()
 {
     tabbedComponent.setBounds (getLocalBounds());
+}
 
+void SonosthesiaRootComponent::refreshAnalyses()
+{
+    tabbedComponent.refreshAnalyses();
 }

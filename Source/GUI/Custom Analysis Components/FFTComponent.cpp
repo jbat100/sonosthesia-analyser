@@ -31,7 +31,7 @@ FFTComponent::FFTComponent(AudioAnalysis* _analysis) : SimpleAnalysisComponent(_
     
     setSize (580, 30);
     
-    numFFTSamplesText.setText("# Samples", dontSendNotification);
+    numFFTSamplesText.setText("Samples", dontSendNotification);
     addAndMakeVisible(&numFFTSamplesText);
     
     numFFTSamples.setColour(Label::textColourId, Colours::black);
@@ -62,8 +62,8 @@ void FFTComponent::resized()
 {
     SimpleAnalysisComponent::resized();
     
-    numFFTSamplesText.setBounds(400, 0, 70, 20);
-    numFFTSamples.setBounds(480,00,40,20);
+    numFFTSamplesText.setBounds(400, yOffset, 70, 20);
+    numFFTSamples.setBounds(480, yOffset,40,20);
 }
 
 /*==============================================================================
