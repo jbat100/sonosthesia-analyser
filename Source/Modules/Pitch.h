@@ -37,86 +37,74 @@ public:
     }
     
     //==============================================================================
-    String getName()
+    String getName() override
     {
         return "Pitch";
     }
     
     //==============================================================================
-    void performAnalysis(std::vector<float> audioFrame)
+    void performAnalysis(std::vector<float> audioFrame) override
     {
         pitchOutputValue = yin.pitchYin(audioFrame);
     }
     
     //==============================================================================
-    float getAnalysisResultAsFloat()
+    float getAnalysisResultAsFloat() override
     {
         return pitchOutputValue;
     }
     
     //==============================================================================
-    void setSamplingFrequency(int fs)
+    void setSamplingFrequency(int fs) override
     {
         yin.setSamplingFrequency(fs);
     }
     
     //==============================================================================
-    void setInputAudioFrameSize(int frameSize)
-    {
-
-    }
-        
-    //==============================================================================
-    std::string getCoreAddressPattern()
-    {
-        return "/pitch";
-    }
-    
-    //==============================================================================
-    Identifier getIdentifier()
+    Identifier getIdentifier() override
     {
         return Identifier("Pitch");
     }
     
     //==============================================================================
-    Identifier getCollectionIdentifier()
+    Identifier getCollectionIdentifier() override
     {
         return Identifier("Gist");
     }
     
     //==============================================================================
-    String getCollectionName()
+    String getCollectionName() override
     {
         return "Gist";
     }
     
     //==============================================================================
-    String getAuthorString()
+    String getAuthorString() override
     {
         return "Adam Stark";
     }
     
     //==============================================================================
-    String getTechnicalDescription()
+    String getTechnicalDescription() override
     {
         return "An implementation of the Yin pitch detection algorithm by de Cheveigne and Kawahara (2002). Output in Hz.";
     }
     
     //==============================================================================
-    String getSimpleDescription()
+    String getSimpleDescription() override
     {
         return "An estimation of the pitch in Hz of a sound - for use on monophonic signals only";
     }
 
     
     //==============================================================================
-    OutputType getOutputType()
+    OutputType getOutputType() override
     {
         return FloatOutput;
     }
     
     //==============================================================================
-    InputType getInputType()
+    InputType getInputType() override
     {
         return AudioBufferInput;
     }

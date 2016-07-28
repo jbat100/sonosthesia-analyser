@@ -33,19 +33,19 @@ class SP_ChordDetector : public AudioAnalysis
 public:
     
     //==============================================================================
-    SP_ChordDetector(int frameSize,int samplingFrequency) : chroma(frameSize,samplingFrequency)
+    SP_ChordDetector(int frameSize, int samplingFrequency) : chroma(frameSize, samplingFrequency)
     {
 
     }
     
     //==============================================================================
-    String getName()
+    String getName() override
     {
         return "Chord Detector";
     }
     
     //==============================================================================
-    void performAnalysis(std::vector<float> audioFrame)
+    void performAnalysis(std::vector<float> audioFrame) override
     {
         std::vector<double> doublePrecisionBuffer(audioFrame.size());
         
@@ -58,7 +58,7 @@ public:
     }
     
     //==============================================================================
-    float getAnalysisResultAsFloat()
+    float getAnalysisResultAsFloat() override
     {
         std::vector<double> chromagram = chroma.getChromagram();
         
@@ -68,73 +68,67 @@ public:
     }
     
     //==============================================================================
-    bool resultReady()
+    bool resultReady() override
     {
         return chroma.isReady();
     }
     
     //==============================================================================
-    void setSamplingFrequency(int fs)
+    void setSamplingFrequency(int fs) override
     {
         chroma.setSamplingFrequency(fs);
     }
     
     //==============================================================================
-    void setInputAudioFrameSize(int frameSize)
+    void setInputAudioFrameSize(int frameSize) override
     {
         chroma.setInputAudioFrameSize(frameSize);
     }
     
     //==============================================================================
-    std::string getCoreAddressPattern()
-    {
-        return "/chordDetector";
-    }
-    
-    //==============================================================================
-    Identifier getIdentifier()
+    Identifier getIdentifier() override
     {
         return Identifier("SP_ChordDetector");
     }
     
     //==============================================================================
-    Identifier getCollectionIdentifier()
+    Identifier getCollectionIdentifier() override
     {
         return Identifier("C4DMQMUL");
     }
     
     //==============================================================================
-    String getCollectionName()
+    String getCollectionName() override
     {
         return "Queen Mary Univ. of London";
     }
     
     //==============================================================================
-    String getAuthorString()
+    String getAuthorString() override
     {
         return "Adam Stark & Mark Plumbley";
     }
     
     //==============================================================================
-    String getTechnicalDescription()
+    String getTechnicalDescription() override
     {
         return "The root note from the chord detection algorithm presented by Stark and Plumbley (2009)";
     }
     
     //==============================================================================
-    String getSimpleDescription()
+    String getSimpleDescription() override
     {
         return "An estimation of the root note (C, C#, D, etc) of the input audio signal";
     }
     
     //==============================================================================
-    OutputType getOutputType()
+    OutputType getOutputType() override
     {
         return FloatOutput;
     }
     
     //==============================================================================
-    InputType getInputType()
+    InputType getInputType() override
     {
         return AudioBufferInput;
     }

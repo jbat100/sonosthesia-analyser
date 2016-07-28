@@ -22,7 +22,9 @@
 //=======================================================================
 
 #include "MelFreqSpecComponent.h"
+
 #include "../../Modules/MelFrequencySpectrum.h"
+#include "../../Sonosthesia/Core/Theme.h"
 
 //==============================================================================
 MelFreqSpecComponent::MelFreqSpecComponent(AudioAnalysis* _analysis) : SimpleAnalysisComponent(_analysis)
@@ -32,31 +34,16 @@ MelFreqSpecComponent::MelFreqSpecComponent(AudioAnalysis* _analysis) : SimpleAna
     setSize (580, 30);
    
     numMelBinsText.setText("Bins", dontSendNotification);
+    Appearence::theme()->label(numMelBinsText);
     addAndMakeVisible(&numMelBinsText);
     
-    numMelBins.setColour(Label::textColourId, Colours::black);
-    numMelBins.setColour(Label::ColourIds::backgroundColourId, Colours::white);
-    numMelBins.setColour(Label::ColourIds::outlineColourId, Colours::lightgrey);
-    numMelBins.setText("13", dontSendNotification);
+    Appearence::theme()->field(numMelBins);
     numMelBins.setEditable(true);
     addAndMakeVisible(&numMelBins);
     
     numMelBins.addListener(this);
     
-    //refreshFromTree();
 }
-
-
-
-/*==============================================================================
-void MelFreqSpecComponent::customComponentPropertyChange(ValueTree& treeWhosePropertyHasChanged, const Identifier& property)
-{
-    if (property == AnalysisProperties::MelFrequencySpectrum::numBins)
-    {
-        numMelBins.setText(treeWhosePropertyHasChanged[property], dontSendNotification);
-    }
-}
- */
 
 void MelFreqSpecComponent::resized()
 {
@@ -66,21 +53,23 @@ void MelFreqSpecComponent::resized()
     numMelBins.setBounds(480, yOffset, 40, 20);
 }
 
-/*==============================================================================
-void MelFreqSpecComponent::customComponentRefreshFromTree()
-{
-    int numBins = analysisTree[AnalysisProperties::MelFrequencySpectrum::numBins];
-    numMelBins.setText(String(numBins), dontSendNotification);
-}
- */
-
 //==============================================================================
 void MelFreqSpecComponent::labelTextChanged (Label* labelThatHasChanged)
 {
     if (labelThatHasChanged == &numMelBins)
     {
         int numBins = numMelBins.getTextValue().getValue();
-        //analysisTree.setProperty(AnalysisProperties::MelFrequencySpectrum::numBins, numBins, nullptr);
+        
+        MelFrequencySpectrum* spectrum = dynamic_cast<MelFrequencySpectrum*>(getAudioAnalysis());
+        
+        if (spectrum)
+        {
+            spectrum->setNumCoefficients(numBins);
+        }
+        else
+        {
+            std::cerr << "MelFreqSpecComponent unexpected analysis\n";
+        }
     }
 }
 

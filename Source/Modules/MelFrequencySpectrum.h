@@ -32,141 +32,113 @@ class MelFrequencySpectrum : public AudioAnalysis
 public:
     
     //==============================================================================
-    MelFrequencySpectrum(int frameSize,int samplingFrequency) : mfcc(frameSize,samplingFrequency)
+    MelFrequencySpectrum(int frameSize,int samplingFrequency) : mfcc(frameSize, samplingFrequency)
     {
         numBins = 13;
     }
     
     //==============================================================================
-    String getName()
+    String getName() override
     {
         return "Mel-frequency Spectrum";
     }
     
     //==============================================================================
-    void performAnalysis(std::vector<float> magnitudeSpectrum)
+    void performAnalysis(std::vector<float> magnitudeSpectrum) override
     {
         mfccOutput = mfcc.melFrequencySpectrum(magnitudeSpectrum);
     }
     
     //==============================================================================
-    std::vector<float> getAnalysisResultAsVector()
+    std::vector<float> getAnalysisResultAsVector() override
     {
         return mfccOutput;
     }
     
     //==============================================================================
-    void setSamplingFrequency(int fs)
+    void setSamplingFrequency(int fs) override
     {
         mfcc.setSamplingFrequency(44100);
     }
     
     //==============================================================================
-    void setInputAudioFrameSize(int frameSize)
+    void setInputAudioFrameSize(int frameSize) override
     {
         mfcc.setFrameSize(frameSize);
     }
     
-    //==============================================================================
-    /** overriding initialise here as we have extra fields! */
-    void initialise(ValueTree &analysisTree)
+    void setNumCoefficients(int num) 
     {
-        send = analysisTree[AnalysisProperties::send];
-        plot = analysisTree[AnalysisProperties::plot];
-        
-        // this property is unique to Mel Frequency Spectrum
-        numBins = analysisTree[AnalysisProperties::MelFrequencySpectrum::numBins];
+        // local copy
+        numBins = num;
         
         // set the number of coefficients in the mfcc object
         mfcc.setNumCoefficients(numBins);
     }
     
     //==============================================================================
-    /** overriding this as we have custom properties */
-    void handleCustomPropertyChange(ValueTree& tree, const Identifier& property)
+    void loadFromValueTree(ValueTree &tree) override
     {
-        if (property == AnalysisProperties::MelFrequencySpectrum::numBins)
-        {
-            numBins = tree[property];
-            
-            mfcc.setNumCoefficients(numBins);
-        }
+        AudioAnalysis::loadFromValueTree(tree);
+        // this property is unique to Mel Frequency Spectrum
+        setNumCoefficients( tree[AnalysisProperties::MelFrequencySpectrum::numBins] ); // default should be 13
     }
     
     //==============================================================================
-    /** overriding this as we have custom parameters */
-    virtual ValueTree createAnalysisTree()
+    ValueTree saveToValueTree() override
     {
-        ValueTree tree(getIdentifier());
-        
-        tree.setProperty(AnalysisProperties::send, 0, nullptr);
-        tree.setProperty(AnalysisProperties::plot, 0, nullptr);
-        tree.setProperty(AnalysisProperties::name, getName(), nullptr);
+        ValueTree tree = AudioAnalysis::saveToValueTree();
         
         // extra properties for Mel Frequency Spectrum
-        tree.setProperty(AnalysisProperties::MelFrequencySpectrum::numBins, 13, nullptr);
+        tree.setProperty(AnalysisProperties::MelFrequencySpectrum::numBins, numBins, nullptr);
         
         return tree;
     }
     
     //==============================================================================
-    /* overriding this as we have a custom GUI
-    Component* getGUIComponent(ValueTree& analysisTree)
-    {
-        return new MelFreqSpecComponent(analysisTree);
-    }
-     */
-        
-    //==============================================================================
-    std::string getCoreAddressPattern()
-    {
-        return "/melSpectrum";
-    }
-    
-    //==============================================================================
-    Identifier getIdentifier()
+    Identifier getIdentifier() override
     {
         return Identifier("MelFrequencySpectrum");
     }
     
     //==============================================================================
-    Identifier getCollectionIdentifier()
+    Identifier getCollectionIdentifier() override
     {
         return Identifier("Gist");
     }
     
     //==============================================================================
-    String getCollectionName()
+    String getCollectionName() override
     {
         return "Gist";
     }
     
     //==============================================================================
-    String getAuthorString()
+    String getAuthorString() override
     {
         return "Adam Stark";
     }
     
     //==============================================================================
-    String getTechnicalDescription()
+    String getTechnicalDescription() override
     {
         return "The magnitude spectrum mapped on to a Mel scale using a bank of triangular filters.";
     }
     
     //==============================================================================
-    String getSimpleDescription()
+    String getSimpleDescription() override
     {
         return "A feature showing you how energy is distributed across the frequency range, on a scale related to human perception";
     }
     
     //==============================================================================
-    OutputType getOutputType()
+    OutputType getOutputType() override
     {
         return VectorOutput;
     }
     
     //==============================================================================
-    InputType getInputType()
+    InputType getInputType() override
     {
         return MagnitudeSpectrumInput;
     }

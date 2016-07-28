@@ -23,36 +23,23 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "ProcessorSettings.h"
 
+
+int defaultBufferSize = 1024;
 
 //==============================================================================
 SoundAnalyserAudioProcessor::SoundAnalyserAudioProcessor() :
-    analyserTree( AnalysisModel::createAnalyserTree()),
-    analyser(analyserTree[AnalysisModel::Ids::BufferSize]),
+    analyser(defaultBufferSize),
     analysisRelayManager(analyser)
 {    
-    analyserTree.addListener(this);
-    refreshFromTree();
+
 }
 
 //==============================================================================
 SoundAnalyserAudioProcessor::~SoundAnalyserAudioProcessor()
 {
-}
-
-//==============================================================================
-void SoundAnalyserAudioProcessor::refreshFromTree()
-{
-    analyser.setBufferSize(analyserTree[AnalysisModel::Ids::BufferSize]);
-    analyser.setOSCPort(analyserTree[AnalysisModel::Ids::Port]);
-    analyser.setIPAddress(analyserTree[AnalysisModel::Ids::IPAddress].toString().toStdString());
-    analyser.setAnalyserIdString(analyserTree[AnalysisModel::Ids::AnalyserId].toString().toStdString());
     
-    for (int i = 0;i < analyser.audioAnalyses.size();i++)
-    {
-        ValueTree tree = analyserTree.getChildWithName(analyser.audioAnalyses[i]->getIdentifier());
-        analyser.audioAnalyses[i]->initialise(tree);
-    }
 }
 
 //==============================================================================
@@ -72,7 +59,8 @@ float SoundAnalyserAudioProcessor::getParameter (int index)
 {
     switch (index)
     {
-        default: return 0.0f;
+        default:
+            return 0.0f;
     }
 }
 
@@ -81,7 +69,8 @@ void SoundAnalyserAudioProcessor::setParameter (int index, float newValue)
 {
     switch (index)
     {
-        default:            break;
+        default:
+            break;
     }
 }
 
@@ -90,7 +79,8 @@ const String SoundAnalyserAudioProcessor::getParameterName (int index)
 {
     switch (index)
     {
-        default:            break;
+        default:
+            break;
     }
     
     return String::empty;
@@ -192,7 +182,7 @@ void SoundAnalyserAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     
-    analyser.setSamplingFrequency((int) sampleRate);
+    analyser.setSamplingFrequency((int)sampleRate);
     analyser.setHostFrameSize(samplesPerBlock);
 }
 
@@ -243,7 +233,21 @@ AudioProcessorEditor* SoundAnalyserAudioProcessor::createEditor()
 //==============================================================================
 void SoundAnalyserAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
-    ScopedPointer<XmlElement> xml = analyserTree.createXml();
+    std::cout << "Saving state\n";
+    
+    ValueTree tree = ValueTree(Identifier("analyser"));
+    
+    // store all state to tree
+    
+    tree.setProperty(AnalysisModel::Ids::BufferSize, ProcessorSettings::getInstance()->getBufferSize(), nullptr);
+    
+    for (int i = 0;i < analyser.audioAnalyses.size();i++)
+    {
+        ValueTree tree = analyser.audioAnalyses[i]->saveToValueTree();
+        tree.addChild(tree, 0, nullptr);
+    }
+    
+    ScopedPointer<XmlElement> xml = tree.createXml();
     
     // then use this helper function to stuff it into the binary blob and return it..
     copyXmlToBinary (*xml, destData);
@@ -252,10 +256,22 @@ void SoundAnalyserAudioProcessor::getStateInformation (MemoryBlock& destData)
 //==============================================================================
 void SoundAnalyserAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    std::cout << "Setting state\n";
+    std::cout << "Restoring state\n";
+    
     ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
-    analyserTree = ValueTree::fromXml(*xmlState);
-    refreshFromTree();
+    ValueTree tree = ValueTree::fromXml(*xmlState);
+    
+    // update all state from
+    
+    analyser.setBufferSize(tree[AnalysisModel::Ids::BufferSize]);
+    
+    ProcessorSettings::getInstance()->setBufferSize(tree[AnalysisModel::Ids::BufferSize]);
+    
+    for (int i = 0;i < analyser.audioAnalyses.size();i++)
+    {
+        ValueTree tree = tree.getChildWithName(analyser.audioAnalyses[i]->getIdentifier());
+        analyser.audioAnalyses[i]->loadFromValueTree(tree);
+    }
 }
 
 //==============================================================================
@@ -264,106 +280,6 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new SoundAnalyserAudioProcessor();
 }
-
-//==============================================================================
-void SoundAnalyserAudioProcessor::valueTreePropertyChanged (ValueTree& treeWhosePropertyHasChanged, const Identifier& property)
-{
-    if (treeWhosePropertyHasChanged.getType() == AnalysisModel::Ids::SOUNDANALYSER)
-    {
-        // analyser ID property
-        if (property == AnalysisModel::Ids::AnalyserId)
-        {
-            analyser.setAnalyserIdString(treeWhosePropertyHasChanged[property].toString().toStdString());
-        }
-        // buffer size property
-        else if (property == AnalysisModel::Ids::BufferSize)
-        {
-            analyser.setBufferSize(treeWhosePropertyHasChanged[property]);
-        }
-        else if (property == AnalysisModel::Ids::Port)
-        {
-            analyser.setOSCPort(treeWhosePropertyHasChanged[property]);
-        }
-        else if (property == AnalysisModel::Ids::IPAddress)
-        {
-            analyser.setIPAddress(treeWhosePropertyHasChanged[property].toString().toStdString());
-        }
-    }
-    else
-    {
-        // send state changes
-        if (property == AnalysisProperties::send)
-        {
-            for (int i = 0;i < analyser.audioAnalyses.size();i++)
-            {
-                 if (treeWhosePropertyHasChanged.getType() == analyser.audioAnalyses[i]->getIdentifier())
-                 {
-                     analyser.audioAnalyses[i]->send = treeWhosePropertyHasChanged[AnalysisProperties::send];
-                 }
-            }
-        }
-        // plot state changes
-        else if (property == AnalysisProperties::plot)
-        {
-            for (int i = 0;i < analyser.audioAnalyses.size();i++)
-            {
-                if (treeWhosePropertyHasChanged.getType() == analyser.audioAnalyses[i]->getIdentifier())
-                {
-                    analyser.audioAnalyses[i]->plot = treeWhosePropertyHasChanged[AnalysisProperties::plot];
-                    
-                    if (analyser.audioAnalyses[i]->plot)
-                    {
-                        analyser.currentAnalysisToPlotType = analyser.audioAnalyses[i]->getOutputType();
-                    }
-                }
-            }
-            // clear the plot history 
-            analyser.clearPlotHistory();
-        }
-        else // deal with custom properties here
-        {
-            for (int i = 0;i < analyser.audioAnalyses.size();i++)
-            {
-                if (treeWhosePropertyHasChanged.getType() == analyser.audioAnalyses[i]->getIdentifier())
-                {
-                    analyser.audioAnalyses[i]->handleCustomPropertyChange(treeWhosePropertyHasChanged, property);
-                }
-            }
-        }
-    }
-}
-
-//==============================================================================
-void SoundAnalyserAudioProcessor::valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded)
-{
-    refreshFromTree();
-}
-
-//==============================================================================
-void SoundAnalyserAudioProcessor::valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved)
-{
-    for (int i = 0;i < analyser.audioAnalyses.size();i++)
-    {
-        if (childWhichHasBeenRemoved.getType() == analyser.audioAnalyses[i]->getIdentifier())
-        {
-            analyser.audioAnalyses[i]->send = false;
-            analyser.audioAnalyses[i]->plot = false;
-        }
-    }
-}
-
-//==============================================================================
-void SoundAnalyserAudioProcessor::valueTreeChildOrderChanged (ValueTree& parentTreeWhoseChildrenHaveMoved, int oldIndex, int newIndex)
-{
-    
-}
-
-//==============================================================================
-void SoundAnalyserAudioProcessor::valueTreeParentChanged (ValueTree& treeWhoseParentHasChanged)
-{
-    
-}
-
 
 OSCTargetManager& SoundAnalyserAudioProcessor::getTargetManager()
 {

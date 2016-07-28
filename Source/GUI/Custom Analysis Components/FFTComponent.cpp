@@ -22,7 +22,9 @@
 //=======================================================================
 
 #include "FFTComponent.h"
+
 #include "../../Modules/FFTMagnitudeSpectrum.h"
+#include "ProcessorSettings.h"
 
 //==============================================================================
 FFTComponent::FFTComponent(AudioAnalysis* _analysis) : SimpleAnalysisComponent(_analysis)
@@ -43,19 +45,7 @@ FFTComponent::FFTComponent(AudioAnalysis* _analysis) : SimpleAnalysisComponent(_
     
     numFFTSamples.addListener(this);
     
-    //refreshFromTree();
 }
-
-
-/*==============================================================================
-void FFTComponent::customComponentPropertyChange(ValueTree& treeWhosePropertyHasChanged, const Identifier& property)
-{
-    if (property == AnalysisProperties::FFT::numSamplesToSend)
-    {
-        numFFTSamples.setText(treeWhosePropertyHasChanged[property], dontSendNotification);
-    }
-}
- */
 
 //==============================================================================
 void FFTComponent::resized()
@@ -66,30 +56,28 @@ void FFTComponent::resized()
     numFFTSamples.setBounds(480, yOffset,40,20);
 }
 
-/*==============================================================================
-void FFTComponent::customComponentRefreshFromTree()
-{
-    int numSamples = analysisTree[AnalysisProperties::FFT::numSamplesToSend];
-    numFFTSamples.setText(String(numSamples), dontSendNotification);
-}
- */
-
 //==============================================================================
 void FFTComponent::labelTextChanged (Label* labelThatHasChanged)
 {
-    /*
     if (labelThatHasChanged == &numFFTSamples)
     {
         int numSamples = numFFTSamples.getTextValue().getValue();
-        ValueTree analyserTree = analysisTree.getParent();
-        int bufferSize = analyserTree[AnalysisModel::Ids::BufferSize];
+        int bufferSize = ProcessorSettings::getInstance()->getBufferSize();
         if (numSamples > bufferSize/2)
         {
             numSamples = bufferSize/2;
         }
-        analysisTree.setProperty(AnalysisProperties::FFT::numSamplesToSend, numSamples, nullptr);
+        FFTMagnitudeSpectrum* fft = dynamic_cast<FFTMagnitudeSpectrum*>(getAudioAnalysis());
+        if (fft)
+        {
+            fft->setNumFFTSamplesToSend(numSamples);
+        }
+        else
+        {
+            std::cerr << "FFTComponent unexpected analysis\n";
+        }
     }
-     */
+    
 }
 
 

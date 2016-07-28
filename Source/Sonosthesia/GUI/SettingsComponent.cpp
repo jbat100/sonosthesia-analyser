@@ -9,7 +9,11 @@
 */
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
+
 #include "SettingsComponent.h"
+#include "ProcessorSettings.h"
+
+#include "../Core/Theme.h"
 
 //==============================================================================
 SettingsComponent::SettingsComponent(SoundAnalyserAudioProcessor& _processor) : processor(_processor)
@@ -21,27 +25,6 @@ SettingsComponent::SettingsComponent(SoundAnalyserAudioProcessor& _processor) : 
     
     Font logoFont;//(typeface);
     logoFont.setHeight(40);
-    
-    OSCPort.setColour(Label::ColourIds::textColourId, Colours::black);
-    OSCPort.setText(processor.analyserTree[AnalysisModel::Ids::Port], dontSendNotification);
-    OSCPort.setEditable(true);
-    OSCPort.setColour(Label::ColourIds::backgroundColourId, Colours::white);
-    OSCPort.setColour(Label::ColourIds::outlineColourId, Colours::lightgrey);
-    addAndMakeVisible(&OSCPort);
-    
-    IPAddressValue.setColour(Label::ColourIds::textColourId, Colours::black);
-    IPAddressValue.setText(processor.analyserTree[AnalysisModel::Ids::Port], dontSendNotification);
-    IPAddressValue.setEditable(true);
-    IPAddressValue.setColour(Label::ColourIds::backgroundColourId, Colours::white);
-    IPAddressValue.setColour(Label::ColourIds::outlineColourId, Colours::lightgrey);
-    addAndMakeVisible(&IPAddressValue);
-    
-    analyserId.setColour(Label::ColourIds::textColourId, Colours::black);
-    analyserId.setText(processor.analyserTree[AnalysisModel::Ids::AnalyserId], dontSendNotification);
-    analyserId.setEditable(true);
-    analyserId.setColour(Label::ColourIds::backgroundColourId, Colours::white);
-    analyserId.setColour(Label::ColourIds::outlineColourId, Colours::lightgrey);
-    addAndMakeVisible(&analyserId);
     
     pluginTitleLabel.setFont(logoFont);
     pluginTitleLabel.setText("Sound Analyser",dontSendNotification);
@@ -65,31 +48,15 @@ SettingsComponent::SettingsComponent(SoundAnalyserAudioProcessor& _processor) : 
     bufferSizeComboBox.addItem("4096", 7);
     
     bufferSizeValue.setEditable(true);
-    bufferSizeValue.setText(processor.analyserTree[AnalysisModel::Ids::BufferSize].toString(), dontSendNotification);
-    bufferSizeValue.setColour(Label::ColourIds::textColourId, Colours::black);
-    bufferSizeValue.setColour(Label::ColourIds::backgroundColourId, Colours::white);
-    bufferSizeValue.setColour(Label::ColourIds::outlineColourId, Colours::lightgrey);
+    bufferSizeValue.setText(String(ProcessorSettings::getInstance()->getBufferSize()), dontSendNotification);
+    Appearence::theme()->field(bufferSizeValue);
     addAndMakeVisible(&bufferSizeValue);
     
     bufferSizeText.setText("Buffer Size: ", dontSendNotification);
+    Appearence::theme()->label(bufferSizeText);
     addAndMakeVisible(&bufferSizeText);
     
-    IPAddressText.setText("IP Address:", dontSendNotification);
-    addAndMakeVisible(&IPAddressText);
-    
-    OSCPortText.setText("Port:", dontSendNotification);
-    addAndMakeVisible(&OSCPortText);
-    
-    analyserIdText.setText("Analyser Id:", dontSendNotification);
-    addAndMakeVisible(&analyserIdText);
-    
     bufferSizeComboBox.addListener(this);
-    processor.analyserTree.addListener(this);
-    
-    analyserId.addListener(this);
-    
-    OSCPort.addListener(this);
-    IPAddressValue.addListener(this);
     bufferSizeValue.addListener(this);
     
 }
@@ -109,15 +76,6 @@ void SettingsComponent::resized()
     // bufferSizeValue.setBounds(90,10,40,20);
     bufferSizeComboBox.setBounds(80, 10, 60, 20);
     
-    IPAddressText.setBounds(getWidth()-450, 10, 80, 20);
-    IPAddressValue.setBounds(getWidth()-360, 10, 90, 20);
-    
-    OSCPortText.setBounds(getWidth()-260, 10, 40, 20);
-    OSCPort.setBounds(getWidth()-210, 10, 40, 20);
-    
-    analyserIdText.setBounds(getWidth()-170, 10, 80, 20);
-    analyserId.setBounds(getWidth()-80, 10, 70, 20);
-    
     float titleWidth = 280;
     pluginTitleLabel.setBounds(getWidth()-titleWidth-10, getHeight()-60, titleWidth, 50);
     
@@ -125,19 +83,6 @@ void SettingsComponent::resized()
     
 }
 
-void SettingsComponent::refreshFromTree()
-{
-    analyserId.setText(processor.analyserTree[AnalysisModel::Ids::AnalyserId], dontSendNotification);
-    
-    OSCPort.setText(processor.analyserTree[AnalysisModel::Ids::Port], dontSendNotification);
-    IPAddressValue.setText(processor.analyserTree[AnalysisModel::Ids::IPAddress], dontSendNotification);
-    
-    int currentBufferSize = processor.analyserTree[AnalysisModel::Ids::BufferSize];
-    
-    bufferSizeComboBox.setSelectedItemIndex(getIndexFromBufferSize(currentBufferSize));
-    
-    resized();
-}
 
 //==============================================================================
 void SettingsComponent::labelTextChanged (Label* labelThatHasChanged)
@@ -236,22 +181,4 @@ void SettingsComponent::valueTreePropertyChanged (ValueTree& treeWhosePropertyHa
     }
 }
 
-void SettingsComponent::valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded)
-{
-    //addAnalysis(childWhichHasBeenAdded);
-}
 
-void SettingsComponent::valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved)
-{
-    refreshFromTree();
-}
-
-void SettingsComponent::valueTreeChildOrderChanged (ValueTree& parentTreeWhoseChildrenHaveMoved, int oldIndex, int newIndex)
-{
-
-}
-
-void SettingsComponent::valueTreeParentChanged (ValueTree& treeWhoseParentHasChanged)
-{
-
-}

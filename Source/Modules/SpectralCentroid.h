@@ -40,73 +40,67 @@ public:
     }
     
     //==============================================================================
-    String getName()
+    String getName() override
     {
         return "Spectral Centroid";
     }
     
     //==============================================================================
-    void performAnalysis(std::vector<float> magnitudeSpectrum)
+    void performAnalysis(std::vector<float> magnitudeSpectrum) override
     {
         spectralCentroidOutputValue = fdf.spectralCentroid(magnitudeSpectrum);
     }
     
     //==============================================================================
-    float getAnalysisResultAsFloat()
+    float getAnalysisResultAsFloat() override
     {
         return spectralCentroidOutputValue;
     }
         
     //==============================================================================
-    std::string getCoreAddressPattern()
-    {
-        return "/spectralCentroid";
-    }
-        
-    //==============================================================================
-    Identifier getIdentifier()
+    Identifier getIdentifier() override
     {
         return Identifier("SpectralCentroid");
     }
     
     //==============================================================================
-    Identifier getCollectionIdentifier()
+    Identifier getCollectionIdentifier() override
     {
         return Identifier("Gist");
     }
     
     //==============================================================================
-    String getCollectionName()
+    String getCollectionName() override
     {
         return "Gist";
     }
     
     //==============================================================================
-    String getAuthorString()
+    String getAuthorString() override
     {
         return "Adam Stark";
     }
     
     //==============================================================================
-    String getTechnicalDescription()
+    String getTechnicalDescription() override
     {
         return "The centre of mass of the magnitude spectrum";
     }
     
     //==============================================================================
-    String getSimpleDescription()
+    String getSimpleDescription() override
     {
         return "A feature correlated with the brightness of a sound";
     }
     
     //==============================================================================
-    OutputType getOutputType()
+    OutputType getOutputType() override
     {
         return FloatOutput;
     }
     
     //==============================================================================
-    InputType getInputType()
+    InputType getInputType() override
     {
         return MagnitudeSpectrumInput;
     }

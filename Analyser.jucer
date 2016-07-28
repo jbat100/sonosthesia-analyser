@@ -212,6 +212,10 @@
         <FILE id="HqQE07" name="ZeroCrossingRate.h" compile="0" resource="0"
               file="Source/Modules/ZeroCrossingRate.h"/>
       </GROUP>
+      <FILE id="Asnq9f" name="ProcessorSettings.cpp" compile="1" resource="0"
+            file="Source/ProcessorSettings.cpp"/>
+      <FILE id="qrF9ZP" name="ProcessorSettings.h" compile="0" resource="0"
+            file="Source/ProcessorSettings.h"/>
       <FILE id="SQxbpL" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="RW2jP3" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>

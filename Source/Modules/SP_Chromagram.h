@@ -32,19 +32,19 @@ class SP_Chromagram : public AudioAnalysis
 public:
     
     //==============================================================================
-    SP_Chromagram(int frameSize,int samplingFrequency) : chroma(frameSize,samplingFrequency)
+    SP_Chromagram(int frameSize, int samplingFrequency) : chroma(frameSize, samplingFrequency)
     {
 
     }
     
     //==============================================================================
-    String getName()
+    String getName() override
     {
         return "Chromagram";
     }
     
     //==============================================================================
-    void performAnalysis(std::vector<float> audioFrame)
+    void performAnalysis(std::vector<float> audioFrame) override
     {
         std::vector<double> doublePrecisionBuffer(audioFrame.size());
         
@@ -57,7 +57,7 @@ public:
     }
     
     //==============================================================================
-    std::vector<float> getAnalysisResultAsVector()
+    std::vector<float> getAnalysisResultAsVector() override
     {
         std::vector<double> chromagram = chroma.getChromagram();
         
@@ -72,73 +72,67 @@ public:
     }
     
     //==============================================================================
-    bool resultReady()
+    bool resultReady() override
     {
         return chroma.isReady();
     }
     
     //==============================================================================
-    void setSamplingFrequency(int fs)
+    void setSamplingFrequency(int fs) override
     {
         chroma.setSamplingFrequency(fs);
     }
     
     //==============================================================================
-    void setInputAudioFrameSize(int frameSize)
+    void setInputAudioFrameSize(int frameSize) override
     {
         chroma.setInputAudioFrameSize(frameSize);
     }
     
     //==============================================================================
-    std::string getCoreAddressPattern()
-    {
-        return "/chromagram";
-    }
-    
-    //==============================================================================
-    Identifier getIdentifier()
+    Identifier getIdentifier() override
     {
         return Identifier("SP_Chromagram");
     }
     
     //==============================================================================
-    Identifier getCollectionIdentifier()
+    Identifier getCollectionIdentifier() override
     {
         return Identifier("C4DMQMUL");
     }
     
     //==============================================================================
-    String getCollectionName()
+    String getCollectionName() override
     {
         return "Queen Mary Univ. of London";
     }
     
     //==============================================================================
-    String getAuthorString()
+    String getAuthorString() override
     {
         return "Adam Stark & Mark Plumbley";
     }
     
     //==============================================================================
-    String getTechnicalDescription()
+    String getTechnicalDescription() override
     {
         return "The chromagram from the real-time chord detection algorithm presented by Stark and Plumbley (2009)";
     }
     
     //==============================================================================
-    String getSimpleDescription()
+    String getSimpleDescription() override
     {
         return "A 12-element vector, indicating how much energy there is in each pitch class - how much 'C', how much 'C#', etc";
     }
     
     //==============================================================================
-    OutputType getOutputType()
+    OutputType getOutputType() override
     {
         return VectorOutput;
     }
     
     //==============================================================================
-    InputType getInputType()
+    InputType getInputType() override
     {
         return AudioBufferInput;
     }

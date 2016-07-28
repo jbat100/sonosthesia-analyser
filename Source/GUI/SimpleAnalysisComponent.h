@@ -61,6 +61,8 @@ public:
     
     void audioAnalysisChanged(AudioAnalysis* analysis) override;
     
+    AudioAnalysis* getAudioAnalysis();
+    
     static const int yOffset;
     
 protected:

@@ -107,7 +107,7 @@ void AudioAnalysisManager::analyseAudio(float* buffer,int numSamples)
         
         for (int i = 0;i < audioAnalyses.size();i++)
         {
-            if (audioAnalyses[i]->send || audioAnalyses[i]->plot)
+            if (audioAnalyses[i]->send || audioAnalyses[i]->plot || audioAnalyses[i]->getRelayed())
             {
                 if (audioAnalyses[i]->getOutputType() == FloatOutput)
                 {

@@ -32,22 +32,10 @@
 #include "Sonosthesia/Target/TargetManager.h"
 #include "Sonosthesia/Analysis/AnalysisRelay.h"
 
-enum BufferSizeValues
-{
-    BufferSize64,
-    BufferSize128,
-    BufferSize256,
-    BufferSize512,
-    BufferSize1024,
-    BufferSize2048,
-    BufferSize4096,
-    NumBufferSizes
-};
-
 //==============================================================================
 /**
 */
-class SoundAnalyserAudioProcessor : public AudioProcessor, public ValueTree::Listener
+class SoundAnalyserAudioProcessor : public AudioProcessor
 {
 public:
     //==============================================================================
@@ -92,19 +80,6 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    // === ValueTree::Listener ===
-    
-    void valueTreePropertyChanged (ValueTree& treeWhosePropertyHasChanged, const Identifier& property) override;
-    void valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded) override;
-    void valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved) override;
-    void valueTreeChildOrderChanged (ValueTree& parentTreeWhoseChildrenHaveMoved, int oldIndex, int newIndex) override;
-    void valueTreeParentChanged (ValueTree& treeWhoseParentHasChanged) override;
-    
-    //==============================================================================
-    
-    void refreshFromTree();
-    
-    ValueTree analyserTree;
     AudioAnalysisManager analyser;
     
     OSCTargetManager& getTargetManager();

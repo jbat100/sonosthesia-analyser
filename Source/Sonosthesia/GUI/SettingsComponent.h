@@ -20,7 +20,6 @@
 */
 class SettingsComponent :   public Component,
                             public Button::Listener,
-                            public ValueTree::Listener,
                             public Label::Listener,
                             public ComboBox::Listener
 {
@@ -37,14 +36,6 @@ public:
     void buttonClicked (Button* button) override;
     
     //==============================================================================
-    // ValueTree::Listener
-    void valueTreePropertyChanged (ValueTree& treeWhosePropertyHasChanged, const Identifier& property) override;
-    void valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded) override;
-    void valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved) override;
-    void valueTreeChildOrderChanged (ValueTree& parentTreeWhoseChildrenHaveMoved, int oldIndex, int newIndex) override;
-    void valueTreeParentChanged (ValueTree& treeWhoseParentHasChanged) override;
-    
-    //==============================================================================
     // Label::Listener
     void labelTextChanged (Label* labelThatHasChanged) override;
     
@@ -55,11 +46,6 @@ public:
     //==============================================================================
     void textEditorTextChanged (TextEditor& textEditor);
     
-    //==============================================================================
-    
-    void setValueTree (ValueTree tree);
-    void addAnalysis (ValueTree& analysisTree);
-    void refreshFromTree();
     
 private:
     
@@ -68,16 +54,6 @@ private:
     int getBufferSizeFromIndex(int index);
     int getIndexFromBufferSize(int bufferSize);
     double round(double val) { return floor(val + 0.5); }
-    
-    Label analyserId;
-    
-    Label OSCPort;
-    Label OSCPortText;
-    
-    Label IPAddressValue;
-    Label IPAddressText;
-    
-    Label analyserIdText;
     
     Label bufferSizeText;
     Label bufferSizeValue;
