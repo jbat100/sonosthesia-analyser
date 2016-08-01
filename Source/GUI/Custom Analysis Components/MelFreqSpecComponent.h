@@ -25,7 +25,6 @@
 #define __SoundAnalyser__MelFreqSpecComponent__
 
 #include "../../JuceLibraryCode/JuceHeader.h"
-#include "../../Audio Analysis/AnalysisModel.h"
 #include "../SimpleAnalysisComponent.h"
 
 class MelFreqSpecComponent : public SimpleAnalysisComponent, public Label::Listener {

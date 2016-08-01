@@ -70,9 +70,6 @@
         </GROUP>
       </GROUP>
       <GROUP id="{5855A183-D5A6-41E2-2853-4D2D0B7D04EC}" name="Audio Analysis">
-        <FILE id="L4Ik4r" name="AnalysisModel.cpp" compile="1" resource="0"
-              file="Source/Audio Analysis/AnalysisModel.cpp"/>
-        <FILE id="oLSBIk" name="AnalysisModel.h" compile="0" resource="0" file="Source/Audio Analysis/AnalysisModel.h"/>
         <FILE id="yfMfvl" name="AudioAnalysis.cpp" compile="1" resource="0"
               file="Source/Audio Analysis/AudioAnalysis.cpp"/>
         <FILE id="P785Mz" name="AudioAnalysis.h" compile="0" resource="0" file="Source/Audio Analysis/AudioAnalysis.h"/>
@@ -216,6 +213,10 @@
             file="Source/ProcessorSettings.cpp"/>
       <FILE id="qrF9ZP" name="ProcessorSettings.h" compile="0" resource="0"
             file="Source/ProcessorSettings.h"/>
+      <FILE id="L4Ik4r" name="ProcessorModel.cpp" compile="1" resource="0"
+            file="Source/Audio Analysis/ProcessorModel.cpp"/>
+      <FILE id="oLSBIk" name="ProcessorModel.h" compile="0" resource="0"
+            file="Source/Audio Analysis/ProcessorModel.h"/>
       <FILE id="SQxbpL" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="RW2jP3" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>

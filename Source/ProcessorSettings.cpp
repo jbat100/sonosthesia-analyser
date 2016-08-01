@@ -9,3 +9,11 @@
 */
 
 #include "ProcessorSettings.h"
+
+ProcessorSettings::ProcessorSettings() :
+    bufferSize(DEFAULT_BUFFER_SIZE),
+    hostFrameSize(DEFAULT_BUFFER_SIZE),
+    samplingFrequency(DEFAULT_SAMPLING_FREQUENCY)
+{
+
+}

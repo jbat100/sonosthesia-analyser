@@ -25,7 +25,7 @@
 #define __SoundAnalyser__FFTComponent__
 
 #include "../../JuceLibraryCode/JuceHeader.h"
-#include "../../Audio Analysis/AnalysisModel.h"
+
 #include "../SimpleAnalysisComponent.h"
 
 class FFTComponent : public SimpleAnalysisComponent, public Label::Listener {

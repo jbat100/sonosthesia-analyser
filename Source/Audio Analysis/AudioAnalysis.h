@@ -26,7 +26,8 @@
 
 #include <vector>
 #include <string>
-#include "AnalysisModel.h"
+#include "ProcessorModel.h"
+#include "ProcessorSettings.h"
 #include "../Libraries/Gist/src/Gist.h"
 
 class AudioAnalysis;
@@ -65,11 +66,14 @@ enum OutputType
  
     To create a new AudioAnalysis module, just extend this class.
  */
-class AudioAnalysis : public ListenerList<AudioAnalysisListener>
+class AudioAnalysis : public ListenerList<AudioAnalysisListener>, public ProcessorSettingsListnener
 {
 public:
     
-    AudioAnalysis() : relayed(false) {}
+    AudioAnalysis() : relayed(false) {
+        // react to processor settings changes if necessary
+        ProcessorSettings::getInstance()->add(this);
+    }
     
     virtual ~AudioAnalysis() {}
     
@@ -184,7 +188,7 @@ public:
     virtual ValueTree saveToValueTree()
     {
         ValueTree tree(getIdentifier());
-        tree.setProperty(AnalysisProperties::name, getName(), nullptr);
+        tree.setProperty(AnalysisProperties::Name, getName(), nullptr);
         return tree;
     }
     
@@ -200,11 +204,6 @@ public:
     
     void setRelayed(bool _relayed);
     bool getRelayed();
-    
-    // properties which should really be private...
-    
-    /** The address pattern of the audio analysis module */
-    std::string addressPattern;
     
 private:
     

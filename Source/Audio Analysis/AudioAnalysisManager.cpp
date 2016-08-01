@@ -22,19 +22,28 @@
 //=======================================================================
 
 #include "AudioAnalysisManager.h"
+#include "ProcessorSettings.h"
+
 #include "../Libraries/speex/include/speex/speex_resampler.h"
 
 //==============================================================================
-AudioAnalysisManager::AudioAnalysisManager(int bufferSize_) : bufferSize(bufferSize_), audioBuffer(bufferSize), gist(bufferSize,DEFAULT_SAMPLING_FREQUENCY), port(8000), ipAddress("127.0.0.1"), mute(false)
+// we need a 
+AudioAnalysisManager::AudioAnalysisManager() :
+    audioBuffer(DEFAULT_BUFFER_SIZE),
+    gist(DEFAULT_BUFFER_SIZE, DEFAULT_SAMPLING_FREQUENCY)
+    /*, port(8000), ipAddress("127.0.0.1"), mute(false) */
 {
-    setBufferSize(bufferSize);
     
     // this function adds all algorithms that the plug-in will have access to
     addAudioAnalysisAlgorithms();
     
-    currentAnalysisToPlotType = FloatOutput;
+    setBufferSize(ProcessorSettings::getInstance()->getBufferSize());
+    setHostFrameSize(ProcessorSettings::getInstance()->getHostFrameSize());
+    setSamplingFrequency(ProcessorSettings::getInstance()->getSamplingFrequency());
     
-    setAnalyserIdString("1");
+    ProcessorSettings::getInstance()->add(this);
+    
+    currentAnalysisToPlotType = FloatOutput;
 
     vectorPlot.resize(512);
     plotHistory.resize(512);
@@ -46,11 +55,6 @@ AudioAnalysisManager::AudioAnalysisManager(int bufferSize_) : bufferSize(bufferS
     }
 }
 
-void AudioAnalysisManager::muteOSCSender(bool _mute)
-{
-    mute = _mute;
-}
-
 //==============================================================================
 void AudioAnalysisManager::addAudioAnalysisAlgorithms()
 {
@@ -59,10 +63,14 @@ void AudioAnalysisManager::addAudioAnalysisAlgorithms()
     // by name as this is how they will appear on the selection dialog
     
     // GIST
+    
+    int bufferSize = ProcessorSettings::getInstance()->getBufferSize();
+    // we should realy get the sampling frequency from here also, seems like it is always set to the default no matter what
+    
     audioAnalyses.add(new FFTMagnitudeSpectrum());
-    audioAnalyses.add(new MelFrequencySpectrum(bufferSize,DEFAULT_SAMPLING_FREQUENCY));
+    audioAnalyses.add(new MelFrequencySpectrum(bufferSize, DEFAULT_SAMPLING_FREQUENCY));
     audioAnalyses.add(new PeakEnergy());
-    audioAnalyses.add(new Pitch(bufferSize,DEFAULT_SAMPLING_FREQUENCY));
+    audioAnalyses.add(new Pitch(bufferSize, DEFAULT_SAMPLING_FREQUENCY));
     audioAnalyses.add(new RMS());
     audioAnalyses.add(new SpectralCentroid());
     audioAnalyses.add(new SpectralCrest());
@@ -71,8 +79,8 @@ void AudioAnalysisManager::addAudioAnalysisAlgorithms()
     audioAnalyses.add(new ZeroCrossingRate());
     
     // QMUL
-    audioAnalyses.add(new SP_ChordDetector(bufferSize,DEFAULT_SAMPLING_FREQUENCY));
-    audioAnalyses.add(new SP_Chromagram(bufferSize,DEFAULT_SAMPLING_FREQUENCY));
+    audioAnalyses.add(new SP_ChordDetector(bufferSize, DEFAULT_SAMPLING_FREQUENCY));
+    audioAnalyses.add(new SP_Chromagram(bufferSize, DEFAULT_SAMPLING_FREQUENCY));
 
 }
 
@@ -107,11 +115,12 @@ void AudioAnalysisManager::analyseAudio(float* buffer,int numSamples)
         
         for (int i = 0;i < audioAnalyses.size();i++)
         {
-            if (audioAnalyses[i]->send || audioAnalyses[i]->plot || audioAnalyses[i]->getRelayed())
+            if (audioAnalyses[i]->getRelayed())
             {
                 if (audioAnalyses[i]->getOutputType() == FloatOutput)
                 {
-                    float output = 0.0;
+                    //float output = 0.0;
+                    
                     if (audioAnalyses[i]->getInputType() == AudioBufferInput)
                     {
                         audioAnalyses[i]->performAnalysis(audioBuffer.buffer);
@@ -122,6 +131,8 @@ void AudioAnalysisManager::analyseAudio(float* buffer,int numSamples)
                     }
                     if (audioAnalyses[i]->resultReady())
                     {
+                        // old plit and send settings
+                        /*
                         output = audioAnalyses[i]->getAnalysisResultAsFloat();
                         if (audioAnalyses[i]->send && !mute)
                         {
@@ -133,6 +144,7 @@ void AudioAnalysisManager::analyseAudio(float* buffer,int numSamples)
                         {
                             updatePlotHistory(output);
                         }
+                         */
                         
                     }
                 }
@@ -157,6 +169,9 @@ void AudioAnalysisManager::analyseAudio(float* buffer,int numSamples)
                     
                     if (audioAnalyses[i]->resultReady())
                     {
+                        // old plot and send settings
+                        
+                        /*
                         output = audioAnalyses[i]->getAnalysisResultAsVector();
                         
                         if (audioAnalyses[i]->send && !mute)
@@ -173,6 +188,7 @@ void AudioAnalysisManager::analyseAudio(float* buffer,int numSamples)
                         {
                             updateVectorPlot(output);
                         }
+                         */
                     }
                 }
             }
@@ -180,6 +196,57 @@ void AudioAnalysisManager::analyseAudio(float* buffer,int numSamples)
     }
     
 }
+
+
+//==============================================================================
+
+void AudioAnalysisManager::processorBufferSizeChanged(ProcessorSettings* settings)
+{
+    setBufferSize(settings->getBufferSize());
+}
+
+void AudioAnalysisManager::processorHostFrameSizeChanged(ProcessorSettings* settings)
+{
+    setHostFrameSize(settings->getHostFrameSize());
+}
+
+void AudioAnalysisManager::processorSamplingFrequencyChanged(ProcessorSettings* settings)
+{
+    setSamplingFrequency(settings->getSamplingFrequency());
+}
+
+//==============================================================================
+void AudioAnalysisManager::setBufferSize(int bufferSize)
+{
+    // initialise the audio buffer
+    audioBuffer.setBufferSize(bufferSize);
+    
+    gist.setAudioFrameSize(bufferSize);
+    
+    // -----------------------------------------------
+    // now for some analysis specific initialisations
+    
+    for (int i = 0;i < audioAnalyses.size();i++)
+    {
+        audioAnalyses[i]->setInputAudioFrameSize(bufferSize);
+    }
+}
+
+//==============================================================================
+void AudioAnalysisManager::setSamplingFrequency(int fs)
+{
+    for (int i = 0;i < audioAnalyses.size();i++)
+    {
+        audioAnalyses[i]->setSamplingFrequency(fs);
+    }
+}
+
+//==============================================================================
+void AudioAnalysisManager::setHostFrameSize(int frameSize)
+{
+    
+}
+
 
 //==============================================================================
 void AudioAnalysisManager::updatePlotHistory(float newSample)
@@ -203,69 +270,7 @@ void AudioAnalysisManager::clearPlotHistory()
     {
         plotHistory[i] = 0;
     }
-
-}
-
-//==============================================================================
-void AudioAnalysisManager::setAnalyserIdString(std::string analyserId)
-{
-    std::string idWithSlash("/");
     
-    idWithSlash = idWithSlash.append(analyserId);
-    
-    for (int i = 0;i < audioAnalyses.size();i++)
-    {
-        audioAnalyses[i]->buildAddressPatternFromId(idWithSlash);
-    }
-}
-
-//==============================================================================
-void AudioAnalysisManager::setBufferSize(int bufferSize_)
-{
-    // store the buffer size
-    bufferSize = bufferSize_;
-    
-    // initialise the audio buffer
-    audioBuffer.setBufferSize(bufferSize);
-    
-    gist.setAudioFrameSize(bufferSize);
-    
-    // -----------------------------------------------
-    // now for some analysis specific initialisations
-    
-    for (int i = 0;i < audioAnalyses.size();i++)
-    {
-        audioAnalyses[i]->setInputAudioFrameSize(bufferSize);
-    }
-}
-
-//==============================================================================
-void AudioAnalysisManager::setOSCPort(int oscPort)
-{
-    port = oscPort;
-    osc.connect(ipAddress, port);
-}
-
-//==============================================================================
-void AudioAnalysisManager::setIPAddress(std::string remoteHostIPAddress)
-{
-    ipAddress = remoteHostIPAddress;
-    osc.connect(ipAddress, port);
-}
-
-//==============================================================================
-void AudioAnalysisManager::setSamplingFrequency(int fs)
-{
-    for (int i = 0;i < audioAnalyses.size();i++)
-    {
-        audioAnalyses[i]->setSamplingFrequency(fs);
-    }
-}
-
-//==============================================================================
-void AudioAnalysisManager::setHostFrameSize(int frameSize)
-{
-    AnalysisModel::currentHostFrameSize = frameSize;
 }
 
 //==============================================================================

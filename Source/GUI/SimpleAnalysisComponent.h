@@ -26,7 +26,6 @@
 #define __Gluver__MappingComponent__
 
 #include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Audio Analysis/AnalysisModel.h"
 #include "../Audio Analysis/AudioAnalysis.h"
 
 /** 

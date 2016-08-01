@@ -87,29 +87,18 @@ void SettingsComponent::resized()
 //==============================================================================
 void SettingsComponent::labelTextChanged (Label* labelThatHasChanged)
 {
-    if (labelThatHasChanged == &analyserId)
+    if (labelThatHasChanged == &bufferSizeValue)
     {
-        processor.analyserTree.setProperty(AnalysisModel::Ids::AnalyserId, analyserId.getText(), nullptr);
-    }
-    else if (labelThatHasChanged == &OSCPort)
-    {
-        processor.analyserTree.setProperty(AnalysisModel::Ids::Port, OSCPort.getText(),nullptr);
-    }
-    else if (labelThatHasChanged == &IPAddressValue)
-    {
-        processor.analyserTree.setProperty(AnalysisModel::Ids::IPAddress, IPAddressValue.getText(),nullptr);
-    }
-    else if (labelThatHasChanged == &bufferSizeValue)
-    {
-        AnalysisModel::setBufferSize(processor.analyserTree, bufferSizeValue.getTextValue().getValue());
+        ProcessorSettings::getInstance()->setBufferSize(bufferSizeValue.getTextValue().getValue());
     }
 }
 
-//==============================================================================
+/*==============================================================================
 void SettingsComponent::textEditorTextChanged (TextEditor& textEditor)
 {
     processor.analyserTree.setProperty(AnalysisModel::Ids::AnalyserId, textEditor.getText(), nullptr);
 }
+ */
 
 
 
@@ -119,7 +108,7 @@ void SettingsComponent::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
     if (comboBoxThatHasChanged == &bufferSizeComboBox)
     {
         int selectedItem = bufferSizeComboBox.getSelectedItemIndex();
-        AnalysisModel::setBufferSize(processor.analyserTree, getBufferSizeFromIndex(selectedItem));
+        ProcessorSettings::getInstance()->setBufferSize( getBufferSizeFromIndex(selectedItem) );
     }
 }
 
@@ -160,6 +149,8 @@ void SettingsComponent::buttonClicked (Button* button)
 
 //==============================================================================
 
+/*
+
 void SettingsComponent::valueTreePropertyChanged (ValueTree& treeWhosePropertyHasChanged, const Identifier& property)
 {
     if (property == AnalysisModel::Ids::AnalyserId)
@@ -181,4 +172,5 @@ void SettingsComponent::valueTreePropertyChanged (ValueTree& treeWhosePropertyHa
     }
 }
 
+ */
 

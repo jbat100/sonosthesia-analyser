@@ -62,22 +62,21 @@ void FFTComponent::labelTextChanged (Label* labelThatHasChanged)
     if (labelThatHasChanged == &numFFTSamples)
     {
         int numSamples = numFFTSamples.getTextValue().getValue();
-        int bufferSize = ProcessorSettings::getInstance()->getBufferSize();
-        if (numSamples > bufferSize/2)
-        {
-            numSamples = bufferSize/2;
-        }
         FFTMagnitudeSpectrum* fft = dynamic_cast<FFTMagnitudeSpectrum*>(getAudioAnalysis());
         if (fft)
         {
-            fft->setNumFFTSamplesToSend(numSamples);
+            int result = fft->setNumFFTSamplesToSend(numSamples);
+            if (result != numSamples)
+            {
+                // error message? fft size cannot be more than half of buffer size
+                numFFTSamples.setText(String(result), dontSendNotification);
+            }
         }
         else
         {
             std::cerr << "FFTComponent unexpected analysis\n";
         }
     }
-    
 }
 
 

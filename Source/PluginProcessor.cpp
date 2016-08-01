@@ -26,11 +26,10 @@
 #include "ProcessorSettings.h"
 
 
-int defaultBufferSize = 1024;
 
 //==============================================================================
 SoundAnalyserAudioProcessor::SoundAnalyserAudioProcessor() :
-    analyser(defaultBufferSize),
+    analyser(),
     analysisRelayManager(analyser)
 {    
 
@@ -182,6 +181,9 @@ void SoundAnalyserAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     
+    ProcessorSettings::getInstance()->setHostFrameSize(samplesPerBlock);
+    ProcessorSettings::getInstance()->setSamplingFrequency((int)sampleRate);
+    
     analyser.setSamplingFrequency((int)sampleRate);
     analyser.setHostFrameSize(samplesPerBlock);
 }
@@ -239,7 +241,7 @@ void SoundAnalyserAudioProcessor::getStateInformation (MemoryBlock& destData)
     
     // store all state to tree
     
-    tree.setProperty(AnalysisModel::Ids::BufferSize, ProcessorSettings::getInstance()->getBufferSize(), nullptr);
+    tree.setProperty(AnalyserProperties::BufferSize, ProcessorSettings::getInstance()->getBufferSize(), nullptr);
     
     for (int i = 0;i < analyser.audioAnalyses.size();i++)
     {
@@ -263,9 +265,9 @@ void SoundAnalyserAudioProcessor::setStateInformation (const void* data, int siz
     
     // update all state from
     
-    analyser.setBufferSize(tree[AnalysisModel::Ids::BufferSize]);
+    analyser.setBufferSize(tree[AnalyserProperties::BufferSize]);
     
-    ProcessorSettings::getInstance()->setBufferSize(tree[AnalysisModel::Ids::BufferSize]);
+    ProcessorSettings::getInstance()->setBufferSize(tree[AnalyserProperties::BufferSize]);
     
     for (int i = 0;i < analyser.audioAnalyses.size();i++)
     {

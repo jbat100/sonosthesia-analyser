@@ -26,6 +26,7 @@
 
 //=======================================================================
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "ProcessorSettings.h"
 #include "AudioAnalysisBuffer.h"
 #include "AudioAnalysis.h"
 #include "../Libraries/Gist/src/Gist.h"
@@ -45,61 +46,45 @@
 #include "../Modules/SP_Chromagram.h"
 #include "../Modules/SP_ChordDetector.h"
 
-#define DEFAULT_SAMPLING_FREQUENCY 44100
 
 //=======================================================================
 /** A class to manage audio input and all audio analysis modules
  */
-class AudioAnalysisManager {
+class AudioAnalysisManager : public ProcessorSettingsListnener {
 
 public:
     /** Constructor */
-    AudioAnalysisManager(int bufferSize_);
+    AudioAnalysisManager();
     
     /** Passes the audio buffer through a number of analysis algorithms
      * @param buffer the audio buffer containing the audio samples
      * @param numSamples the number of audio samples in the buffer
      */
     void analyseAudio(float* buffer,int numSamples);
-
-    /** Sets the analyser Id string, which will be prepended to all
-     * OSC messages
-     * @param analyserId the analyser Id
-     */
-    void setAnalyserIdString(std::string analyserId);
     
-    /** Set the audio buffer size to be used for audio analysis. Note that this is
-     * not (necessarily) the host audio frame size as the AudioAnalysisManager will 
-     * use an AudioBuffer object to manage audio buffer sizes
-     * @param bufferSize_ the new audio buffer size to use
-     */
-    void setBufferSize(int bufferSize_);
+    //=============================================
+    // ProcessorSettingsListnener
     
-    /** Sets the network port to be used for sending OSC messages
-     * @param oscPort the port to send OSC messages to
-     */
-    void setOSCPort(int oscPort);
+    void processorBufferSizeChanged(ProcessorSettings* settings) override;
+    void processorHostFrameSizeChanged(ProcessorSettings* settings) override;
+    void processorSamplingFrequencyChanged(ProcessorSettings* settings) override;
     
-    /** Sets the IP address to be used
-     * @param IPAddress the new IP address
-     */
-    void setIPAddress(std::string remoteHostIPAddress);
-    
-    /** Update the AudioAnalysisManager with the host sampling frequency
-     * @param fs the sampling frequency
-     */
-    void setSamplingFrequency(int fs);
-    
-    /** Update the AudioAnalysisManager with the host audio frame size
-     * @param frameSize the audio frame size of the host
-     */
-    void setHostFrameSize(int frameSize);
-    
-    /** Resets the plotHistory to zeros */
-    void clearPlotHistory();
+    //=============================================
+    // Analyses
     
     /** An array of AudioAnalysis objects */
     OwnedArray<AudioAnalysis> audioAnalyses;
+    
+    /** Sonosthesia add on, true if relay manager should send the results through OSC clients **/
+    bool shouldSendResults();
+    
+    AudioAnalysis* getAnalysisWithIdentifier(String identifier);
+    
+    //=============================================
+    // Plot related stuff, obsolete...
+    
+    /** Resets the plotHistory to zeros */
+    void clearPlotHistory();
     
     /** The current audio analysis plot type */
     OutputType currentAnalysisToPlotType;
@@ -110,15 +95,24 @@ public:
     /** A vector containing the data to be plotted for an audio analysis algorithm that returns vectors */
     std::vector<float> vectorPlot;
     
-    /** Sonosthesia add on, to mute the OSC sender, in favour of relay based senders **/
-    void muteOSCSender(bool mute);
-    
-    /** Sonosthesia add on, true if relay manager should send the results through OSC clients **/
-    bool shouldSendResults();
-    
-    AudioAnalysis* getAnalysisWithIdentifier(String identifier);
-    
 private:
+    
+    /** Set the audio buffer size to be used for audio analysis. Note that this is
+     * not (necessarily) the host audio frame size as the AudioAnalysisManager will
+     * use an AudioBuffer object to manage audio buffer sizes
+     * @param bufferSize_ the new audio buffer size to use
+     */
+    void setBufferSize(int bufferSize_);
+    
+    /** Update the AudioAnalysisManager with the host sampling frequency
+     * @param fs the sampling frequency
+     */
+    void setSamplingFrequency(int fs);
+    
+    /** Update the AudioAnalysisManager with the host audio frame size
+     * @param frameSize the audio frame size of the host
+     */
+    void setHostFrameSize(int frameSize);
  
     /** Add a new sample to the plot history
      * @param newSample the new sample to add to the plot history
@@ -134,25 +128,20 @@ private:
     /** Updates the vector plot with the latest vector result */
     void updateVectorPlot(std::vector<float> v);
     
-    /** The audio buffer size used by the plug-in to calculate audio analyses */
-    int bufferSize;
-    
-    /** allows osc to be sent to a specific ip address and port number */
-    OSCSender osc;
-    
     /** An AudioAnalysisBuffer object to manage audio buffers when new audio frames are received from the host */
     AudioAnalysisBuffer audioBuffer;
     
     /** An instance of the gist audio analysis library */
     Gist<float> gist;
     
-    /** The port to send to */
-    int port;
-    
-    /** The remote host IP address to send to */
-    String ipAddress;
-    
+    /*
+     // old send settings, now replaced by relays, use ProcessorSettings singleton for buffer size
+    OSCSender osc; // allows osc to be sent to a specific ip address and port number
+    int bufferSize; // The audio buffer size used by the plug-in to calculate audio analyses
+    int port; // The port to send to
+    String ipAddress; // The remote host IP address to send to
     bool mute;
+     */
     
     //=======================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioAnalysisManager)

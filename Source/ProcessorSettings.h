@@ -13,6 +13,11 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "ProcessorModel.h"
+
+#define DEFAULT_BUFFER_SIZE 1024
+#define DEFAULT_SAMPLING_FREQUENCY 44100
+
 // Settings should be accessible globaly without needing to go through the actual processor
 
 enum BufferSizeValues
@@ -27,19 +32,47 @@ enum BufferSizeValues
     NumBufferSizes
 };
 
-class ProcessorSettings {
+class ProcessorSettings;
+
+class ProcessorSettingsListnener {
+    
+public:
+    virtual ~ProcessorSettingsListnener();
+    virtual void processorBufferSizeChanged(ProcessorSettings* settings) {}
+    virtual void processorHostFrameSizeChanged(ProcessorSettings* settings) {}
+    virtual void processorSamplingFrequencyChanged(ProcessorSettings* settings) {}
+    
+};
+
+class ProcessorSettings : public ListenerList<ProcessorSettingsListnener> {
     
 private:
     
     int bufferSize;
+    int hostFrameSize;
+    int samplingFrequency;
     
 public:
     
-    ProcessorSettings() {}
+    ProcessorSettings();
     
-    ~ProcessorSettings()
+    virtual ~ProcessorSettings()
     {
         clearSingletonInstance();
+    }
+    
+    /** Save state to a value tree */
+    virtual ValueTree saveToValueTree()
+    {
+        ValueTree tree;
+        tree.setProperty(AnalyserProperties::BufferSize, bufferSize, nullptr);
+        return tree;
+    }
+    
+    /** Load state from a value tree */
+    virtual void loadFromValueTree(ValueTree &tree)
+    {
+        setBufferSize( tree[AnalyserProperties::BufferSize] );
     }
     
     int getBufferSize()
@@ -50,6 +83,29 @@ public:
     void setBufferSize(int _bufferSize)
     {
         bufferSize = _bufferSize;
+        call(&ProcessorSettingsListnener::processorBufferSizeChanged, this);
+    }
+    
+    int getSamplingFrequency()
+    {
+        return samplingFrequency;
+    }
+    
+    void setSamplingFrequency(int _samplingFrequency)
+    {
+        samplingFrequency = _samplingFrequency;
+        call(&ProcessorSettingsListnener::processorSamplingFrequencyChanged, this);
+    }
+    
+    int getHostFrameSize()
+    {
+        return hostFrameSize;
+    }
+    
+    void setHostFrameSize(int _hostFrameSize)
+    {
+        hostFrameSize = _hostFrameSize; // does anyone need to be informed of this change?
+        call(&ProcessorSettingsListnener::processorHostFrameSizeChanged, this);
     }
     
     juce_DeclareSingleton(ProcessorSettings, false);

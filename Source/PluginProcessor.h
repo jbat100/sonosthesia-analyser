@@ -27,8 +27,6 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "Audio Analysis/AudioAnalysisManager.h"
-#include "Audio Analysis/AnalysisModel.h"
-
 #include "Sonosthesia/Target/TargetManager.h"
 #include "Sonosthesia/Analysis/AnalysisRelay.h"
 

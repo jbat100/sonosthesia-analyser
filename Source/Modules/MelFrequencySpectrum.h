@@ -25,6 +25,7 @@
 #define __Sound_Analyser__MelFrequencySpectrum__
 
 #include "AudioAnalysis.h"
+#include "ProcessorModel.h"
 #include "../GUI/Custom Analysis Components/MelFreqSpecComponent.h"
 
 class MelFrequencySpectrum : public AudioAnalysis
@@ -81,7 +82,7 @@ public:
     {
         AudioAnalysis::loadFromValueTree(tree);
         // this property is unique to Mel Frequency Spectrum
-        setNumCoefficients( tree[AnalysisProperties::MelFrequencySpectrum::numBins] ); // default should be 13
+        setNumCoefficients( tree[AnalysisProperties::MelFrequencySpectrum::NumBins] ); // default should be 13
     }
     
     //==============================================================================
@@ -90,7 +91,7 @@ public:
         ValueTree tree = AudioAnalysis::saveToValueTree();
         
         // extra properties for Mel Frequency Spectrum
-        tree.setProperty(AnalysisProperties::MelFrequencySpectrum::numBins, numBins, nullptr);
+        tree.setProperty(AnalysisProperties::MelFrequencySpectrum::NumBins, numBins, nullptr);
         
         return tree;
     }

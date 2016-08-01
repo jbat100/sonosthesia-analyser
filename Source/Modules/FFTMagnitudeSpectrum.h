@@ -25,6 +25,10 @@
 #define SoundAnalyser_FFTMagnitudeSpectrum_h
 
 #include "AudioAnalysis.h"
+
+#include "ProcessorModel.h"
+#include "ProcessorSettings.h"
+
 #include "../GUI/Custom Analysis Components/FFTComponent.h"
 #include <cmath>
 
@@ -138,9 +142,27 @@ public:
     }
     
     //===============================================================================
-    void setNumFFTSamplesToSend(int numSamples)
+    // returns the value that was actually set, can be capped because of global buffer size setting
+    int setNumFFTSamplesToSend(int numSamples)
     {
+        int bufferSize = ProcessorSettings::getInstance()->getBufferSize();
+        if (numSamples > bufferSize/2)
+        {
+            numSamples = bufferSize/2;
+        }
         numSamplesToSend = numSamples;
+        return numSamples;
+    }
+    
+    //==============================================================================
+    // if the buffer size changes, we need to readjust the number of samples to send
+    void processorBufferSizeChanged(ProcessorSettings* settings) override
+    {
+        int bufferSize = settings->getBufferSize();
+        if (numSamplesToSend > bufferSize/2)
+        {
+            numSamplesToSend = bufferSize/2;
+        }
     }
     
     //==============================================================================
@@ -148,7 +170,7 @@ public:
     void loadFromValueTree(ValueTree &tree) override
     {
         AudioAnalysis::loadFromValueTree(tree);
-        numSamplesToSend = tree[AnalysisProperties::FFT::numSamplesToSend]; // default should be 512
+        numSamplesToSend = tree[AnalysisProperties::FFT::NumSamplesToSend]; // default should be 512
     }
     
     //==============================================================================
@@ -156,7 +178,7 @@ public:
     {
         ValueTree tree = AudioAnalysis::saveToValueTree();
         // extra properties for FFT
-        tree.setProperty(AnalysisProperties::FFT::numSamplesToSend, numSamplesToSend, nullptr);
+        tree.setProperty(AnalysisProperties::FFT::NumSamplesToSend, numSamplesToSend, nullptr);
         return tree;
     }
     

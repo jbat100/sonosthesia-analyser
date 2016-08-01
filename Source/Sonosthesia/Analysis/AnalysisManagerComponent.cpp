@@ -12,10 +12,8 @@
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 
-#include "../../Audio Analysis/AnalysisModel.h"
 #include "../../Audio Analysis/AudioAnalysis.h"
 #include "../../PluginProcessor.h"
-
 #include "../../GUI/SimpleAnalysisComponent.h"
 #include "../../GUI/Custom Analysis Components/FFTComponent.h"
 #include "../../GUI/Custom Analysis Components/MelFreqSpecComponent.h"
