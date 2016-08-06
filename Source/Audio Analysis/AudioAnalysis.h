@@ -187,6 +187,7 @@ public:
     
     virtual ValueTree saveToValueTree()
     {
+        std::cout << "Saving state for " << getIdentifier().toString() << "\n";
         ValueTree tree(getIdentifier());
         tree.setProperty(AnalysisProperties::Name, getName(), nullptr);
         return tree;
@@ -199,7 +200,15 @@ public:
      */
     virtual void loadFromValueTree(ValueTree &tree)
     {
-        jassert(tree.getType() == getIdentifier());
+        if (tree.getType() != getIdentifier())
+        {
+            std::cerr << "AudioAnalysis unexpected identifier " << tree.getType().toString();
+            std::cerr << ", expected " << getIdentifier().toString() << "\n";
+        }
+        else
+        {
+            std::cout << "Loading state for " << getIdentifier().toString() << "\n";
+        }
     }
     
     void setRelayed(bool _relayed);

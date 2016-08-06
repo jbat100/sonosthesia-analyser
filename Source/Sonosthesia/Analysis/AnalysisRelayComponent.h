@@ -60,6 +60,9 @@ public:
     void resized() override;
     
     void buttonClicked (Button* button) override;
+    void labelTextChanged(Label *label) override;
+    
+    
     void setRelay(std::shared_ptr<Relay> _relay) override;
     void refresh() override;
     

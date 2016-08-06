@@ -184,8 +184,8 @@ void SoundAnalyserAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     ProcessorSettings::getInstance()->setHostFrameSize(samplesPerBlock);
     ProcessorSettings::getInstance()->setSamplingFrequency((int)sampleRate);
     
-    analyser.setSamplingFrequency((int)sampleRate);
-    analyser.setHostFrameSize(samplesPerBlock);
+    //analyser.setSamplingFrequency((int)sampleRate);
+    //analyser.setHostFrameSize(samplesPerBlock);
 }
 
 //==============================================================================
@@ -243,10 +243,10 @@ void SoundAnalyserAudioProcessor::getStateInformation (MemoryBlock& destData)
     
     tree.setProperty(AnalyserProperties::BufferSize, ProcessorSettings::getInstance()->getBufferSize(), nullptr);
     
-    for (int i = 0;i < analyser.audioAnalyses.size();i++)
+    for (int i = 0;i < analyser.audioAnalyses.size(); i++)
     {
-        ValueTree tree = analyser.audioAnalyses[i]->saveToValueTree();
-        tree.addChild(tree, 0, nullptr);
+        ValueTree analysisTree = analyser.audioAnalyses[i]->saveToValueTree();
+        tree.addChild(analysisTree, 0, nullptr);
     }
     
     ScopedPointer<XmlElement> xml = tree.createXml();
@@ -263,17 +263,26 @@ void SoundAnalyserAudioProcessor::setStateInformation (const void* data, int siz
     ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
     ValueTree tree = ValueTree::fromXml(*xmlState);
     
+    std::cout << "SoundAnalyserAudioProcessor setStateInformation tree is " << (tree.isValid() ? "valid" : "invalid") << "\n";
+    
     // update all state from
     
-    analyser.setBufferSize(tree[AnalyserProperties::BufferSize]);
     
     ProcessorSettings::getInstance()->setBufferSize(tree[AnalyserProperties::BufferSize]);
-    
     for (int i = 0;i < analyser.audioAnalyses.size();i++)
     {
-        ValueTree tree = tree.getChildWithName(analyser.audioAnalyses[i]->getIdentifier());
-        analyser.audioAnalyses[i]->loadFromValueTree(tree);
+        Identifier identifier = analyser.audioAnalyses[i]->getIdentifier();
+        ValueTree analysisTree = tree.getChildWithName(identifier);
+        if (analysisTree.isValid())
+        {
+            analyser.audioAnalyses[i]->loadFromValueTree(analysisTree);
+        }
+        else
+        {
+            //std::cerr << "SoundAnalyserAudioProcessor setStateInformation invalid analysis tree\n";
+        }
     }
+     
 }
 
 //==============================================================================

@@ -173,7 +173,6 @@ void RelayComponent::setRelay(std::shared_ptr<Relay> _relay)
 {
     targetSelectionComponent.setRelay(_relay);
     relay = _relay;
-    refresh();
 }
 
 std::shared_ptr<Relay> RelayComponent::getRelay()

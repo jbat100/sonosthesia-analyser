@@ -108,4 +108,9 @@ void SimpleAnalysisComponent::updateActivityIndicator()
     }
 }
 
+void SimpleAnalysisComponent::buttonClicked (Button* button)
+{
+    // maybe an info button with pop-up
+}
+
 

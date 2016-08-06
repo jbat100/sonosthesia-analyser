@@ -95,22 +95,10 @@
           <FILE id="cDLfcY" name="MelFreqSpecComponent.h" compile="0" resource="0"
                 file="Source/GUI/Custom Analysis Components/MelFreqSpecComponent.h"/>
         </GROUP>
-        <FILE id="RIJ4YG" name="AnalysisSelectionComponent.cpp" compile="1"
-              resource="0" file="Source/GUI/AnalysisSelectionComponent.cpp"/>
-        <FILE id="MVAJCx" name="AnalysisSelectionComponent.h" compile="0" resource="0"
-              file="Source/GUI/AnalysisSelectionComponent.h"/>
-        <FILE id="gBcFq2" name="ItemListComponent.cpp" compile="1" resource="0"
-              file="Source/GUI/ItemListComponent.cpp"/>
-        <FILE id="yQO3MV" name="ItemListComponent.h" compile="0" resource="0"
-              file="Source/GUI/ItemListComponent.h"/>
         <FILE id="PGnRl9" name="OriginalPlotComponent.cpp" compile="1" resource="0"
               file="Source/GUI/OriginalPlotComponent.cpp"/>
         <FILE id="kWl73F" name="OriginalPlotComponent.h" compile="0" resource="0"
               file="Source/GUI/OriginalPlotComponent.h"/>
-        <FILE id="M6IRQW" name="OriginalRootComponent.cpp" compile="1" resource="0"
-              file="Source/GUI/OriginalRootComponent.cpp"/>
-        <FILE id="T9Ua51" name="OriginalRootComponent.h" compile="0" resource="0"
-              file="Source/GUI/OriginalRootComponent.h"/>
         <FILE id="KmIn6N" name="PluginLookAndFeel.cpp" compile="1" resource="0"
               file="Source/GUI/PluginLookAndFeel.cpp"/>
         <FILE id="k1U5Oz" name="PluginLookAndFeel.h" compile="0" resource="0"

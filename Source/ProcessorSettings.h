@@ -37,7 +37,7 @@ class ProcessorSettings;
 class ProcessorSettingsListnener {
     
 public:
-    virtual ~ProcessorSettingsListnener();
+    virtual ~ProcessorSettingsListnener() {}
     virtual void processorBufferSizeChanged(ProcessorSettings* settings) {}
     virtual void processorHostFrameSizeChanged(ProcessorSettings* settings) {}
     virtual void processorSamplingFrequencyChanged(ProcessorSettings* settings) {}
@@ -56,9 +56,18 @@ public:
     
     ProcessorSettings();
     
+    static ProcessorSettings* getInstance()
+    {
+        // http://stackoverflow.com/questions/1008019/c-singleton-design-pattern
+        
+        static ProcessorSettings instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return &instance;
+    }
+    
     virtual ~ProcessorSettings()
     {
-        clearSingletonInstance();
+        //clearSingletonInstance();
     }
     
     /** Save state to a value tree */
@@ -108,10 +117,10 @@ public:
         call(&ProcessorSettingsListnener::processorHostFrameSizeChanged, this);
     }
     
-    juce_DeclareSingleton(ProcessorSettings, false);
+    //juce_DeclareSingleton(ProcessorSettings, false);
 };
 
-juce_ImplementSingleton(ProcessorSettings);
+//juce_ImplementSingleton(ProcessorSettings);
 
 
 #endif  // PROCESSORSETTINGS_H_INCLUDED

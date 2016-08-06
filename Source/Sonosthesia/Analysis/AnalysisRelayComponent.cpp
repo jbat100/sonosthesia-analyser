@@ -208,9 +208,30 @@ void AnalysisRelayComponent::buttonClicked (Button* button)
 
 void AnalysisRelayComponent::refresh()
 {
+    RelayComponent::refresh();
+    
+    std::shared_ptr<AnalysisRelay> analysisRelay = std::dynamic_pointer_cast<AnalysisRelay>(relay);
+    if (analysisRelay)
+    {
+        descriptorField.setText(analysisRelay->getDescriptor(), dontSendNotification);
+    }
+    else
+    {
+        descriptorField.setText("", dontSendNotification);
+    }
     
 }
 
+void AnalysisRelayComponent::labelTextChanged(Label *label)
+{
+    RelayComponent::labelTextChanged(label);
+    
+    if (label == &descriptorField)
+    {
+        std::shared_ptr<AnalysisRelay> analysisRelay = std::dynamic_pointer_cast<AnalysisRelay>(relay);
+        if (analysisRelay) analysisRelay->setDescriptor(descriptorField.getText());
+    }
+}
 
 
 void AnalysisRelayComponent::setRelay(std::shared_ptr<Relay> _relay)
@@ -323,6 +344,7 @@ Component* AnalysisRelayListComponent::refreshComponentForRow (int rowNumber, bo
     {
         relay = processor.getAnalysisRelayManager().getItem(rowNumber);
         relayComponent->setRelay(relay);
+        relayComponent->refresh();
     }
     else
     {
@@ -332,4 +354,6 @@ Component* AnalysisRelayListComponent::refreshComponentForRow (int rowNumber, bo
     
     return relayComponent;
 }
+
+
 

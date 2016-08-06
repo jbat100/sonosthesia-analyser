@@ -39,11 +39,12 @@ FFTComponent::FFTComponent(AudioAnalysis* _analysis) : SimpleAnalysisComponent(_
     numFFTSamples.setColour(Label::textColourId, Colours::black);
     numFFTSamples.setColour(Label::ColourIds::backgroundColourId, Colours::white);
     numFFTSamples.setColour(Label::ColourIds::outlineColourId, Colours::lightgrey);
-    numFFTSamples.setText("512", dontSendNotification);
     numFFTSamples.setEditable(true);
     addAndMakeVisible(&numFFTSamples);
     
     numFFTSamples.addListener(this);
+    
+    refresh();
     
 }
 
@@ -54,6 +55,16 @@ void FFTComponent::resized()
     
     numFFTSamplesText.setBounds(400, yOffset, 70, 20);
     numFFTSamples.setBounds(480, yOffset,40,20);
+}
+
+void FFTComponent::refresh()
+{
+    FFTMagnitudeSpectrum* fft = dynamic_cast<FFTMagnitudeSpectrum*>(getAudioAnalysis());
+    
+    if (fft)
+    {
+        numFFTSamples.setText(String(fft->getNumSamplesToSend()), dontSendNotification);
+    }
 }
 
 //==============================================================================

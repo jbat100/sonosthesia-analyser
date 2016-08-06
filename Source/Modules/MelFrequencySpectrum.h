@@ -28,6 +28,7 @@
 #include "ProcessorModel.h"
 #include "../GUI/Custom Analysis Components/MelFreqSpecComponent.h"
 
+
 class MelFrequencySpectrum : public AudioAnalysis
 {
 public:
@@ -35,7 +36,7 @@ public:
     //==============================================================================
     MelFrequencySpectrum(int frameSize,int samplingFrequency) : mfcc(frameSize, samplingFrequency)
     {
-        numBins = 13;
+        numBins = defaultNumBins;
     }
     
     //==============================================================================
@@ -75,25 +76,6 @@ public:
         
         // set the number of coefficients in the mfcc object
         mfcc.setNumCoefficients(numBins);
-    }
-    
-    //==============================================================================
-    void loadFromValueTree(ValueTree &tree) override
-    {
-        AudioAnalysis::loadFromValueTree(tree);
-        // this property is unique to Mel Frequency Spectrum
-        setNumCoefficients( tree[AnalysisProperties::MelFrequencySpectrum::NumBins] ); // default should be 13
-    }
-    
-    //==============================================================================
-    ValueTree saveToValueTree() override
-    {
-        ValueTree tree = AudioAnalysis::saveToValueTree();
-        
-        // extra properties for Mel Frequency Spectrum
-        tree.setProperty(AnalysisProperties::MelFrequencySpectrum::NumBins, numBins, nullptr);
-        
-        return tree;
     }
     
     //==============================================================================
@@ -144,12 +126,45 @@ public:
         return MagnitudeSpectrumInput;
     }
     
+    //==============================================================================
+    void loadFromValueTree(ValueTree &tree) override
+    {
+        AudioAnalysis::loadFromValueTree(tree);
+        // this property is unique to Mel Frequency Spectrum
+        if (tree.hasProperty(AnalysisProperties::MelFrequencySpectrum::NumBins))
+        {
+            setNumCoefficients( tree[AnalysisProperties::MelFrequencySpectrum::NumBins] ); // default should be 13
+        }
+        else
+        {
+            setNumCoefficients( defaultNumBins );
+        }
+    }
+    
+    //==============================================================================
+    ValueTree saveToValueTree() override
+    {
+        ValueTree tree = AudioAnalysis::saveToValueTree();
+        
+        // extra properties for Mel Frequency Spectrum
+        tree.setProperty(AnalysisProperties::MelFrequencySpectrum::NumBins, numBins, nullptr);
+        
+        return tree;
+    }
+    
+    int getNumBins()
+    {
+        return numBins;
+    }
+    
 private:
     
     MFCC<float> mfcc;
     std::vector<float> mfccOutput;
     
     int numBins;
+    
+    static const int defaultNumBins = 13;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MelFrequencySpectrum)
 };

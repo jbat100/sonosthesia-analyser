@@ -43,6 +43,7 @@ MelFreqSpecComponent::MelFreqSpecComponent(AudioAnalysis* _analysis) : SimpleAna
     
     numMelBins.addListener(this);
     
+    refresh();
 }
 
 void MelFreqSpecComponent::resized()
@@ -73,3 +74,12 @@ void MelFreqSpecComponent::labelTextChanged (Label* labelThatHasChanged)
     }
 }
 
+void MelFreqSpecComponent::refresh()
+{
+    MelFrequencySpectrum* mel = dynamic_cast<MelFrequencySpectrum*>(getAudioAnalysis());
+    
+    if (mel)
+    {
+        numMelBins.setText(String(mel->getNumBins()), dontSendNotification);
+    }
+}

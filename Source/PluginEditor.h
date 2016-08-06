@@ -27,7 +27,6 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "PluginProcessor.h"
-#include "GUI/OriginalRootComponent.h"
 #include "Sonosthesia/GUI/SonosthesiaRootComponent.h"
 
 //==============================================================================

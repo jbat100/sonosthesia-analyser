@@ -40,7 +40,7 @@ public:
     FFTMagnitudeSpectrum()
     {        
         // initialise
-        numSamplesToSend = 512;
+        numSamplesToSend = defaultNumSamplesToSend;
     }
     
     //==============================================================================
@@ -170,7 +170,16 @@ public:
     void loadFromValueTree(ValueTree &tree) override
     {
         AudioAnalysis::loadFromValueTree(tree);
-        numSamplesToSend = tree[AnalysisProperties::FFT::NumSamplesToSend]; // default should be 512
+        
+        if (tree.hasProperty(AnalysisProperties::FFT::NumSamplesToSend))
+        {
+            numSamplesToSend = tree[AnalysisProperties::FFT::NumSamplesToSend]; // default should be 512
+        }
+        else
+        {
+            numSamplesToSend = defaultNumSamplesToSend;
+        }
+    
     }
     
     //==============================================================================
@@ -182,9 +191,16 @@ public:
         return tree;
     }
     
+    int getNumSamplesToSend()
+    {
+        return numSamplesToSend;
+    }
+    
 private:
     
     int numSamplesToSend;
+    
+    static const int defaultNumSamplesToSend = 512;
     
     std::vector<float> magnitudeSpectrumResult;
     

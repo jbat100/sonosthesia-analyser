@@ -35,6 +35,8 @@ public:
     
     void resized() override;
     
+    void refresh();
+    
     void labelTextChanged (Label* labelThatHasChanged) override;
     
 private:
