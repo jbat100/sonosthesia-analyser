@@ -20,7 +20,21 @@ AnalysisRelay::AnalysisRelay() :
     
 }
 
-AnalysisRelay::AnalysisRelay(std::shared_ptr<OSCTarget> _target, String _group, String _descriptor, String _anaysisIdentifier)
+AnalysisRelay::AnalysisRelay(std::shared_ptr<OSCTarget> _target, String _group, String _descriptor, String _anaysisIdentifier) :
+    Relay(_target, _group),
+    descriptor(_descriptor),
+    anaysisIdentifier(_anaysisIdentifier)
+{
+    
+}
+
+AnalysisRelay::AnalysisRelay(String _identifier,
+                             std::shared_ptr<OSCTarget> _target,
+                             String _group, String _descriptor,
+                             String _anaysisIdentifier) :
+    Relay(_identifier, _target, _group),
+    descriptor(_descriptor),
+    anaysisIdentifier(_anaysisIdentifier)
 {
     
 }

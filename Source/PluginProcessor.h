@@ -88,6 +88,14 @@ private:
     OSCTargetManager targetManager;
     AnalysisRelayManager analysisRelayManager;
     
+    void saveOSCTarget(std::shared_ptr<OSCTarget> target, XmlElement* element);
+    std::shared_ptr<OSCTarget> loadOSCTarget(XmlElement* element);
+    
+    void saveAnalysisRelay(std::shared_ptr<AnalysisRelay> relay, XmlElement* element);
+    std::shared_ptr<AnalysisRelay> loadAnalysisRelay(XmlElement* element);
+    
+    std::shared_ptr<OSCTarget> getTargetForElement(XmlElement* element);
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SoundAnalyserAudioProcessor)
 };

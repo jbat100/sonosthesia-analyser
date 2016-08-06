@@ -21,7 +21,7 @@ SettingsComponent::SettingsComponent(SoundAnalyserAudioProcessor& _processor) : 
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     
-    LookAndFeel::setDefaultLookAndFeel(&pluginLookAndFeel);
+    //LookAndFeel::setDefaultLookAndFeel(&pluginLookAndFeel);
     
     Font logoFont;//(typeface);
     logoFont.setHeight(40);
@@ -59,6 +59,8 @@ SettingsComponent::SettingsComponent(SoundAnalyserAudioProcessor& _processor) : 
     bufferSizeComboBox.addListener(this);
     bufferSizeValue.addListener(this);
     
+    refresh();
+    
 }
 
 SettingsComponent::~SettingsComponent()
@@ -72,13 +74,12 @@ void SettingsComponent::paint (Graphics& g)
 
 void SettingsComponent::resized()
 {
-    bufferSizeText.setBounds(10, 10, 70, 20);
+    bufferSizeText.setBounds(10, 10, 100, 20);
     // bufferSizeValue.setBounds(90,10,40,20);
-    bufferSizeComboBox.setBounds(80, 10, 60, 20);
+    bufferSizeComboBox.setBounds(120, 10, 80, 20);
     
     float titleWidth = 280;
     pluginTitleLabel.setBounds(getWidth()-titleWidth-10, getHeight()-60, titleWidth, 50);
-    
     pluginVersionLabel.setBounds(getWidth()-50, getHeight()-15, 40, 10);
     
 }
@@ -116,7 +117,7 @@ void SettingsComponent::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 int SettingsComponent::getBufferSizeFromIndex(int index)
 {
     int minBufferSize = 64;
-    return minBufferSize * powl(2,index);
+    return minBufferSize * powl(2, index);
 }
 
 //==============================================================================
@@ -147,30 +148,10 @@ void SettingsComponent::buttonClicked (Button* button)
 
 }
 
-//==============================================================================
-
-/*
-
-void SettingsComponent::valueTreePropertyChanged (ValueTree& treeWhosePropertyHasChanged, const Identifier& property)
+void SettingsComponent::refresh()
 {
-    if (property == AnalysisModel::Ids::AnalyserId)
-    {
-        refreshFromTree();
-    }
-    else if (property == AnalysisModel::Ids::IPAddress)
-    {
-        refreshFromTree();
-    }
-    else if (property == AnalysisModel::Ids::Port)
-    {
-        refreshFromTree();
-    }
-    else if (property == AnalysisModel::Ids::BufferSize)
-    {
-        int newBufferSize = processor.analyserTree[property];
-        bufferSizeComboBox.setSelectedItemIndex(getIndexFromBufferSize(newBufferSize));
-    }
+    int bufferSize = ProcessorSettings::getInstance()->getBufferSize();
+    bufferSizeComboBox.setSelectedItemIndex(getIndexFromBufferSize(bufferSize));
 }
 
- */
 

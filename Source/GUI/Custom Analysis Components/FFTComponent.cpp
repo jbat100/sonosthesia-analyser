@@ -24,7 +24,7 @@
 #include "FFTComponent.h"
 
 #include "../../Modules/FFTMagnitudeSpectrum.h"
-#include "ProcessorSettings.h"
+#include "../../Sonosthesia/Core/Theme.h"
 
 //==============================================================================
 FFTComponent::FFTComponent(AudioAnalysis* _analysis) : SimpleAnalysisComponent(_analysis)
@@ -34,6 +34,7 @@ FFTComponent::FFTComponent(AudioAnalysis* _analysis) : SimpleAnalysisComponent(_
     setSize (580, 30);
     
     numFFTSamplesText.setText("Samples", dontSendNotification);
+    Appearence::theme()->label(numFFTSamplesText);
     addAndMakeVisible(&numFFTSamplesText);
     
     numFFTSamples.setColour(Label::textColourId, Colours::black);

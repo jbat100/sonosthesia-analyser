@@ -218,6 +218,8 @@ void AudioAnalysisManager::processorSamplingFrequencyChanged(ProcessorSettings* 
 //==============================================================================
 void AudioAnalysisManager::setBufferSize(int bufferSize)
 {
+    std::cout << "AudioAnalysisManager updating for new buffer size : " << bufferSize << "\n";
+    
     // initialise the audio buffer
     audioBuffer.setBufferSize(bufferSize);
     

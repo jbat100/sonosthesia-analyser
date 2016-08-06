@@ -31,6 +31,8 @@ public:
     void paint (Graphics&) override;
     void resized() override;
     
+    void refresh();
+    
     //==============================================================================
     // Button::Listener
     void buttonClicked (Button* button) override;

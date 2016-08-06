@@ -29,7 +29,8 @@ class AnalysisRelay : public Relay, public ListenerList<AnalysisRelayListener> {
 public:
     
     AnalysisRelay();
-    AnalysisRelay(std::shared_ptr<OSCTarget> _target, String _group, String _descriptor, String _anaysisIdentifier);
+    AnalysisRelay(std::shared_ptr<OSCTarget> _target, String _group, String _descriptor, String _analysisIdentifier);
+    AnalysisRelay(String _identifier, std::shared_ptr<OSCTarget> _target, String _group, String _descriptor, String _analysisIdentifier);
     
     void setDescriptor(String _descriptor);
     String getDescriptor();

@@ -22,7 +22,6 @@ public:
     
     Relay();
     Relay(std::shared_ptr<OSCTarget> _target, String _group);
-    
     Relay(String _identifier, std::shared_ptr<OSCTarget> _target, String _group);
     
     virtual ~Relay();

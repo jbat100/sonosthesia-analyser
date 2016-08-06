@@ -251,6 +251,24 @@ void SoundAnalyserAudioProcessor::getStateInformation (MemoryBlock& destData)
     
     ScopedPointer<XmlElement> xml = tree.createXml();
     
+    // Store targets...
+    XmlElement* targetsElement = xml->createNewChildElement("targets");
+    auto targets = targetManager.getItems();
+    for (auto i = targets.begin(); i != targets.end(); i++)
+    {
+        XmlElement* targetElement = targetsElement->createNewChildElement("target");
+        saveOSCTarget((*i), targetElement);
+    }
+    
+    // Store relays...
+    XmlElement* relaysElement = xml->createNewChildElement("relays");
+    auto relays = analysisRelayManager.getItems();
+    for (auto i = relays.begin(); i != relays.end(); i++)
+    {
+        XmlElement* relayElement = relaysElement->createNewChildElement("relay");
+        saveAnalysisRelay((*i), relayElement);
+    }
+    
     // then use this helper function to stuff it into the binary blob and return it..
     copyXmlToBinary (*xml, destData);
 }
@@ -267,8 +285,11 @@ void SoundAnalyserAudioProcessor::setStateInformation (const void* data, int siz
     
     // update all state from
     
+    if (tree.hasProperty(AnalyserProperties::BufferSize))
+    {
+        ProcessorSettings::getInstance()->setBufferSize(tree[AnalyserProperties::BufferSize]);
+    }
     
-    ProcessorSettings::getInstance()->setBufferSize(tree[AnalyserProperties::BufferSize]);
     for (int i = 0;i < analyser.audioAnalyses.size();i++)
     {
         Identifier identifier = analyser.audioAnalyses[i]->getIdentifier();
@@ -282,7 +303,87 @@ void SoundAnalyserAudioProcessor::setStateInformation (const void* data, int siz
             //std::cerr << "SoundAnalyserAudioProcessor setStateInformation invalid analysis tree\n";
         }
     }
-     
+    
+    
+    
+    // order is important, targets must be loaded first, as the relays will need them
+    XmlElement* targetsElement = xmlState->getChildByName("targets");
+    if (targetsElement)
+    {
+        for (int i = 0; i < targetsElement->getNumChildElements(); i++)
+        {
+            XmlElement* targetElement = targetsElement->getChildElement(i);
+            auto target = loadOSCTarget(targetElement);
+            targetManager.addItem(target);
+        }
+    }
+    
+    // load midi relays
+    XmlElement* relaysElement = xmlState->getChildByName("relays");
+    if (relaysElement)
+    {
+        for (int i = 0; i < relaysElement->getNumChildElements(); i++)
+        {
+            XmlElement* relayElement = relaysElement->getChildElement(i);
+            auto midiRelay = loadAnalysisRelay(relayElement);
+            analysisRelayManager.addItem(midiRelay);
+        }
+    }
+    
+}
+
+
+//==============================================================================
+
+void SoundAnalyserAudioProcessor::saveOSCTarget(std::shared_ptr<OSCTarget> target, XmlElement* element)
+{
+    element->setAttribute("identifier", target->getIdentifier());
+    element->setAttribute("hostname", target->getHostName());
+    element->setAttribute("portnumber", target->getPortNumber());
+}
+
+std::shared_ptr<OSCTarget> SoundAnalyserAudioProcessor::loadOSCTarget(XmlElement* element)
+{
+    String identifier = element->getStringAttribute("identifier");
+    String hostName = element->getStringAttribute("hostname");
+    int portNumber = element->getIntAttribute("portnumber");
+    return std::shared_ptr<OSCTarget> (new OSCTarget(identifier, hostName, portNumber));
+}
+
+void SoundAnalyserAudioProcessor::saveAnalysisRelay(std::shared_ptr<AnalysisRelay> relay, XmlElement* element)
+{
+    element->setAttribute("identifier", relay->getIdentifier());
+    element->setAttribute("analysis", relay->getAnaysisIdentifier());
+    element->setAttribute("group", relay->getGroup());
+    element->setAttribute("descriptor", relay->getDescriptor());
+    if (relay->getTarget()) element->setAttribute("target", relay->getTarget()->getIdentifier());
+}
+
+std::shared_ptr<AnalysisRelay> SoundAnalyserAudioProcessor::loadAnalysisRelay(XmlElement* element)
+{
+    String identifier = element->getStringAttribute("identifier");
+    String group = element->getStringAttribute("group");
+    String descriptor = element->getStringAttribute("descriptor");
+    String analysis = element->getStringAttribute("analysis");
+    std::shared_ptr<OSCTarget> target = getTargetForElement(element);
+    return std::shared_ptr<AnalysisRelay> (new AnalysisRelay(identifier, target, group, descriptor, analysis));
+}
+
+std::shared_ptr<OSCTarget> SoundAnalyserAudioProcessor::getTargetForElement(XmlElement* element)
+{
+    std::shared_ptr<OSCTarget> target = nullptr;
+    if (element->hasAttribute("target"))
+    {
+        try
+        {
+            target = targetManager.getItem(element->getStringAttribute("target"));
+        }
+        catch (std::invalid_argument& e)
+        {
+            std::cerr << "Invalid target identifier" << "\n";
+        }
+    }
+    return target;
 }
 
 //==============================================================================
