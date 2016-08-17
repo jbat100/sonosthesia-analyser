@@ -22,3 +22,15 @@
 //=======================================================================
 
 #include "AudioAnalysis.h"
+
+
+void AudioAnalysis::setRelayed(bool _relayed)
+{
+    relayed = _relayed;
+    call(&AudioAnalysisListener::audioAnalysisChanged, this);
+}
+
+bool AudioAnalysis::getRelayed()
+{
+    return relayed;
+}

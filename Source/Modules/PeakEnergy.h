@@ -38,73 +38,67 @@ public:
     }
     
     //==============================================================================
-    String getName()
+    String getName() override
     {
         return "Peak Energy";
     }
     
     //==============================================================================
-    void performAnalysis(std::vector<float> audioFrame)
+    void performAnalysis(std::vector<float> audioFrame) override
     {
         peakEnergyOutputValue = tdf.peakEnergy(audioFrame);
     }
     
     //==============================================================================
-    float getAnalysisResultAsFloat()
+    float getAnalysisResultAsFloat() override
     {
         return peakEnergyOutputValue;
     }
-    
-    //==============================================================================
-    std::string getCoreAddressPattern()
-    {
-        return "/peakEnergy";
-    }
         
     //==============================================================================
-    Identifier getIdentifier()
+    Identifier getIdentifier() override
     {
         return Identifier("PeakEnergy");
     }
     
     //==============================================================================
-    Identifier getCollectionIdentifier()
+    Identifier getCollectionIdentifier() override
     {
         return Identifier("Gist");
     }
     
     //==============================================================================
-    String getCollectionName()
+    String getCollectionName() override
     {
         return "Gist";
     }
     
     //==============================================================================
-    String getAuthorString()
+    String getAuthorString() override
     {
         return "Adam Stark";
     }
     
     //==============================================================================
-    String getTechnicalDescription()
+    String getTechnicalDescription() override
     {
         return "The maximum observed signal value in each audio frame";
     }
     
     //==============================================================================
-    String getSimpleDescription()
+    String getSimpleDescription() override
     {
         return "An indication of signal energy or loudness";
     }
     
     //==============================================================================
-    OutputType getOutputType()
+    OutputType getOutputType() override
     {
         return FloatOutput;
     }
     
     //==============================================================================
-    InputType getInputType()
+    InputType getInputType() override
     {
         return AudioBufferInput;
     }

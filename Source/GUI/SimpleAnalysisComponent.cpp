@@ -24,166 +24,93 @@
 
 #include "SimpleAnalysisComponent.h"
 
-//==============================================================================
-SimpleAnalysisComponent::SimpleAnalysisComponent(ValueTree& analysisTree_) : analysisTree(analysisTree_)
-{
+#include "../Sonosthesia/Core/Theme.h"
 
+const int SimpleAnalysisComponent::yOffset = 5;
+
+//==============================================================================
+SimpleAnalysisComponent::SimpleAnalysisComponent(AudioAnalysis* _analysis) : analysis(_analysis)
+{
     setSize (580, 30);
     
+    jassert(analysis != nullptr);
     
+    addAndMakeVisible(activityIndicator);
+    updateActivityIndicator();
     
-    String name = analysisTree[AnalysisProperties::name];
-    analysisName.setText(name, dontSendNotification);
-    analysisName.setFont(Font(16));
-    addAndMakeVisible(&analysisName);
-    
-    sendButton.setButtonText("Send");
-    //sendButton.setColour(TextButton::ColourIds::buttonOnColourId, Colours::blueviolet);
-    //sendButton.setColour(TextButton::ColourIds::buttonColourId, Colours::silver);
-    sendButton.setToggleState(false, dontSendNotification);
-    addAndMakeVisible(&sendButton);
-    
-    plotButton.setButtonText("Plot");
-    //plotButton.setColour(TextButton::ColourIds::buttonOnColourId, Colours::yellowgreen);
-    //plotButton.setColour(TextButton::ColourIds::buttonColourId, Colours::silver);
-    plotButton.setToggleState(false, dontSendNotification);
-    addAndMakeVisible(&plotButton);
-    
-    removeButton.setButtonText("x");
-    addAndMakeVisible(&removeButton);
-    
-    analysisTree.addListener(this);
-    sendButton.addListener(this);
-    plotButton.addListener(this);
-    removeButton.addListener(this);
-        
-    refreshFromTree();
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::refreshFromTree()
-{
-    sendButton.setToggleState(analysisTree[AnalysisProperties::send],dontSendNotification);
-    plotButton.setToggleState(analysisTree[AnalysisProperties::plot], dontSendNotification);
-    
-    customComponentRefreshFromTree();
-    
-    resized();
+    nameLabel.setText(analysis->getName(), dontSendNotification);
+    addAndMakeVisible(&nameLabel);
+    Appearence::theme()->label(nameLabel);
+    nameLabel.setJustificationType(Justification::verticallyCentred | Justification::left);
 }
 
 //==============================================================================
 void SimpleAnalysisComponent::resized()
 {
-    removeButton.setBounds(0,0,20,20);
-    analysisName.setBounds(30,0,300,20);
-    
-    sendButton.setBounds(280,0,40,20);
-    plotButton.setBounds(340, 0, 40, 20);
-
-    customComponentResized();
+    activityIndicator.setBounds(30, yOffset, 80, 20);
+    nameLabel.setBounds(120, yOffset, 200, 20);
 }
 
 
 //==============================================================================
 void SimpleAnalysisComponent::paint(Graphics& g)
 {
-   // g.fillAll(Colours::silver);
+    int hmargin = 10;
+    
+    g.fillAll (Colours::transparentBlack);   // clear the background
+    
+    Rectangle<float> b = getLocalBounds().toFloat();
+    
+    b.setX(hmargin);
+    b.setWidth( b.getWidth() - (hmargin*2) );
+    b.setHeight( b.getHeight() - 10);
+    
+    g.setColour (Colours::grey);
+    g.drawRoundedRectangle(b, 5, 1);
+    g.setColour(Colours::black.withAlpha(0.5f));
+    g.fillRoundedRectangle(b.reduced(1), 5);
 }
 
-//==============================================================================
+void SimpleAnalysisComponent::reload()
+{
+    updateActivityIndicator();
+}
+
+AudioAnalysis* SimpleAnalysisComponent::getAudioAnalysis()
+{
+    return analysis;
+}
+
+void SimpleAnalysisComponent::audioAnalysisChanged(AudioAnalysis* analysis)
+{
+    updateActivityIndicator();
+}
+
+void SimpleAnalysisComponent::updateActivityIndicator()
+{
+    if (analysis != nullptr)
+    {
+        if (analysis->getRelayed())
+        {
+            Appearence::theme()->indicator(activityIndicator, Theme::Primary);
+            activityIndicator.setText("Active", dontSendNotification);
+        }
+        else
+        {
+            Appearence::theme()->indicator(activityIndicator, Theme::Background);
+            activityIndicator.setText("Inactive", dontSendNotification);
+        }
+    }
+    else
+    {
+        Appearence::theme()->indicator(activityIndicator, Theme::Warning);
+        activityIndicator.setText("Unknown", dontSendNotification);
+    }
+}
+
 void SimpleAnalysisComponent::buttonClicked (Button* button)
 {
-    if (button == &sendButton)
-    {
-        bool state = sendButton.getToggleState();
-        
-        if (state == true)
-        {
-            analysisTree.setProperty(AnalysisProperties::send, 0, nullptr);
-        }
-        else
-        {
-            analysisTree.setProperty(AnalysisProperties::send, 1, nullptr);
-        }
-    }
-    else if (button == &plotButton)
-    {
-        bool state = plotButton.getToggleState();
-        
-        if (state == true)
-        {
-            analysisTree.setProperty(AnalysisProperties::plot, 0, nullptr);
-        }
-        else
-        {
-            AnalysisModel::turnOffAllPlotting(analysisTree.getParent());
-            analysisTree.setProperty(AnalysisProperties::plot, 1, nullptr);
-        }
-    }
-    else if (button == &removeButton)
-    {
-        AnalysisModel::removeAnalysis(analysisTree);
-    }
+    // maybe an info button with pop-up
 }
 
-//==============================================================================
-void SimpleAnalysisComponent::valueTreePropertyChanged (ValueTree& treeWhosePropertyHasChanged, const Identifier& property)
-{
-    if (treeWhosePropertyHasChanged == analysisTree)
-    {
-        if (property == AnalysisProperties::send)
-        {
-            sendButton.setToggleState(analysisTree[AnalysisProperties::send],dontSendNotification);
-        }
-        else if (property == AnalysisProperties::plot)
-        {
-            plotButton.setToggleState(analysisTree[AnalysisProperties::plot], dontSendNotification);
-        }
-        
-        customComponentPropertyChange(treeWhosePropertyHasChanged,property);
-        
-        
-        resized();
-    }
-}
-//==============================================================================
-void SimpleAnalysisComponent::valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded)
-{
 
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved)
-{
-
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::valueTreeChildOrderChanged (ValueTree& parentTreeWhoseChildrenHaveMoved,int oldIndex, int newIndex)
-{
-
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::valueTreeParentChanged (ValueTree& treeWhoseParentHasChanged)
-{
-
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::customComponentPropertyChange(ValueTree& treeWhosePropertyHasChanged, const Identifier& property)
-{
-    
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::customComponentResized()
-{
-    
-}
-
-//==============================================================================
-void SimpleAnalysisComponent::customComponentRefreshFromTree()
-{
-    
-}

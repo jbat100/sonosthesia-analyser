@@ -26,6 +26,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+
+
 class PluginLookAndFeel : public LookAndFeel_V3
 {
 public:
@@ -35,15 +37,15 @@ public:
         setColour(Label::textColourId, Colours::white);
         
         // buttons
-        setColour (TextButton::buttonColourId, Colour::fromRGB(29, 114, 239));
+        setColour(TextButton::buttonColourId, Colour::fromRGB(29, 114, 239));
         setColour(TextButton::textColourOffId, Colours::white);
-        setColour (TextButton::ColourIds::buttonOnColourId, Colours::aquamarine);
+        setColour(TextButton::ColourIds::buttonOnColourId, Colours::aquamarine);
         
         // sliders
-        setColour (Slider::ColourIds::thumbColourId, Colours::royalblue);
-        setColour (Slider::trackColourId,               Colour::fromRGBA(255, 255, 255, 200));
+        setColour(Slider::ColourIds::thumbColourId, Colours::royalblue);
+        setColour(Slider::trackColourId, Colour::fromRGBA(255, 255, 255, 200));
         
-        setColour (Slider::rotarySliderFillColourId,Colours::aqua);   
+        setColour(Slider::rotarySliderFillColourId,Colours::aqua);   
     }
     
     

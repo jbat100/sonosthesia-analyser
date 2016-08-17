@@ -25,6 +25,10 @@
 #define SoundAnalyser_FFTMagnitudeSpectrum_h
 
 #include "AudioAnalysis.h"
+
+#include "ProcessorModel.h"
+#include "ProcessorSettings.h"
+
 #include "../GUI/Custom Analysis Components/FFTComponent.h"
 #include <cmath>
 
@@ -36,17 +40,17 @@ public:
     FFTMagnitudeSpectrum()
     {        
         // initialise
-        numSamplesToSend = 512;
+        numSamplesToSend = defaultNumSamplesToSend;
     }
     
     //==============================================================================
-    String getName()
+    String getName() override
     {
         return "FFT Magnitude Spectrum";
     }
     
     //==============================================================================
-    void performAnalysis(std::vector<float> magnitudeSpectrum)
+    void performAnalysis(std::vector<float> magnitudeSpectrum) override
     {
         magnitudeSpectrumResult.resize(numSamplesToSend);
         
@@ -72,135 +76,131 @@ public:
     }
     
     //==============================================================================
-    std::vector<float> getAnalysisResultAsVector()
+    std::vector<float> getAnalysisResultAsVector() override
     {
         return magnitudeSpectrumResult;
     }
-    
-    //==============================================================================
-    /** overriding initialise here as we have extra fields! */
-    void initialise(ValueTree &analysisTree)
-    {
-        send = analysisTree[AnalysisProperties::send];
-        plot = analysisTree[AnalysisProperties::plot];
-        
-        // this property is unique to FFT
-        numSamplesToSend = analysisTree[AnalysisProperties::FFT::numSamplesToSend];
-
-    }
-    
-    //==============================================================================
-    /** overriding this as we have custom properties */
-    void handleCustomPropertyChange(ValueTree& tree, const Identifier& property)
-    {
-        if (property == AnalysisProperties::FFT::numSamplesToSend)
-        {
-            numSamplesToSend = tree[property];
-        }
-    }
-    
-    //==============================================================================
-    /** overriding this as we have custom parameters */
-    virtual ValueTree createAnalysisTree()
-    {
-        ValueTree tree(getIdentifier());
-        
-        tree.setProperty(AnalysisProperties::send, 0, nullptr);
-        tree.setProperty(AnalysisProperties::plot, 0, nullptr);
-        tree.setProperty(AnalysisProperties::name, getName(), nullptr);
-        
-        // extra properties for FFT
-        tree.setProperty(AnalysisProperties::FFT::numSamplesToSend, 512, nullptr);
-
-        magSpecTree = tree;
-        
-        return tree;
-    }
-    
-    //==============================================================================
-    /** overriding this as we have a custom GUI */
-    Component* getGUIComponent(ValueTree& analysisTree)
-    {
-        return new FFTComponent(analysisTree);
-    }
-    
-    //==============================================================================
-    std::string getCoreAddressPattern()
-    {
-        return "/fft";
-    }
         
     //==============================================================================
-    Identifier getIdentifier()
+    Identifier getIdentifier() override
     {
         return Identifier("FFT");
     }
     
     //==============================================================================
-    Identifier getCollectionIdentifier()
+    Identifier getCollectionIdentifier() override
     {
         return Identifier("Gist");
     }
     
     //==============================================================================
-    String getCollectionName()
+    String getCollectionName() override
     {
         return "Gist";
     }
     
     //==============================================================================
-    String getAuthorString()
+    String getAuthorString() override
     {
         return "Adam Stark";
     }
     
     //==============================================================================
-    String getTechnicalDescription()
+    String getTechnicalDescription() override
     {
         return "The magnitude spectrum calculated from the Fourier transform. The number of samples to display can be set via the user interface.";
     }
     
     //==============================================================================
-    String getSimpleDescription()
+    String getSimpleDescription() override
     {
         return "A feature showing you how energy is distributed across the frequency range, on a linear scale";
     }
     
     //==============================================================================
-    OutputType getOutputType()
+    OutputType getOutputType() override
     {
         return VectorOutput;
     }
     
     //==============================================================================
-    InputType getInputType()
+    InputType getInputType() override
     {
         return MagnitudeSpectrumInput;
     }
     
     //==============================================================================
-    void setInputAudioFrameSize(int frameSize)
+    void setInputAudioFrameSize(int frameSize) override
     {
         // if our number of samples to send parameter is larger
         // than the number of magnitude spectrum samples, then
         // automatically adjust
         if ((frameSize/2) < numSamplesToSend)
         {
-            magSpecTree.setProperty(AnalysisProperties::FFT::numSamplesToSend, frameSize/2, nullptr);
+            numSamplesToSend = frameSize/2;
         }
     }
     
     //===============================================================================
-    void setNumFFTSamplesToSend(int numSamples)
+    // returns the value that was actually set, can be capped because of global buffer size setting
+    int setNumFFTSamplesToSend(int numSamples)
     {
+        int bufferSize = ProcessorSettings::getInstance()->getBufferSize();
+        if (numSamples > bufferSize/2)
+        {
+            numSamples = bufferSize/2;
+        }
         numSamplesToSend = numSamples;
+        return numSamples;
+    }
+    
+    //==============================================================================
+    // if the buffer size changes, we need to readjust the number of samples to send
+    void processorBufferSizeChanged(ProcessorSettings* settings) override
+    {
+        int bufferSize = settings->getBufferSize();
+        if (numSamplesToSend > bufferSize/2)
+        {
+            numSamplesToSend = bufferSize/2;
+        }
+    }
+    
+    //==============================================================================
+    /** overriding initialise here as we have extra fields! */
+    void loadFromValueTree(ValueTree &tree) override
+    {
+        AudioAnalysis::loadFromValueTree(tree);
+        
+        if (tree.hasProperty(AnalysisProperties::FFT::NumSamplesToSend))
+        {
+            numSamplesToSend = tree[AnalysisProperties::FFT::NumSamplesToSend]; // default should be 512
+        }
+        else
+        {
+            numSamplesToSend = defaultNumSamplesToSend;
+        }
+    
+    }
+    
+    //==============================================================================
+    ValueTree saveToValueTree() override
+    {
+        ValueTree tree = AudioAnalysis::saveToValueTree();
+        // extra properties for FFT
+        tree.setProperty(AnalysisProperties::FFT::NumSamplesToSend, numSamplesToSend, nullptr);
+        return tree;
+    }
+    
+    int getNumSamplesToSend()
+    {
+        return numSamplesToSend;
     }
     
 private:
     
-    ValueTree magSpecTree;
-    
     int numSamplesToSend;
+    
+    static const int defaultNumSamplesToSend = 512;
     
     std::vector<float> magnitudeSpectrumResult;
     

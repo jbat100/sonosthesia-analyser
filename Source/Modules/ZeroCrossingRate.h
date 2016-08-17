@@ -38,73 +38,67 @@ public:
     }
     
     //==============================================================================
-    String getName()
+    String getName() override
     {
         return "Zero Crossing Rate";
     }
     
     //==============================================================================
-    void performAnalysis(std::vector<float> audioFrame)
+    void performAnalysis(std::vector<float> audioFrame) override
     {
         zcrOutputValue = tdf.zeroCrossingRate(audioFrame);
     }
     
     //==============================================================================
-    float getAnalysisResultAsFloat()
+    float getAnalysisResultAsFloat() override
     {
         return zcrOutputValue;
     }
-    
-    //==============================================================================
-    std::string getCoreAddressPattern()
-    {
-        return "/zcr";
-    }
 
     //==============================================================================
-    Identifier getIdentifier()
+    Identifier getIdentifier() override
     {
         return Identifier("ZeroCrossingRate");
     }
     
     //==============================================================================
-    Identifier getCollectionIdentifier()
+    Identifier getCollectionIdentifier() override
     {
         return Identifier("Gist");
     }
     
     //==============================================================================
-    String getCollectionName()
+    String getCollectionName() override
     {
         return "Gist";
     }
     
     //==============================================================================
-    String getAuthorString()
+    String getAuthorString() override
     {
         return "Adam Stark";
     }
     
     //==============================================================================
-    String getTechnicalDescription()
+    String getTechnicalDescription() override
     {
         return "The count of zero crossings in each observed frame";
     }
     
     //==============================================================================
-    String getSimpleDescription()
+    String getSimpleDescription() override
     {
         return "A feature giving an indication of the brightness of a sound";
     }
     
     //==============================================================================
-    OutputType getOutputType()
+    OutputType getOutputType() override
     {
         return FloatOutput;
     }
     
     //==============================================================================
-    InputType getInputType()
+    InputType getInputType() override
     {
         return AudioBufferInput;
     }

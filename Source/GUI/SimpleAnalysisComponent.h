@@ -26,61 +26,60 @@
 #define __Gluver__MappingComponent__
 
 #include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Audio Analysis/AnalysisModel.h"
+#include "../Audio Analysis/AudioAnalysis.h"
 
-/** A generic GUI component for AudioAnalysis modules. 
- 
-    Extend this class to create a custom component. 
- 
+/** 
+ A generic GUI component for AudioAnalysis modules.
+ Extend this class to create a custom component.
 */
-class SimpleAnalysisComponent :     public Component,
-                                    public Button::Listener,
-                                    public ValueTree::Listener
+
+class SimpleAnalysisComponent : public Component, public Button::Listener, AudioAnalysisListener
 {
     
 public:
-    SimpleAnalysisComponent(ValueTree& analysisTree_);
     
-    virtual ~SimpleAnalysisComponent()
-    {
-        
-    }
+    SimpleAnalysisComponent(AudioAnalysis* _analysis);
     
-    void refreshFromTree();
+    virtual ~SimpleAnalysisComponent() {}
+    
+    //void refreshFromTree();
+    
+    void reload();
     
     //======================================================================
     // Component
-    void resized();
-    void paint(Graphics& g);
+    void resized() override;
+    void paint(Graphics& g) override;
     
     //======================================================================
     // Button::Listener
-    void buttonClicked (Button* button);
+    void buttonClicked (Button* button) override;
     
     //======================================================================
-    // ValueTree::Listener
-    void valueTreePropertyChanged (ValueTree& treeWhosePropertyHasChanged, const Identifier& property);
-    void valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded);
-    void valueTreeChildRemoved (ValueTree& parentTree,ValueTree& childWhichHasBeenRemoved,int indexFromWhichChildWasRemoved);
-    void valueTreeChildOrderChanged (ValueTree& parentTreeWhoseChildrenHaveMoved,int oldIndex, int newIndex);
-    void valueTreeParentChanged (ValueTree& treeWhoseParentHasChanged);
-   
-    //======================================================================
-    virtual void customComponentPropertyChange(ValueTree& treeWhosePropertyHasChanged, const Identifier& property);
-    virtual void customComponentResized();
-    virtual void customComponentRefreshFromTree();
+    // AudioAnalysisListener
+    
+    void audioAnalysisChanged(AudioAnalysis* analysis) override;
+    
+    AudioAnalysis* getAudioAnalysis();
+    
+    static const int yOffset;
     
 protected:
     
-    ValueTree analysisTree;
+    //ValueTree analysisTree;
+    
+    AudioAnalysis* analysis;
     
 private:
     
-    Label analysisName;
-    TextButton sendButton;
-    TextButton plotButton;
+    Label nameLabel;
+    Label activityIndicator;
     
-    TextButton removeButton;
+    void updateActivityIndicator();
+    
+    //TextButton sendButton;
+    //TextButton plotButton;
+    //TextButton removeButton;
     
     //======================================================================//
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleAnalysisComponent)

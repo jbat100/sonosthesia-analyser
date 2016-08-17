@@ -35,73 +35,67 @@ public:
     }
     
     //==============================================================================
-    String getName()
+    String getName() override
     {
         return "Spectral Difference";
     }
         
     //==============================================================================
-    void performAnalysis(std::vector<float> magnitudeSpectrum)
+    void performAnalysis(std::vector<float> magnitudeSpectrum) override
     {
         spectralDifferenceOutputValue = odf.spectralDifference(magnitudeSpectrum);
     }
     
     //==============================================================================
-    float getAnalysisResultAsFloat()
+    float getAnalysisResultAsFloat() override
     {
         return spectralDifferenceOutputValue;
     }
     
     //==============================================================================
-    std::string getCoreAddressPattern()
-    {
-        return "/spectralDifference";
-    }
-    
-    //==============================================================================
-    Identifier getIdentifier()
+    Identifier getIdentifier() override
     {
         return Identifier("SpectralDifference");
     }
     
     //==============================================================================
-    Identifier getCollectionIdentifier()
+    Identifier getCollectionIdentifier() override
     {
         return Identifier("Gist");
     }
     
     //==============================================================================
-    String getCollectionName()
+    String getCollectionName() override
     {
         return "Gist";
     }
     
     //==============================================================================
-    String getAuthorString()
+    String getAuthorString() override
     {
         return "Adam Stark";
     }
     
     //==============================================================================
-    String getTechnicalDescription()
+    String getTechnicalDescription() override
     {
         return "The sum of the absolute value of the bin-wise difference between consecutive magnitude spectra";
     }
     
     //==============================================================================
-    String getSimpleDescription()
+    String getSimpleDescription() override
     {
         return "A feature showing peaks whenever there are sharp changes in a sound, e.g. at the start of notes";
     }
     
     //==============================================================================
-    OutputType getOutputType()
+    OutputType getOutputType() override
     {
         return FloatOutput;
     }
     
     //==============================================================================
-    InputType getInputType()
+    InputType getInputType() override
     {
         return MagnitudeSpectrumInput;
     }

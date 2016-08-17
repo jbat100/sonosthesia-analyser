@@ -25,77 +25,76 @@
 #define __PLUGINPROCESSOR_H_FF438757__
 
 #include "../JuceLibraryCode/JuceHeader.h"
+
 #include "Audio Analysis/AudioAnalysisManager.h"
-#include "Audio Analysis/AnalysisModel.h"
+#include "Sonosthesia/Target/TargetManager.h"
+#include "Sonosthesia/Analysis/AnalysisRelay.h"
 
 //==============================================================================
 /**
 */
-class SoundAnalyserAudioProcessor : public AudioProcessor,
-                                    public ValueTree::Listener
+class SoundAnalyserAudioProcessor : public AudioProcessor
 {
 public:
     //==============================================================================
     SoundAnalyserAudioProcessor();
     ~SoundAnalyserAudioProcessor();
 
-    //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock);
-    void releaseResources();
-
-    void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages);
-
-    //==============================================================================
-    AudioProcessorEditor* createEditor();
-    bool hasEditor() const;
-
-    //==============================================================================
-    const String getName() const;
-
-    int getNumParameters();
-
-    float getParameter (int index);
-    void setParameter (int index, float newValue);
-
-    const String getParameterName (int index);
-    const String getParameterText (int index);
-
-    const String getInputChannelName (int channelIndex) const;
-    const String getOutputChannelName (int channelIndex) const;
-    bool isInputChannelStereoPair (int index) const;
-    bool isOutputChannelStereoPair (int index) const;
-
-    bool acceptsMidi() const;
-    bool producesMidi() const;
-    bool silenceInProducesSilenceOut() const;
-    double getTailLengthSeconds() const;
-
-    //==============================================================================
-    int getNumPrograms();
-    int getCurrentProgram();
-    void setCurrentProgram (int index);
-    const String getProgramName (int index);
-    void changeProgramName (int index, const String& newName);
-
-    //==============================================================================
-    void getStateInformation (MemoryBlock& destData);
-    void setStateInformation (const void* data, int sizeInBytes);
+    // === AudioProcessor ===
     
-    //==============================================================================
-    void refreshFromTree();
-    
-    //==============================================================================
-    void valueTreePropertyChanged (ValueTree& treeWhosePropertyHasChanged, const Identifier& property);
-    void valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded);
-    void valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved);
-    void valueTreeChildOrderChanged (ValueTree& parentTreeWhoseChildrenHaveMoved, int oldIndex, int newIndex);
-    void valueTreeParentChanged (ValueTree& treeWhoseParentHasChanged);
-    
-    ValueTree analyserTree;
+    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void releaseResources() override;
+    void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages) override;
+
+    AudioProcessorEditor* createEditor() override;
+    bool hasEditor() const override;
+
+    const String getName() const override;
+
+    int getNumParameters() override;
+
+    float getParameter (int index) override;
+    void setParameter (int index, float newValue) override;
+
+    const String getParameterName (int index) override;
+    const String getParameterText (int index) override;
+
+    const String getInputChannelName (int channelIndex) const override;
+    const String getOutputChannelName (int channelIndex) const override;
+    bool isInputChannelStereoPair (int index) const override;
+    bool isOutputChannelStereoPair (int index) const override;
+
+    bool acceptsMidi() const override;
+    bool producesMidi() const override;
+    bool silenceInProducesSilenceOut() const override;
+    double getTailLengthSeconds() const override;
+
+    int getNumPrograms() override;
+    int getCurrentProgram() override;
+    void setCurrentProgram (int index) override;
+    const String getProgramName (int index) override;
+    void changeProgramName (int index, const String& newName) override;
+
+    void getStateInformation (MemoryBlock& destData) override;
+    void setStateInformation (const void* data, int sizeInBytes) override;
     
     AudioAnalysisManager analyser;
     
+    OSCTargetManager& getTargetManager();
+    AnalysisRelayManager& getAnalysisRelayManager();
+    
 private:
+    
+    OSCTargetManager targetManager;
+    AnalysisRelayManager analysisRelayManager;
+    
+    void saveOSCTarget(std::shared_ptr<OSCTarget> target, XmlElement* element);
+    std::shared_ptr<OSCTarget> loadOSCTarget(XmlElement* element);
+    
+    void saveAnalysisRelay(std::shared_ptr<AnalysisRelay> relay, XmlElement* element);
+    std::shared_ptr<AnalysisRelay> loadAnalysisRelay(XmlElement* element);
+    
+    std::shared_ptr<OSCTarget> getTargetForElement(XmlElement* element);
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SoundAnalyserAudioProcessor)

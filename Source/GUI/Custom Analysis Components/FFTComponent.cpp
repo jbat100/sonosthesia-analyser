@@ -23,48 +23,49 @@
 
 #include "FFTComponent.h"
 
+#include "../../Modules/FFTMagnitudeSpectrum.h"
+#include "../../Sonosthesia/Core/Theme.h"
+
 //==============================================================================
-FFTComponent::FFTComponent(ValueTree& analysisTree_) : SimpleAnalysisComponent(analysisTree_)
+FFTComponent::FFTComponent(AudioAnalysis* _analysis) : SimpleAnalysisComponent(_analysis)
 {
+    jassert(dynamic_cast<FFTMagnitudeSpectrum*>(_analysis) != nullptr);
+    
     setSize (580, 30);
     
-    numFFTSamplesText.setText("# Samples", dontSendNotification);
+    numFFTSamplesText.setText("Samples", dontSendNotification);
+    Appearence::theme()->label(numFFTSamplesText);
     addAndMakeVisible(&numFFTSamplesText);
     
     numFFTSamples.setColour(Label::textColourId, Colours::black);
     numFFTSamples.setColour(Label::ColourIds::backgroundColourId, Colours::white);
     numFFTSamples.setColour(Label::ColourIds::outlineColourId, Colours::lightgrey);
-    numFFTSamples.setText("512", dontSendNotification);
     numFFTSamples.setEditable(true);
     addAndMakeVisible(&numFFTSamples);
     
     numFFTSamples.addListener(this);
     
-    refreshFromTree();
+    refresh();
+    
 }
 
-
 //==============================================================================
-void FFTComponent::customComponentPropertyChange(ValueTree& treeWhosePropertyHasChanged, const Identifier& property)
+void FFTComponent::resized()
 {
-    if (property == AnalysisProperties::FFT::numSamplesToSend)
+    SimpleAnalysisComponent::resized();
+    
+    numFFTSamplesText.setBounds(400, yOffset, 70, 20);
+    numFFTSamples.setBounds(480, yOffset,40,20);
+}
+
+void FFTComponent::refresh()
+{
+    FFTMagnitudeSpectrum* fft = dynamic_cast<FFTMagnitudeSpectrum*>(getAudioAnalysis());
+    
+    if (fft)
     {
-        numFFTSamples.setText(treeWhosePropertyHasChanged[property], dontSendNotification);
+        numFFTSamples.setText(String(fft->getNumSamplesToSend()), dontSendNotification);
     }
-}
-
-//==============================================================================
-void FFTComponent::customComponentResized()
-{
-    numFFTSamplesText.setBounds(400, 0, 70, 20);
-    numFFTSamples.setBounds(480,00,40,20);
-}
-
-//==============================================================================
-void FFTComponent::customComponentRefreshFromTree()
-{
-    int numSamples = analysisTree[AnalysisProperties::FFT::numSamplesToSend];
-    numFFTSamples.setText(String(numSamples), dontSendNotification);
 }
 
 //==============================================================================
@@ -73,16 +74,21 @@ void FFTComponent::labelTextChanged (Label* labelThatHasChanged)
     if (labelThatHasChanged == &numFFTSamples)
     {
         int numSamples = numFFTSamples.getTextValue().getValue();
-        
-        ValueTree analyserTree = analysisTree.getParent();
-        
-        int bufferSize = analyserTree[AnalysisModel::Ids::BufferSize];
-        
-        if (numSamples > bufferSize/2)
+        FFTMagnitudeSpectrum* fft = dynamic_cast<FFTMagnitudeSpectrum*>(getAudioAnalysis());
+        if (fft)
         {
-            numSamples = bufferSize/2;
+            int result = fft->setNumFFTSamplesToSend(numSamples);
+            if (result != numSamples)
+            {
+                // error message? fft size cannot be more than half of buffer size
+                numFFTSamples.setText(String(result), dontSendNotification);
+            }
         }
-        
-        analysisTree.setProperty(AnalysisProperties::FFT::numSamplesToSend, numSamples, nullptr);
+        else
+        {
+            std::cerr << "FFTComponent unexpected analysis\n";
+        }
     }
 }
+
+

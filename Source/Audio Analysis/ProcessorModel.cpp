@@ -1,6 +1,6 @@
 //=======================================================================
-/** @file ItemListComponent.h
- *  @brief A gui component to display a list of String elements
+/** @file AnalysisModel.cpp
+ *  @brief The ValueTree model for the Sound Analyser plug-in
  *  @author Adam Stark
  *  @copyright Copyright (C) 2014  Adam Stark
  *
@@ -21,33 +21,18 @@
  */
 //=======================================================================
 
-#ifndef __Sound_Analyser__ItemListComponent__
-#define __Sound_Analyser__ItemListComponent__
+#include "ProcessorModel.h"
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Audio Analysis/AnalysisModel.h"
+// instantiate static variables
 
-class ItemListComponent : public ListBox, ListBoxModel, public ChangeBroadcaster
-{
-public:
-    
-    ItemListComponent();
-    
-    int getNumRows();
-    
-    void setContentList(StringArray list);
-    
-    void selectedRowsChanged (int lastRowSelected);
-        
-    void paintListBoxItem (int rowNumber, Graphics& g, int width, int height, bool rowIsSelected);
-    
-    String getCurrentlySelectedItem();
-    
-private:
-    
-    StringArray listItems;
-    
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ItemListComponent)
-};
+const Identifier AnalyserProperties::Analyser("Analyser");
+const Identifier AnalyserProperties::BufferSize("BufferSize");
+const Identifier AnalyserProperties::SamplingFrequency("SamplingFrequency");
 
-#endif /* defined(__Sound_Analyser__ItemListComponent__) */
+const Identifier AnalysisProperties::Analyses("Analyses");
+const Identifier AnalysisProperties::Name("Name");
+const Identifier AnalysisProperties::FFT::NumSamplesToSend("NumSamplesToSend");
+const Identifier AnalysisProperties::MelFrequencySpectrum::NumBins("NumBins");
+
+
+

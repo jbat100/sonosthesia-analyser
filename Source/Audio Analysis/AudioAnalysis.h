@@ -26,9 +26,21 @@
 
 #include <vector>
 #include <string>
-#include "AnalysisModel.h"
-#include "../GUI/SimpleAnalysisComponent.h"
+#include "ProcessorModel.h"
+#include "ProcessorSettings.h"
 #include "../Libraries/Gist/src/Gist.h"
+
+class AudioAnalysis;
+
+class AudioAnalysisListener {
+    
+public:
+    
+    virtual ~AudioAnalysisListener() {}
+    
+    virtual void audioAnalysisChanged(AudioAnalysis* analysis) = 0;
+    
+};
 
 //=======================================================================
 /** The InputType for the audio analysis module.
@@ -54,22 +66,16 @@ enum OutputType
  
     To create a new AudioAnalysis module, just extend this class.
  */
-class AudioAnalysis
+class AudioAnalysis : public ListenerList<AudioAnalysisListener>, public ProcessorSettingsListnener
 {
 public:
-    /** Constructor */
-    AudioAnalysis()
-    {
-        plot = false;
-        send = false;
-        addressPattern = "/uninitialised";
+    
+    AudioAnalysis() : relayed(false) {
+        // react to processor settings changes if necessary
+        ProcessorSettings::getInstance()->add(this);
     }
     
-    /** Destructor */
-    virtual ~AudioAnalysis()
-    {
-        
-    }
+    virtual ~AudioAnalysis() {}
     
     //==============================================================================
     
@@ -124,10 +130,6 @@ public:
     /** @returns a String containing a simple description of the audio analysis module, for non-expert users */
     virtual String getSimpleDescription() = 0;
     
-    /** @returns the core address pattern that will be used to form OSC messages when sending the audio analysis
-        module data. An example might be "/rms"
-     */
-    virtual std::string getCoreAddressPattern() = 0;
     
     /** The method that will be called when the audio analysis module should calculate its result. 
      
@@ -155,7 +157,6 @@ public:
     virtual std::vector<float> getAnalysisResultAsVector()
     {
         std::vector<float> v;
-        
         return v;
     }
 
@@ -182,76 +183,42 @@ public:
     
     //==============================================================================
     
-    /** Creates the audio analysis module's ValueTree node.
-        
-        Override this if you need to create custom properties for your module
-     */
-    virtual ValueTree createAnalysisTree()
+    /** Save state to a value tree */
+    
+    virtual ValueTree saveToValueTree()
     {
+        std::cout << "Saving state for " << getIdentifier().toString() << "\n";
         ValueTree tree(getIdentifier());
-        
-        tree.setProperty(AnalysisProperties::send, 0, nullptr);
-        tree.setProperty(AnalysisProperties::plot, 0, nullptr);
-        tree.setProperty(AnalysisProperties::name, getName(), nullptr);
-        
+        tree.setProperty(AnalysisProperties::Name, getName(), nullptr);
         return tree;
     }
     
-    /** Initialises internal variables based upon the audio analysis ValueTree
-    
-        Override this if you have extra parameters for the analysis algorithm you are developing as you
-        will need to initialise them from the ValueTree
+    /** Load state from a value tree
      
         @param analysisTree a ValueTree node representing the audio analysis module
      
      */
-    virtual void initialise(ValueTree &analysisTree)
-    {        
-        send = analysisTree[AnalysisProperties::send];
-        plot = analysisTree[AnalysisProperties::plot];
-    }
-    
-    /** If your module has custom properties, override this function to deal with any changes
-        to properties. Be sure to check that the properties that have changed are the ones
-        you expect, as all property changes for the module will be passed to this function
-     
-        @param tree the valueTree that has had a property change
-        @param property the property that has changed
-     */
-    virtual void handleCustomPropertyChange(ValueTree& tree, const Identifier& property)
+    virtual void loadFromValueTree(ValueTree &tree)
     {
-        
+        if (tree.getType() != getIdentifier())
+        {
+            std::cerr << "AudioAnalysis unexpected identifier " << tree.getType().toString();
+            std::cerr << ", expected " << getIdentifier().toString() << "\n";
+        }
+        else
+        {
+            std::cout << "Loading state for " << getIdentifier().toString() << "\n";
+        }
     }
     
-    /** @returns a pointer to the GUI component that should be used for this AudioAnalysis module.
-     
-        Override this if you wish to create a custom GUI component. Also, @see SimpleAnalysisComponent for
-        how to extend it to be a custom GUI component 
-     
-        @param analysisTree the audio analysis tree for the module
-     */
-    virtual Component* getGUIComponent(ValueTree& analysisTree)
-    {
-        return new SimpleAnalysisComponent(analysisTree);
-    }
+    void setRelayed(bool _relayed);
+    bool getRelayed();
     
-    /** Constructs the full OSC address pattern from the analyser ID and the module address pattern
-     * @param idWithForwardSlash the identifier of the analyser, with a leading forward slash
-     */
-    void buildAddressPatternFromId(std::string idWithForwardSlash)
-    {
-        addressPattern = idWithForwardSlash.append(getCoreAddressPattern());
-    }
+private:
     
-    /** Indicates whether the module should update the plotting vectors */
-    bool plot;
+    /** Sonosthesia: indicates whether the analysis is used by at least one relay **/
+    bool relayed;
     
-    /** Indicates whether the module should send its result by OSC */
-    bool send;
-    
-    /** The address pattern of the audio analysis module */
-    std::string addressPattern;
-   
 };
 
 #endif /* defined(__SoundAnalyser__Analysis__) */

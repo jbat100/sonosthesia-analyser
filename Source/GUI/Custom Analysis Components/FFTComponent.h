@@ -25,21 +25,19 @@
 #define __SoundAnalyser__FFTComponent__
 
 #include "../../JuceLibraryCode/JuceHeader.h"
-#include "../../Audio Analysis/AnalysisModel.h"
+
 #include "../SimpleAnalysisComponent.h"
 
 class FFTComponent : public SimpleAnalysisComponent, public Label::Listener {
     
 public:
-    FFTComponent(ValueTree& analysisTree_);
-   
-    //======================================================================
-    void customComponentPropertyChange(ValueTree& treeWhosePropertyHasChanged, const Identifier& property);
-    void customComponentResized();
-    void customComponentRefreshFromTree();
+    FFTComponent(AudioAnalysis* _analysis);
     
-    //======================================================================
-    void labelTextChanged (Label* labelThatHasChanged);
+    void resized() override;
+    
+    void refresh();
+    
+    void labelTextChanged (Label* labelThatHasChanged) override;
     
 private:
     
